@@ -7,7 +7,9 @@ import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
 
 @RestController
 @RequestMapping("/mail")
@@ -21,11 +23,20 @@ public class MailController {
     private final MailAuthService emailAuthService;
 
     @GetMapping("/send")
-    public String mailConfirm(@RequestParam String email, HttpSession session) throws Exception{
+    public String mailConfirm(@RequestParam String email, HttpSession session, HttpServletRequest request) throws Exception{
         // 비어있으면 true 있다면 false
         boolean pass = memberService.availableEmail(email);
 
         if(!pass) return "duplicate";
+
+        Enumeration<String> headerNames = request.getHeaderNames();
+
+        System.out.println("--------------여기서 부터 봐바----------------");
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            System.out.println(headerName + ": " + headerValue);
+        }
 
         session.setAttribute("email", email);
 
