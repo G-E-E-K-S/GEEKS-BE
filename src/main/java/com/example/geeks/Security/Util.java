@@ -9,18 +9,13 @@ import java.util.Date;
 
 @Component
 public class Util {
-
-
-    public static String getType(String token, String secretKey){
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
-                .getBody().get("type", String.class);
-    }
-
+    //Token에서 UserId값 찾기
     public static long getUserId(String token, String secretKey) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().get("id", Long.class);
     }
 
+    //Token에서 Nickname 찾기
     public static String getNickname(String token, String secretKey) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().get("nickname", String.class);
@@ -35,9 +30,9 @@ public class Util {
 
     private static final long expireMs = 86400000; // 토큰 만료 시간 (하루)
 
-    public static String createJwt(String type, Long id, String nickname, String secretKey) {
+    //아이디와 닉네임 가지고 토큰 생성.
+    public static String createJwt(Long id, String nickname, String secretKey) {
         Claims claims = Jwts.claims();
-        claims.put("type", type);
         claims.put("id", id);
         claims.put("nickname", nickname);
 

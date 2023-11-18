@@ -1,10 +1,12 @@
 package com.example.geeks.service;
 
+import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.requestDto.RegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +17,12 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     private final MemberRepository memberRepository;
+
+    private final Util util;
 
     public boolean availableEmail(String email) {
         return memberRepository.findByEmail(email).isEmpty();
@@ -37,5 +43,9 @@ public class MemberService {
 
         Member member = result.get();
         member.setIntroduction(introduction); // 변경감지
+    }
+
+    public String createToken(Long id, String nickname){
+        return util.createJwt(id, nickname, secretKey);
     }
 }
