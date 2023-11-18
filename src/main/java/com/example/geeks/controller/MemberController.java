@@ -8,6 +8,12 @@ import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 
 import javax.servlet.http.HttpSession;
 
@@ -34,6 +40,17 @@ public class MemberController {
                 .introduction("")
                 .build();
         memberService.join(member);
+        String token = memberService.createToken(member.getId(), member.getNickname());
+        Cookie cookie = new Cookie("token", token);
+
+        cookie.setPath("/");
+        cookie.setSecure(false);
+        cookie.setMaxAge(86400); // 1일
+        cookie.setHttpOnly(false);
+
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.addCookie(cookie);
+
         return "";
     }
 
