@@ -38,11 +38,19 @@ public class MemberService {
     }
 
     @Transactional
+    public void editNickname(String nickname, Long id) {
+        Optional<Member> result = memberRepository.findById(id);
+
+        Member member = result.get();
+        member.changeNickname(nickname);
+    }
+
+    @Transactional
     public void editIntroduction(String introduction, Long id) {
         Optional<Member> result = memberRepository.findById(id);
 
         Member member = result.get();
-        member.setIntroduction(introduction); // 변경감지
+        member.changeIntroduction(introduction); // 변경감지
     }
 
     public String createToken(Long id, String nickname){

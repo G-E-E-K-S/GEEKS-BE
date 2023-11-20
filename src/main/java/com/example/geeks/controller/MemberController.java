@@ -1,11 +1,13 @@
 package com.example.geeks.controller;
 
 import com.example.geeks.Enum.DormitoryType;
+import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.PasswordDto;
 import com.example.geeks.requestDto.RegisterDto;
 import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
@@ -20,11 +22,15 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class MemberController {
     private final MemberService memberService;
 
     private final BCryptPasswordEncoder encoder;
+
+    private final Util util;
+
+    @Value("${jwt.secret}")
+    private String tokenSecretKey;
 
     @GetMapping("/register")
     public String register(HttpSession session) {
@@ -40,6 +46,7 @@ public class MemberController {
                 .introduction("")
                 .build();
         memberService.join(member);
+
         String token = memberService.createToken(member.getId(), member.getNickname());
         Cookie cookie = new Cookie("token", token);
 
@@ -94,12 +101,18 @@ public class MemberController {
     }
 
     @GetMapping("/edit/nickname")
-    public String editNickname(@RequestParam String nickname) {
+    public String editNickname(@RequestParam String nickname,
+                               @CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        memberService.editNickname(nickname, userId);
         return "success";
     }
 
     @GetMapping("/edit/introduction")
-    public String editIntroduction(@RequestParam String introduction) {
+    public String editIntroduction(@RequestParam String introduction,
+                                   @CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        memberService.editIntroduction(introduction, userId);
         return "success";
     }
 }
