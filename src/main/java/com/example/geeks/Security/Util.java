@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class Util {
     //Token에서 UserId값 찾기
-    public static long getUserId(String token, String secretKey) {
+    public static Long getUserId(String token, String secretKey) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().get("id", Long.class);
     }

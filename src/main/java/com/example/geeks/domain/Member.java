@@ -37,10 +37,13 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
 
-    public void setIntroduction(String introduction) {
+    public void changeIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
     @Builder
     public Member(String nickname, String email, String password, String major, int studentID, int gender, int exp, String image_url, String introduction, DormitoryType type) {
         this.nickname = nickname;

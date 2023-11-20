@@ -22,6 +22,35 @@ public class MemberTest {
     @Autowired
     MemberRepository memberRepository;
 
+
+    @Test
+    public void testEditNickname() {
+        Member member = Member.builder()
+                .nickname("admin")
+                .email("bak3839@naver.com")
+                .password("1234")
+                .major("소프트웨어")
+                .gender(1)
+                .exp(3)
+                .type(DormitoryType.NEW)
+                .image_url("basic")
+                .introduction("")
+                .build();
+
+        memberRepository.save(member);
+
+        Optional<Member> result1 = memberRepository.findById(1L);
+
+        Member findMember1 = result1.get();
+        System.out.println("before: " + findMember1);
+
+        memberService.editNickname("change", 1L);
+
+        Optional<Member> result2 = memberRepository.findById(1L);
+
+        Member findMember2 = result2.get();
+        System.out.println("after: " + findMember2);
+    }
     @Test
     public void testEditIntroduction() {
         Member member = Member.builder()
@@ -38,11 +67,16 @@ public class MemberTest {
 
         memberRepository.save(member);
 
+        Optional<Member> result1 = memberRepository.findById(1L);
+
+        Member findMember1 = result1.get();
+        System.out.println("before: " + findMember1);
+
         memberService.editIntroduction("hi", 1L);
 
-        Optional<Member> result = memberRepository.findById(1L);
+        Optional<Member> result2 = memberRepository.findById(1L);
 
-        Member findMember = result.get();
-        System.out.println(findMember);
+        Member findMember2 = result2.get();
+        System.out.println("after: " + findMember2);
     }
 }
