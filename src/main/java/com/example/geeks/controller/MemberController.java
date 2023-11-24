@@ -1,6 +1,7 @@
 package com.example.geeks.controller;
 
 import com.example.geeks.Enum.DormitoryType;
+import com.example.geeks.Enum.Gender;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.PasswordDto;
@@ -39,7 +40,7 @@ public class MemberController {
                 .email((String) session.getAttribute("email"))
                 .password((String) session.getAttribute("password"))
                 .major((String) session.getAttribute("major"))
-                .gender((int) session.getAttribute("gender"))
+                .gender((Gender) session.getAttribute("gender"))
                 .exp((int) session.getAttribute("exp"))
                 .type((DormitoryType) session.getAttribute("type"))
                 .image_url("basic")
@@ -89,7 +90,7 @@ public class MemberController {
     }
 
     @GetMapping("/gender")
-    public String gender(@RequestParam int gender, HttpSession session) {
+    public String gender(@RequestParam Gender gender, HttpSession session) {
         session.setAttribute("gender", gender);
         return "success";
     }

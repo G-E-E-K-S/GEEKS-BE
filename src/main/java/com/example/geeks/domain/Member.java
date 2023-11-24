@@ -1,6 +1,7 @@
 package com.example.geeks.domain;
 
 import com.example.geeks.Enum.DormitoryType;
+import com.example.geeks.Enum.Gender;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,7 +27,8 @@ public class Member {
 
     private int studentID;
 
-    private int gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     private int exp;
 
@@ -37,6 +39,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
 
+    @OneToOne
+    @JoinColumn(name = "detail_id")
+    private Detail detail;
+
     public void changeIntroduction(String introduction) {
         this.introduction = introduction;
     }
@@ -45,7 +51,7 @@ public class Member {
         this.nickname = nickname;
     }
     @Builder
-    public Member(String nickname, String email, String password, String major, int studentID, int gender, int exp, String image_url, String introduction, DormitoryType type) {
+    public Member(String nickname, String email, String password, String major, int studentID, Gender gender, int exp, String image_url, String introduction, DormitoryType type) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;

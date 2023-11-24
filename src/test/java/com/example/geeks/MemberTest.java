@@ -1,6 +1,7 @@
 package com.example.geeks;
 
 import com.example.geeks.Enum.DormitoryType;
+import com.example.geeks.Enum.Gender;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.service.MemberService;
@@ -30,7 +31,7 @@ public class MemberTest {
                 .email("bak3839@naver.com")
                 .password("1234")
                 .major("소프트웨어")
-                .gender(1)
+                .gender(Gender.MALE)
                 .exp(3)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
@@ -58,7 +59,7 @@ public class MemberTest {
                 .email("bak3839@naver.com")
                 .password("1234")
                 .major("소프트웨어")
-                .gender(1)
+                .gender(Gender.MALE)
                 .exp(3)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
