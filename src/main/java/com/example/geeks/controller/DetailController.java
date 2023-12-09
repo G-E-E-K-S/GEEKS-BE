@@ -28,4 +28,13 @@ public class DetailController {
         
         return "success";
     }
+
+    @PostMapping("/point")
+    public String calculate(@CookieValue String token){
+        Long userId = util.getUserId(token, tokenSecretKey);
+
+        detailService.calculate(userId);
+
+        return "success";
+    }
 }

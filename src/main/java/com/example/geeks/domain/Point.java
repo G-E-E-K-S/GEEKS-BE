@@ -1,9 +1,6 @@
 package com.example.geeks.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,4 +22,11 @@ public class Point extends BaseTimeEntity{
     private Long friend_id;
 
     private int point;
+
+    @Builder
+    public Point(Member member, Long friend_id, int point) {
+        this.member = member;
+        this.friend_id = friend_id;
+        this.point = point;
+    }
 }
