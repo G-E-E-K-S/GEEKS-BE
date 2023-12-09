@@ -1,11 +1,15 @@
 package com.example.geeks.domain;
 
 import com.example.geeks.Enum.*;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-public class Detail {
+@Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Detail extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "detail_id")
@@ -15,18 +19,38 @@ public class Detail {
 
     private boolean habit;
 
+    @Enumerated(EnumType.STRING)
     private Ear ear;
 
-    private Time sleep;
+    @Enumerated(EnumType.STRING)
+    private Time sleeping;
 
+    @Enumerated(EnumType.STRING)
     private Time wakeup;
 
-    private Out out;
+    @Enumerated(EnumType.STRING)
+    private Out outing;
 
+    @Enumerated(EnumType.STRING)
     private Cleaning cleaning;
 
+    @Enumerated(EnumType.STRING)
     private Tendency tendency;
 
-    @OneToOne(mappedBy = "detail")
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Detail(boolean smoking, boolean habit, Ear ear, Time sleep, Time wakeup, Out out, Cleaning cleaning, Tendency tendency, Member member) {
+        this.smoking = smoking;
+        this.habit = habit;
+        this.ear = ear;
+        this.sleeping = sleep;
+        this.wakeup = wakeup;
+        this.outing = out;
+        this.cleaning = cleaning;
+        this.tendency = tendency;
+        this.member = member;
+    }
 }

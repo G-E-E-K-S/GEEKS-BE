@@ -33,7 +33,7 @@ public class MemberController {
     @Value("${jwt.secret}")
     private String tokenSecretKey;
 
-    @GetMapping("/register")
+   /* @GetMapping("/register")
     public String register(HttpSession session) {
         Member member = Member.builder()
                 .nickname((String) session.getAttribute("nickname"))
@@ -60,7 +60,36 @@ public class MemberController {
         response.addCookie(cookie);
 
         return "";
-    }
+    }*/
+   @PostMapping("/register")
+   public String register(@RequestBody RegisterDto dto) {
+       Member member = Member.builder()
+               .nickname(dto.getNickname())
+               .email(dto.getEmail())
+               .password(dto.getPassword())
+               .major(dto.getMajor())
+               .gender(dto.getGender())
+               .exp(dto.getExp())
+               .type(dto.getType())
+               .image_url("basic")
+               .introduction("")
+               .build();
+
+       memberService.join(member);
+
+       String token = memberService.createToken(member.getId(), member.getNickname());
+       Cookie cookie = new Cookie("token", token);
+
+       cookie.setPath("/");
+       cookie.setSecure(false);
+       cookie.setMaxAge(86400); // 1일
+       cookie.setHttpOnly(false);
+
+       HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+       response.addCookie(cookie);
+
+       return "";
+   }
 
     @GetMapping("/check/nickname")
     public String checkNickname(@RequestParam String nickname) {
