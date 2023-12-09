@@ -5,12 +5,13 @@ import com.example.geeks.Enum.Gender;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @ToString(exclude = "password")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +40,13 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
 
-    @OneToOne
+    @OneToOne(mappedBy = "member")
     @JoinColumn(name = "detail_id")
     private Detail detail;
+
+    @OneToMany(mappedBy = "member")
+    @Column(name = "point_id")
+    private List<Point> point;
 
     public void changeIntroduction(String introduction) {
         this.introduction = introduction;

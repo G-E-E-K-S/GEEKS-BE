@@ -1,6 +1,10 @@
 package com.example.geeks.requestDto;
 
+import com.example.geeks.Enum.DormitoryType;
+import com.example.geeks.Enum.Gender;
 import lombok.Getter;
+
+import java.lang.reflect.Type;
 
 @Getter
 public class RegisterDto {
@@ -14,7 +18,9 @@ public class RegisterDto {
 
     private String major;
 
-    private int gender;
+    private Gender gender;
+
+    private DormitoryType type;
 
     private int exp;
 
