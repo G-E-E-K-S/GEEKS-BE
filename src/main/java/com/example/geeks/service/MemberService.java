@@ -3,6 +3,7 @@ package com.example.geeks.service;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
+import com.example.geeks.requestDto.ProfileEditDto;
 import com.example.geeks.requestDto.RegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,13 @@ public class MemberService {
 
         Member member = result.get();
         member.changeIntroduction(introduction); // 변경감지
+    }
+
+    @Transactional
+    public void editProfile(ProfileEditDto dto, Long id) {
+        Member member = memberRepository.findById(id).get();
+
+        member.changeProfile(dto);
     }
 
     public String createToken(Long id, String nickname){

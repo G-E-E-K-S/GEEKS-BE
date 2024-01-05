@@ -6,12 +6,13 @@ import com.example.geeks.domain.Point;
 import com.example.geeks.repository.DetailRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PointRepository;
-import com.example.geeks.requestDto.DetailDto;
+import com.example.geeks.responseDto.DetailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -94,6 +95,30 @@ public class DetailService {
                 pointRepository.save(result);
             }
         }
+    }
+
+    public DetailDto getUserDetailById(Long userId){
+        Optional<Detail> optionalUserDetail = detailRepository.findById(userId);
+
+        Detail userDetail = optionalUserDetail.get();
+
+        DetailDto userDetailDto = new DetailDto(userDetail.isSmoking(), userDetail.isHabit(),
+                userDetail.getEar(), userDetail.getSleeping(), userDetail.getWakeup(),
+                userDetail.getOuting(), userDetail.getCleaning(), userDetail.getTendency());
+
+        return userDetailDto;
+    }
+
+    public DetailDto getOpponentDetailById( Long id){
+        Optional<Detail> optionalOpponentDetail = detailRepository.findById(id);
+
+        Detail opponentDeatil = optionalOpponentDetail.get();
+
+        DetailDto opponentDeatilDto = new DetailDto(opponentDeatil.isSmoking(), opponentDeatil.isHabit(),
+                opponentDeatil.getEar(), opponentDeatil.getSleeping(), opponentDeatil.getWakeup(),
+                opponentDeatil.getOuting(), opponentDeatil.getCleaning(), opponentDeatil.getTendency());
+
+        return opponentDeatilDto;
     }
 }
 

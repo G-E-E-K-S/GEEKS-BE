@@ -5,6 +5,7 @@ import com.example.geeks.Enum.Gender;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.PasswordDto;
+import com.example.geeks.requestDto.ProfileEditDto;
 import com.example.geeks.requestDto.RegisterDto;
 import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -143,6 +144,14 @@ public class MemberController {
                                    @CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         memberService.editIntroduction(introduction, userId);
+        return "success";
+    }
+
+    @PostMapping("/edit/profile")
+    public String editProfile(@RequestBody ProfileEditDto dto,
+                              @CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        memberService.editProfile(dto, userId);
         return "success";
     }
 }
