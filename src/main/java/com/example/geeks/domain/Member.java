@@ -2,6 +2,7 @@ package com.example.geeks.domain;
 
 import com.example.geeks.Enum.DormitoryType;
 import com.example.geeks.Enum.Gender;
+import com.example.geeks.requestDto.ProfileEditDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -55,6 +56,14 @@ public class Member extends BaseTimeEntity{
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void changeProfile(ProfileEditDto dto) {
+        this.nickname = dto.getNickname();
+        this.major = dto.getMajor();
+        this.studentID = dto.getStudentID();
+        this.introduction = dto.getIntroduction();
+    }
+
     @Builder
     public Member(String nickname, String email, String password, String major, int studentID, Gender gender, int exp, String image_url, String introduction, DormitoryType type) {
         this.nickname = nickname;

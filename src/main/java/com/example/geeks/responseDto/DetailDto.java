@@ -1,9 +1,13 @@
-package com.example.geeks.requestDto;
+package com.example.geeks.responseDto;
 
 import com.example.geeks.Enum.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
+@AllArgsConstructor
 public class DetailDto {
     private boolean smoking;
 
