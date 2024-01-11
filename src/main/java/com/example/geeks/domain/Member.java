@@ -6,7 +6,10 @@ import com.example.geeks.requestDto.ProfileEditDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.*;
 
 @Entity
 @Getter
@@ -41,13 +44,15 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "member", cascade = ALL)
     @JoinColumn(name = "detail_id")
     private Detail detail;
 
-    @OneToMany(mappedBy = "member")
-    @Column(name = "point_id")
-    private List<Point> point;
+    @OneToMany(mappedBy = "member", cascade = ALL)
+    private List<Point> point = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = ALL)
+    private List<Post> posts = new ArrayList<>();
 
     public void changeIntroduction(String introduction) {
         this.introduction = introduction;
