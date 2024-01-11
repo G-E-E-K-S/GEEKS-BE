@@ -23,13 +23,11 @@ public class ChatRoom{
 
     private String roomId;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "my_user_id")
     private Member user;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "opponent_user_id")
     private Member opponentUser;
 
@@ -43,14 +41,6 @@ public class ChatRoom{
         chatRoom.user = user;
         chatRoom.opponentUser = opponentUser;
         return chatRoom;
-    }
-    @Builder
-    public ChatRoom(Long id, String roomId, Member user, Member opponentUser, /*List<ChatHistory> histories*/){
-        this.id = id;
-        this.roomId = roomId;
-        this.user = user;
-        this.opponentUser = opponentUser;
-        //this.histories = histories;
     }
 
     public ChatRoomDTO toDTO() {
