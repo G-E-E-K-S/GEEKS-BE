@@ -36,7 +36,7 @@ public class ChatService {
     }
 
     private ChatRoom findChatRoom(Member user, Member opponentUser) {
-        return chatRoomRepository.findByMembersIn(user, opponentUser).get();
+        return chatRoomRepository.findByUserAndOpponentUser(user, opponentUser).get();
     }
 
     public Member getUserByNickname(String name) {
