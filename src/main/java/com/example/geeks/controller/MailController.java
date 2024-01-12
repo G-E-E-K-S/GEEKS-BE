@@ -1,6 +1,5 @@
 package com.example.geeks.controller;
 
-import com.example.geeks.requestDto.MailAuthDto;
 import com.example.geeks.service.MailAuthService;
 import com.example.geeks.service.MailService;
 import com.example.geeks.service.MemberService;

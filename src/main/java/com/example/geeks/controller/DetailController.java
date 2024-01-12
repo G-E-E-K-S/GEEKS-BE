@@ -1,7 +1,7 @@
 package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
-import com.example.geeks.responseDto.DetailDto;
+import com.example.geeks.responseDto.DetailDTO;
 import com.example.geeks.service.DetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ public class DetailController {
     private String tokenSecretKey;
 
     @PostMapping("/register")
-    public String register(@CookieValue String token, @RequestBody DetailDto dto) {
+    public String register(@CookieValue String token, @RequestBody DetailDTO dto) {
         Long userId = util.getUserId(token, tokenSecretKey);
         //Long userId = 1L;
 
@@ -40,13 +40,13 @@ public class DetailController {
     }
 
     @GetMapping("/details")
-    public List<DetailDto> sendDetailToFE(@CookieValue String token,@RequestParam Long id){
+    public List<DetailDTO> sendDetailToFE(@CookieValue String token, @RequestParam Long id){
         Long userId = util.getUserId(token, tokenSecretKey);
 
-        DetailDto userDetail = detailService.getUserDetailById(userId);
-        DetailDto opponentDetail = detailService.getOpponentDetailById(id);
+        DetailDTO userDetail = detailService.getUserDetailById(userId);
+        DetailDTO opponentDetail = detailService.getOpponentDetailById(id);
 
-        List<DetailDto> Details = new ArrayList<>();
+        List<DetailDTO> Details = new ArrayList<>();
 
         Details.add(userDetail);
         Details.add(opponentDetail);

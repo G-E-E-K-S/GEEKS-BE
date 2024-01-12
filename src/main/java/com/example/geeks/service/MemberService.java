@@ -3,15 +3,12 @@ package com.example.geeks.service;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
-import com.example.geeks.requestDto.ProfileEditDto;
-import com.example.geeks.requestDto.RegisterDto;
+import com.example.geeks.requestDto.ProfileEditDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,7 +52,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void editProfile(ProfileEditDto dto, Long id) {
+    public void editProfile(ProfileEditDTO dto, Long id) {
         Member member = memberRepository.findById(id).get();
 
         member.changeProfile(dto);

@@ -4,9 +4,9 @@ import com.example.geeks.Enum.DormitoryType;
 import com.example.geeks.Enum.Gender;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
-import com.example.geeks.requestDto.PasswordDto;
-import com.example.geeks.requestDto.ProfileEditDto;
-import com.example.geeks.requestDto.RegisterDto;
+import com.example.geeks.requestDto.PasswordDTO;
+import com.example.geeks.requestDto.ProfileEditDTO;
+import com.example.geeks.requestDto.RegisterDTO;
 import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,7 +63,7 @@ public class MemberController {
         return "";
     }*/
    @PostMapping("/register")
-   public String register(@RequestBody RegisterDto dto) {
+   public String register(@RequestBody RegisterDTO dto) {
        Member member = Member.builder()
                .nickname(dto.getNickname())
                .email(dto.getEmail())
@@ -99,7 +99,7 @@ public class MemberController {
     }
 
     @PostMapping("/password")
-    public String password(@RequestBody PasswordDto dto, HttpSession session) {
+    public String password(@RequestBody PasswordDTO dto, HttpSession session) {
         String encodePassword = encoder.encode(dto.getPassword());
         session.setAttribute("password", encodePassword);
         return "success";
@@ -148,7 +148,7 @@ public class MemberController {
     }
 
     @PostMapping("/edit/profile")
-    public String editProfile(@RequestBody ProfileEditDto dto,
+    public String editProfile(@RequestBody ProfileEditDTO dto,
                               @CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         memberService.editProfile(dto, userId);

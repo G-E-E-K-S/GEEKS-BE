@@ -5,8 +5,8 @@ import com.example.geeks.domain.Detail;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.DetailRepository;
 import com.example.geeks.repository.MemberRepository;
-import com.example.geeks.responseDto.DetailDto;
-import com.example.geeks.requestDto.ProfileEditDto;
+import com.example.geeks.responseDto.DetailDTO;
+import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.service.DetailService;
 import com.example.geeks.service.MemberService;
 import org.junit.jupiter.api.Test;
@@ -121,7 +121,7 @@ public class MemberTest {
         em.clear();
         em.flush();
 
-        ProfileEditDto dto = new ProfileEditDto("admin", "소프트웨어", 20, "안녕");
+        ProfileEditDTO dto = new ProfileEditDTO("admin", "소프트웨어", 20, "안녕");
         memberService.editProfile(dto, 1L);
 
         Member member2 = memberRepository.findById(1L).get();
@@ -195,15 +195,15 @@ public class MemberTest {
 
         detailRepository.save(yourDetail);
         
-        DetailDto userDetail = detailService.getUserDetailById(member.getId());
-        DetailDto opponentDetail = detailService.getOpponentDetailById(member1.getId());
+        DetailDTO userDetail = detailService.getUserDetailById(member.getId());
+        DetailDTO opponentDetail = detailService.getOpponentDetailById(member1.getId());
         
-        List<DetailDto> Details = new ArrayList<>();
+        List<DetailDTO> Details = new ArrayList<>();
 
         Details.add(userDetail);
         Details.add(opponentDetail);
 
-        for (DetailDto detail : Details) {
+        for (DetailDTO detail : Details) {
             System.out.println(detail);
         }
     }

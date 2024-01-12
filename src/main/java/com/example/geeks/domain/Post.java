@@ -1,9 +1,6 @@
 package com.example.geeks.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -33,6 +30,32 @@ public class Post extends BaseTimeEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "post", cascade = ALL)
+    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE})
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<Photo> photos = new ArrayList<>();
+
+    public void setMember(Member member) {
+        this.member = member;
+
+        if(!member.getPosts().contains(this)) {
+            member.addPost(this);
+        }
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+    public void addPhoto(Photo photo) {
+        this.photos.add(photo);
+    }
+
+    @Builder
+    public Post(String title, String content, int like_count) {
+        this.title = title;
+        this.content = content;
+        this.like_count = like_count;
+    }
 }
