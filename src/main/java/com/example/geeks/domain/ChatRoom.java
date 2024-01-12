@@ -48,4 +48,5 @@ public class ChatRoom{
         dto.setHistories(this.histories);
         return dto;
     }
+
 }
