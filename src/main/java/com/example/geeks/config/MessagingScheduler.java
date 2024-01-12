@@ -24,7 +24,7 @@ public class MessagingScheduler {
         log.info("checkNotice call");
         try{
             messagingTemplate.setMessageConverter(new StringMessageConverter());
-            messagingTemplate.convertAndSend("/subscribe/notice" + message.getId(), message.getUser() + "|" + message.getId() + ":" + message.getContent() + " / " +message.getTimeStamp());
+            messagingTemplate.convertAndSend("/subscribe/notice" + message.getRoomid(), message.getUser() + "|" + message.getRoomid() + ":" + message.getContent() + " / " +message.getTimeStamp());
         }catch(Exception ex){
             log.error(ex.getMessage());
         }
