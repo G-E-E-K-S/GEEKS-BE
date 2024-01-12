@@ -3,6 +3,7 @@ package com.example.geeks.Handler;
 import com.example.geeks.config.KafkaConstants;
 import com.example.geeks.requestDto.ChatMessage;
 import com.example.geeks.requestDto.ChatRoomDTO;
+import com.example.geeks.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,6 +22,9 @@ public class MessageHandler {
     private KafkaTemplate<String, ChatMessage> kafkaTemplate;
 
     @Autowired
+    private ChatService chatService;
+
+    @Autowired
     private ChatRoomDTO chatRoomDTO;
 
     @Transactional
@@ -31,12 +35,10 @@ public class MessageHandler {
         // 지금 시간을 넣어서 발송
         message.setTimeStamp(LocalDateTime.now().toString());
         // RDS에 데이터 입력
-        int insert = chatRoomDTO.insertChatting(message);
+        chatService.saveMessage(message);
         // 정상적으로 데이터가 입력된 경우
-        if(insert > 0) {
-            // 카프카에 메세지를 push
-            kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message).get();
-        }
+        // 카프카에 메세지를 push
+        kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message).get();
     }
 
 }

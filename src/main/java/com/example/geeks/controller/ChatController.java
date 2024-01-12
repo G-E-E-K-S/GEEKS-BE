@@ -1,25 +1,23 @@
 package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
+import com.example.geeks.domain.ChatRoom;
+import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {
-    @GetMapping("/")
-    public String index(){
-        return "error";
-    }
+
     private final ChatService chatService;
     private final Util util;
 
@@ -30,21 +28,39 @@ public class ChatController {
     @GetMapping("/room")
     public String createRoom(@RequestParam String yournickname, @CookieValue("token") String token) {
         String mynickName = util.getNickname(token, secretKey);
+        //String mynickName = "90000";
         System.out.print(mynickName);
         return chatService.createChatRoom(mynickName, yournickname);
     }
 
-    @GetMapping("/{id}")
-    public String chattingRoom(@PathVariable String id, HttpSession session, Model model){
-        if(id.equals("guest")){
-            model.addAttribute("name", "guest");
-        }else if(id.equals("master")){
-            model.addAttribute("name", "master");
-        }else if(id.equals("loose")){
-            model.addAttribute("name", "loose");
-        }else {
-            return "error";
-        }
-        return "chattingRoom2";
+    //읽음 처리 기능
+    @GetMapping("/readChat")
+    public void readMessage(Long chatid){
+        chatService.readChat(chatid);
     }
+
+    //message가져오기
+    @GetMapping("/messages")
+    public ChatRoomDTO getMessages(@CookieValue("token") String token, String roomid, String yournickname){
+        String myNickname = util.getNickname(token, secretKey);
+        return chatService.getMessages(roomid);
+    }
+
+    @GetMapping("/main")
+    public List<ChatRoomDTO> getChatRooms(@CookieValue("token") String token){
+        String myNickname = util.getNickname(token, secretKey);
+        System.out.println(myNickname);
+        return chatService.getChatingRooms(myNickname);
+    }
+
+    @GetMapping("/all")
+    public List<ChatRoom> getAllRooms(){
+        return chatService.getAllRooms();
+    }
+
+    @GetMapping("/find")
+    public ChatRoom findRoom(String UUID){
+        return chatService.findRoom(UUID);
+    }
+
 }
