@@ -48,12 +48,11 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(message.getRoomid());
         Member sender = getUserByNickname(message.getUser());
         String _message = message.getContent();
-        LocalDateTime createdAt = LocalDateTime.now();
-        saveChatMessage(chatRoom, sender, _message, createdAt);
+        saveChatMessage(chatRoom, sender, _message, message.getTimeStamp());
     }
 
     @Transactional
-    public void saveChatMessage(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
+    public void saveChatMessage(ChatRoom chatRoom, Member sender, String message, String createdAt) {
         ChatHistory chatHistory;
         chatHistory = ChatHistory.create(chatRoom, sender, message, createdAt);
         chatHistoryRepository.save(chatHistory);

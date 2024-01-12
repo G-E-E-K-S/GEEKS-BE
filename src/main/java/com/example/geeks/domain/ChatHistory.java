@@ -26,14 +26,14 @@ public class ChatHistory {
 
     private int readCount = 2;
 
-    private LocalDateTime createdAt;
-    public ChatHistory(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
+    private String createdAt;
+    public ChatHistory(ChatRoom chatRoom, Member sender, String message, String createdAt) {
         this.chatRoom = chatRoom;
         this.sender = sender;
         this.message = message;
         this.createdAt = createdAt;
     }
-    public static ChatHistory create(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
+    public static ChatHistory create(ChatRoom chatRoom, Member sender, String message, String createdAt) {
         ChatHistory chatHistory = new ChatHistory(chatRoom, sender, message, createdAt);
         chatRoom.getHistories().add(chatHistory);
         return chatHistory;
