@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class DetailDto {
+public class DetailDTO {
     private boolean smoking;
 
     private boolean habit;

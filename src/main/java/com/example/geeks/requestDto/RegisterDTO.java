@@ -4,10 +4,8 @@ import com.example.geeks.Enum.DormitoryType;
 import com.example.geeks.Enum.Gender;
 import lombok.Getter;
 
-import java.lang.reflect.Type;
-
 @Getter
-public class RegisterDto {
+public class RegisterDTO {
     private Long id;
 
     private String nickname;

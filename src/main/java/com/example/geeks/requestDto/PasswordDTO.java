@@ -3,6 +3,6 @@ package com.example.geeks.requestDto;
 import lombok.Getter;
 
 @Getter
-public class PasswordDto {
+public class PasswordDTO {
     private String password;
 }
