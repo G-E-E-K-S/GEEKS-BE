@@ -1,13 +1,18 @@
 package com.example.geeks.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.example.geeks.domain.Comment;
 import com.example.geeks.domain.Member;
 import com.example.geeks.domain.Photo;
 import com.example.geeks.domain.Post;
+import com.example.geeks.repository.CommentRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PhotoRepository;
 import com.example.geeks.repository.PostRepository;
+import com.example.geeks.requestDto.PostCommentRequestDTO;
+import com.example.geeks.responseDto.PostCommentResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +34,8 @@ public class PostService {
 
     private final MemberRepository memberRepository;
 
+    private final CommentRepository commentRepository;
+
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -41,10 +48,11 @@ public class PostService {
         metadata.setContentType(file.getContentType());
 
         amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
+        System.out.println("사진 URL" + amazonS3.getUrl(bucket, fileName));
     }
 
     @Transactional
-    public void createPost(Long memberId, String title, String content, List<MultipartFile> files) {
+    public void createPost(Long memberId, String title, String content, List<MultipartFile> files) throws IOException{
         Member member = memberRepository.findById(memberId).get();
 
         Post post = Post.builder()
@@ -67,11 +75,39 @@ public class PostService {
                 String fileName = member.getNickname() + current_date + count++;
                 System.out.println("file name: " + fileName);
 
-                //S3에 업로드 하는 기능 추가하기
-
                 Photo photo = Photo.createPhoto(fileName, post);
                 photoRepository.save(photo);
+
+                //S3 Upload
+                uploadToS3(file, fileName);
             }
         }
+    }
+
+    @Transactional
+    public void createComment(Long memberId, PostCommentRequestDTO requestDTO) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("Could not found member id : " + memberId));
+
+        Post post = postRepository.findById(requestDTO.getPostId())
+                .orElseThrow(() -> new NotFoundException("Could not found post id : " + requestDTO.getPostId()));
+
+        Comment comment = new Comment(requestDTO.getContent(), false);
+        comment.setMember(member);
+        comment.setPost(post);
+
+        Comment parentComment;
+
+        if(requestDTO.getParentId() != null) {
+            parentComment = commentRepository.findById(requestDTO.getParentId())
+                    .orElseThrow(() -> new NotFoundException("Could not found parent id : " + requestDTO.getParentId()));
+            comment.setParent(parentComment);
+        }
+
+        commentRepository.save(comment);
+    }
+
+    public List<PostCommentResponseDTO> selectComment(Long postId) {
+        return commentRepository.findByPostId(postId);
     }
 }

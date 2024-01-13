@@ -54,6 +54,9 @@ public class Member extends BaseTimeEntity{
     @OneToMany(mappedBy = "member", cascade = ALL)
     private List<Post> posts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
+    private List<Comment> comments = new ArrayList<>();
+
     public void changeIntroduction(String introduction) {
         this.introduction = introduction;
     }
@@ -64,6 +67,10 @@ public class Member extends BaseTimeEntity{
 
     public void addPost(Post post) {
         this.posts.add(post);
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
     public void changeProfile(ProfileEditDTO dto) {

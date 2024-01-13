@@ -42,4 +42,37 @@ public class Comment extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "parent")
     private List<Comment> children = new ArrayList<>();
+
+    public Comment(String content, Boolean isDeleted) {
+        this.content = content;
+        this.isDeleted = isDeleted;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+
+        if(!member.getComments().contains(this)) {
+            member.addComment(this);
+        }
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+
+        if(!post.getComments().contains(this)) {
+            post.addComment(this);
+        }
+    }
+
+    public void setParent(Comment comment) {
+        this.parent = comment;
+
+        if(!comment.children.contains(this)) {
+            comment.children.add(this);
+        }
+    }
+
+    public void addComment(Comment comment) {
+        this.children.add(comment);
+    }
 }
