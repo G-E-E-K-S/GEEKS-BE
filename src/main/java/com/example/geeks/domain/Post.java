@@ -1,5 +1,6 @@
 package com.example.geeks.domain;
 
+import com.example.geeks.Enum.DormitoryType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,11 +27,13 @@ public class Post extends BaseTimeEntity{
 
     private int like_count;
 
+    private DormitoryType type;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE})
+    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
@@ -53,9 +56,10 @@ public class Post extends BaseTimeEntity{
     }
 
     @Builder
-    public Post(String title, String content, int like_count) {
+    public Post(String title, String content, int like_count, DormitoryType type) {
         this.title = title;
         this.content = content;
         this.like_count = like_count;
+        this.type = type;
     }
 }

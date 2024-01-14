@@ -28,6 +28,12 @@ public class PostController {
         return "success";
     }
 
+    @GetMapping("/delete")
+    public String delete(@RequestParam Long postId) {
+        postService.deletePost(postId);
+        return "success";
+    }
+
     @PostMapping("/comment")
     public String comment(@RequestBody PostCommentRequestDTO requestDTO) {
         postService.createComment(1L, requestDTO);

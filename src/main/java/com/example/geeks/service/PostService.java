@@ -52,19 +52,20 @@ public class PostService {
     }
 
     @Transactional
-    public void createPost(Long memberId, String title, String content, List<MultipartFile> files) throws IOException{
+    public void createPost(Long memberId, String title, String content, List<MultipartFile> files) throws IOException {
         Member member = memberRepository.findById(memberId).get();
 
         Post post = Post.builder()
                 .title(title)
                 .content(content)
                 .like_count(0)
+                .type(member.getType())
                 .build();
         post.setMember(member);
 
         postRepository.save(post);
 
-        if(files != null) {
+        if (files != null) {
             int count = 1;
 
             for (MultipartFile file : files) {
@@ -85,6 +86,20 @@ public class PostService {
     }
 
     @Transactional
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
+
+        List<Photo> photos = post.getPhotos();
+
+        for (Photo photo : photos) {
+            amazonS3.deleteObject(bucket, photo.getPhotoName());
+        }
+
+        postRepository.delete(post);
+    }
+
+    @Transactional
     public void createComment(Long memberId, PostCommentRequestDTO requestDTO) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException("Could not found member id : " + memberId));
@@ -98,7 +113,7 @@ public class PostService {
 
         Comment parentComment;
 
-        if(requestDTO.getParentId() != null) {
+        if (requestDTO.getParentId() != null) {
             parentComment = commentRepository.findById(requestDTO.getParentId())
                     .orElseThrow(() -> new NotFoundException("Could not found parent id : " + requestDTO.getParentId()));
             comment.setParent(parentComment);
