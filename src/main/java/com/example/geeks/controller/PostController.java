@@ -1,11 +1,13 @@
 package com.example.geeks.controller;
 
+import com.example.geeks.Security.Util;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.responseDto.PostCommentResponseDTO;
 import com.example.geeks.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,12 +21,19 @@ public class PostController {
 
     private final PostService postService;
 
+    private final Util util;
+
+    @Value("${jwt.secret}")
+    private String tokenSecretKey;
+
     @PostMapping("/create")
     public String create(
-            @RequestPart(required=false) List<MultipartFile> files,
-            @RequestParam String title, @RequestParam String content) throws IOException {
+            @RequestPart(value = "files", required=false) List<MultipartFile> files,
+            @RequestPart(value = "dto") PostCreateRequestDTO requestDTO,
+            @CookieValue(value = "token") String token) throws IOException {
         // 쿠키값 가져와서 멤버ID 넘겨주는거로 바꾸기
-        postService.createPost(1L, title, content, files);
+        Long userId = util.getUserId(token, tokenSecretKey);
+        postService.createPost(userId, requestDTO.getTitle(), requestDTO.getContent(), files);
         return "success";
     }
 

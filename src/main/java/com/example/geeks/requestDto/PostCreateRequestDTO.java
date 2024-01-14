@@ -14,6 +14,4 @@ public class PostCreateRequestDTO {
     private String title;
 
     private String content;
-
-    private List<MultipartFile> photos;
 }
