@@ -62,34 +62,50 @@ public class MemberController {
 
         return "";
     }*/
-   @PostMapping("/register")
-   public String register(@RequestBody RegisterDTO dto) {
-       Member member = Member.builder()
-               .nickname(dto.getNickname())
-               .email(dto.getEmail())
-               .password(dto.getPassword())
-               .major(dto.getMajor())
-               .gender(dto.getGender())
-               .exp(dto.getExp())
-               .type(dto.getType())
-               .image_url("basic")
-               .introduction("")
-               .build();
+//   @PostMapping("/register")
+//   public String register(@RequestBody RegisterDTO dto) {
+//       Member member = Member.builder()
+//               .nickname(dto.getNickname())
+//               .email(dto.getEmail())
+//               .password(dto.getPassword())
+//               .major(dto.getMajor())
+//               .gender(dto.getGender())
+//               .exp(dto.getExp())
+//               .type(dto.getType())
+//               .image_url("basic")
+//               .introduction("")
+//               .build();
+//
+//       memberService.join(member);
+//
+//       String token = memberService.createToken(member.getId(), member.getNickname());
+//       Cookie cookie = new Cookie("token", token);
+//
+//       cookie.setPath("/");
+//       cookie.setSecure(false);
+//       cookie.setMaxAge(86400); // 1일
+//       cookie.setHttpOnly(false);
+//
+//       HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+//       response.addCookie(cookie);
+//
+//       return "";
+//   }
 
-       memberService.join(member);
-
-       String token = memberService.createToken(member.getId(), member.getNickname());
+   @GetMapping("/admin")
+   public String admin() {
+       String token = memberService.createToken(1L, "member1");
        Cookie cookie = new Cookie("token", token);
 
        cookie.setPath("/");
        cookie.setSecure(false);
        cookie.setMaxAge(86400); // 1일
-       cookie.setHttpOnly(false);
+       cookie.setHttpOnly(true);
 
        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
        response.addCookie(cookie);
-
-       return "";
+       System.out.println("token: " + token);
+       return "success";
    }
 
     @GetMapping("/check/nickname")
