@@ -14,8 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @Component
 public class ChatRoomDTO {
-    private Long id;
-
     public ChatRoomDTO(String roomId, Member user, Member opponentUser, List<ChatHistory> histories) {
         this.roomId = roomId;
         this.user = user;

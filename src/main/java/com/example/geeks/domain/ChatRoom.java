@@ -27,26 +27,20 @@ public class ChatRoom{
 
     private String roomId;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "my_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "my_user_id")
     private Member user;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "opponent_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "opponent_user_id")
     private Member opponentUser;
 
-    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.EAGER) // FetchType.LAZY로 변경
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY) // FetchType.LAZY로 변경
     private List<ChatHistory> histories = new ArrayList<>();
 
 
     public ChatRoomDTO toDTO() {
-        ChatRoomDTO dto = new ChatRoomDTO();
-        dto.setId(this.id);
-        dto.setRoomId(this.roomId);
-        dto.setUser(this.user);
-        dto.setOpponentUser(this.opponentUser);
-        dto.setHistories(this.histories);
+        ChatRoomDTO dto = new ChatRoomDTO(this.roomId, this.user, this.opponentUser, this.histories);
         return dto;
     }
-
 }
