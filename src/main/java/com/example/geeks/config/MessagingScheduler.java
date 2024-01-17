@@ -1,6 +1,8 @@
 package com.example.geeks.config;
 
 import com.example.geeks.requestDto.ChatMessage;
+import com.example.geeks.responseDto.SendChatMessage;
+import com.example.geeks.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class MessagingScheduler {
 
     private SimpMessagingTemplate messagingTemplate;
+    private ChatService chatService;
 
     @Autowired
     public void setMessagingTemplate(SimpMessagingTemplate messagingTemplate) {
@@ -23,8 +26,9 @@ public class MessagingScheduler {
     public void checkNotice(ChatMessage message){
         log.info("checkNotice call");
         try{
-            messagingTemplate.setMessageConverter(new StringMessageConverter());
-            messagingTemplate.convertAndSend("/subscribe/notice" + message.getRoomid(), message.getUser() + "|" + message.getRoomid() + ":" + message.getContent() + " / " +message.getCreateAt());
+            //messagingTemplate.setMessageConverter(new StringMessageConverter());
+            Long chatId = chatService.saveMessage(message);
+            messagingTemplate.convertAndSend("/subscribe/notice" + message.getRoomid(), SendChatMessage.of(chatId, message));
         }catch(Exception ex){
             log.error(ex.getMessage());
         }

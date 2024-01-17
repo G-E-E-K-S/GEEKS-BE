@@ -20,21 +20,10 @@ public class MessageHandler {
 
     @Autowired
     private KafkaTemplate<String, ChatMessage> kafkaTemplate;
-
-    @Autowired
-    private ChatService chatService;
-
-    @Autowired
-    private ChatRoomDTO chatRoomDTO;
     
     @MessageMapping("/message")
-    @SendTo("/topic/greetings")
     public void greeting(ChatMessage message) throws Exception {
         log.info("message received, message:{}", message.toString());
-        // RDS에 데이터 입력
-        chatService.saveMessage(message);
-        // 정상적으로 데이터가 입력된 경우
-        // 카프카에 메세지를 push
         kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message).get();
     }
 }
