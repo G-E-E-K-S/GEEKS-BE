@@ -32,10 +32,10 @@ public class ChatController {
     }
 
     //읽음 처리 기능
-    @GetMapping("/readChat")
+    /*@GetMapping("/readChat")
     public void readMessage(@RequestParam Long chatid){
         chatService.readChat(chatid);
-    }
+    }*/
 
     //message가져오기
     @GetMapping("/messages")

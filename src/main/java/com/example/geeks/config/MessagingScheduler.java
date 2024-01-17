@@ -28,6 +28,7 @@ public class MessagingScheduler {
         try{
             //messagingTemplate.setMessageConverter(new StringMessageConverter());
             Long chatId = chatService.saveMessage(message);
+            chatService.readChat(chatId);
             messagingTemplate.convertAndSend("/subscribe/notice" + message.getRoomid(), SendChatMessage.of(chatId, message));
         }catch(Exception ex){
             log.error(ex.getMessage());
