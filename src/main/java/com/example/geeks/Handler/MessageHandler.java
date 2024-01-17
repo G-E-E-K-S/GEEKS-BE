@@ -32,8 +32,6 @@ public class MessageHandler {
     @SendTo("/topic/greetings")
     public void greeting(ChatMessage message) throws Exception {
         log.info("message received, message:{}", message.toString());
-        // 지금 시간을 넣어서 발송
-        message.setTimeStamp(LocalDateTime.now().toString());
         // RDS에 데이터 입력
         chatService.saveMessage(message);
         // 정상적으로 데이터가 입력된 경우

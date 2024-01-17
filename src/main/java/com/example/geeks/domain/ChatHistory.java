@@ -17,6 +17,7 @@ public class ChatHistory {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,14 +27,14 @@ public class ChatHistory {
 
     private int readCount = 2;
 
-    private String createdAt;
-    public ChatHistory(ChatRoom chatRoom, Member sender, String message, String createdAt) {
+    private LocalDateTime createdAt;
+    public ChatHistory(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
         this.chatRoom = chatRoom;
         this.sender = sender;
         this.message = message;
         this.createdAt = createdAt;
     }
-    public static ChatHistory create(ChatRoom chatRoom, Member sender, String message, String createdAt) {
+    public static ChatHistory create(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
         ChatHistory chatHistory = new ChatHistory(chatRoom, sender, message, createdAt);
         chatRoom.getHistories().add(chatHistory);
         return chatHistory;

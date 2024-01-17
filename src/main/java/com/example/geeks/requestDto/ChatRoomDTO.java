@@ -14,15 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @Component
 public class ChatRoomDTO {
+    private String roomId;
+    private Member user;
+    private Member opponentUser;
+    private List<ChatHistory> histories;
+
     public ChatRoomDTO(String roomId, Member user, Member opponentUser, List<ChatHistory> histories) {
         this.roomId = roomId;
         this.user = user;
         this.opponentUser = opponentUser;
         this.histories = histories;
     }
-
-    private String roomId;
-    private Member user;
-    private Member opponentUser;
-    private List<ChatHistory> histories;
 }

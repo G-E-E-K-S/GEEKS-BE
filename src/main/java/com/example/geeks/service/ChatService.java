@@ -8,7 +8,9 @@ import com.example.geeks.repository.ChatRoomRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.requestDto.ChatMessage;
 import com.example.geeks.requestDto.ChatRoomDTO;
+import com.example.geeks.responseDto.MessagesResponse;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,27 +45,30 @@ public class ChatService {
         return chatRoom.getRoomId();
     }
 
-    @Transactional
+
     public void saveMessage(ChatMessage message) {
         ChatRoom chatRoom = chatRoomRepository.findById(message.getRoomid());
         Member sender = getUserByNickname(message.getUser());
         String _message = message.getContent();
-        saveChatMessage(chatRoom, sender, _message, message.getTimeStamp());
+        saveChatMessage(chatRoom, sender ,_message, message.getCreateAt());
     }
-
     @Transactional
-    public void saveChatMessage(ChatRoom chatRoom, Member sender, String message, String createdAt) {
-        ChatHistory chatHistory;
-        chatHistory = ChatHistory.create(chatRoom, sender, message, createdAt);
+    public void saveChatMessage(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
+        ChatHistory chatHistory = ChatHistory.create(chatRoom, sender, message, createdAt);
         chatHistoryRepository.save(chatHistory);
     }
 
-    public ChatRoomDTO getMessages(String roomUUID) {
-        ChatRoom chatRoom = chatRoomRepository.findById(roomUUID);
-        ChatRoomDTO chatRoomDTO = new ChatRoomDTO(chatRoom.getRoomId(), chatRoom.getUser(), chatRoom.getOpponentUser(), chatRoom.getHistories());
-        return chatRoomDTO;
+
+
+    public MessagesResponse getMessages(String sender, String roomUUID, String recipient) {
+        Member user = getUserByNickname(sender);
+        Member opponentUser = getUserByNickname(recipient);
+        ChatRoom chatRoom = findRoom(roomUUID);
+        reduceReadCountOfChats(chatRoom, user);
+        return MessagesResponse.of(opponentUser, chatRoom);
     }
 
+    @Transactional
     public ChatRoom create(Member user, Member opponentUser) {
         ChatRoom chatRoom = new ChatRoom(UUID.randomUUID().toString(), user, opponentUser);
         return chatRoom;
@@ -94,6 +99,21 @@ public class ChatService {
                 .map(ChatRoom::toDTO)
                 .collect(Collectors.toList());
         return chatRoomDTOs;
+    }
+
+    public void reduceReadCountOfChats(ChatRoom chatRoom, Member me) {
+        chatRoom.getHistories().forEach(chatHistory -> checkAndReduceReadCount(chatHistory, me));
+        chatRoomRepository.save(chatRoom);
+    }
+
+    private void checkAndReduceReadCount(ChatHistory chatHistory, Member me) {
+        if (canReduceReadCount(chatHistory, me)) {
+            chatHistory.setReadCount(chatHistory.getReadCount() - 1);
+        }
+    }
+
+    private boolean canReduceReadCount(ChatHistory chat, Member me) {
+        return !chat.getSender().equals(me) && chat.getReadCount() == 1;
     }
 
     public List<ChatRoom> getAllRooms(){
