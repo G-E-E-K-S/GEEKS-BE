@@ -37,6 +37,7 @@ public class ChatController {
         chatService.readChat(chatid);
     }*/
 
+
     //message가져오기
     @GetMapping("/messages")
     public MessagesResponse getMessages(@CookieValue("token") String token,
