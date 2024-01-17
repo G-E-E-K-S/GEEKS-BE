@@ -27,5 +27,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setDisconnectDelay(30 * 1000);
 
         registry.addEndpoint("/websocket").setAllowedOrigins("*").withSockJS();
+
     }
 }
