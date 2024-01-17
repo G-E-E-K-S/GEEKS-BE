@@ -3,7 +3,9 @@ package com.example.geeks.controller;
 import com.example.geeks.Security.Util;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
+import com.example.geeks.responseDto.PostAllDTO;
 import com.example.geeks.responseDto.PostCommentResponseDTO;
+import com.example.geeks.responseDto.PostDetailDTO;
 import com.example.geeks.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,16 @@ public class PostController {
         Long userId = util.getUserId(token, tokenSecretKey);
         postService.createPost(userId, requestDTO.getTitle(), requestDTO.getContent(), files);
         return "success";
+    }
+
+    @GetMapping("/showAll")
+    public List<PostAllDTO> showAll() {
+        return postService.findAllPost();
+    }
+
+    @GetMapping("/show")
+    public PostDetailDTO show(@RequestParam Long postId) {
+        return postService.findDetailPost(postId);
     }
 
     @GetMapping("/delete")

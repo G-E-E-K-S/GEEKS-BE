@@ -12,7 +12,9 @@ import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PhotoRepository;
 import com.example.geeks.repository.PostRepository;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
+import com.example.geeks.responseDto.PostAllDTO;
 import com.example.geeks.responseDto.PostCommentResponseDTO;
+import com.example.geeks.responseDto.PostDetailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -83,6 +86,33 @@ public class PostService {
                 uploadToS3(file, fileName);
             }
         }
+    }
+
+    public List<PostAllDTO> findAllPost() {
+        List<Post> posts = postRepository.findAll();
+
+        List<PostAllDTO> result = posts
+                .stream()
+                .map(post -> new PostAllDTO(post.getId(), post.getTitle(), post.getContent(),
+                        !post.getPhotos().isEmpty() ? post.getPhotos().get(0).getPhotoName() : null,
+                        post.getComments().size(), post.getCreatedDate())).toList();
+
+        return result;
+    }
+
+    public PostDetailDTO findDetailPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
+
+        List<PostCommentResponseDTO> comments = commentRepository.findByPostId(postId);
+        List<String> photoNames = photoRepository.findPhotoNamesByPostId(postId);
+
+        return PostDetailDTO.builder()
+                .title(post.getTitle())
+                .content(post.getContent())
+                .comments(comments)
+                .photoNames(photoNames)
+                .build();
     }
 
     @Transactional
