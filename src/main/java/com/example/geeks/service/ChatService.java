@@ -46,16 +46,17 @@ public class ChatService {
     }
 
 
-    public void saveMessage(ChatMessage message) {
+    public Long saveMessage(ChatMessage message) {
         ChatRoom chatRoom = chatRoomRepository.findById(message.getRoomid());
         Member sender = getUserByNickname(message.getUser());
         String _message = message.getContent();
-        saveChatMessage(chatRoom, sender ,_message, message.getCreateAt());
+        return saveChatMessage(chatRoom, sender ,_message, message.getCreateAt());
     }
     @Transactional
-    public void saveChatMessage(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
+    public Long saveChatMessage(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
         ChatHistory chatHistory = ChatHistory.create(chatRoom, sender, message, createdAt);
-        chatHistoryRepository.save(chatHistory);
+        Long id = chatHistoryRepository.save(chatHistory);
+        return id;
     }
 
 
