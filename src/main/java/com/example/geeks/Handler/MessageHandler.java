@@ -26,8 +26,7 @@ public class MessageHandler {
 
     @Autowired
     private ChatRoomDTO chatRoomDTO;
-
-    @Transactional
+    
     @MessageMapping("/message")
     @SendTo("/topic/greetings")
     public void greeting(ChatMessage message) throws Exception {
@@ -38,5 +37,4 @@ public class MessageHandler {
         // 카프카에 메세지를 push
         kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message).get();
     }
-
 }

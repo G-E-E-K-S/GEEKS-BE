@@ -1,5 +1,6 @@
 package com.example.geeks.requestDto;
 
+import com.example.geeks.domain.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

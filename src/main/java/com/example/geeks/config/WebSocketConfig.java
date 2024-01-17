@@ -12,7 +12,6 @@ import org.springframework.web.socket.config.annotation.*;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic"); // broker 역할 수행시 사용할 prefix
         registry.enableSimpleBroker("/subscribe", "/topic");
         registry.setApplicationDestinationPrefixes("/app"); // 메세지 수신 용 prefix
     }
@@ -27,7 +26,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setHttpMessageCacheSize(1000)
                 .setDisconnectDelay(30 * 1000);
 
-        registry.addEndpoint("/websocket");
         registry.addEndpoint("/websocket").setAllowedOrigins("*").withSockJS();
     }
 }
