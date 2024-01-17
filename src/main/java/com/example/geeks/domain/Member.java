@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
@@ -44,7 +45,7 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
 
-    @OneToOne(mappedBy = "member", cascade = ALL)
+    @OneToOne(mappedBy = "member", fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "detail_id")
     private Detail detail;
 
