@@ -27,7 +27,6 @@ public class ChatController {
     public String createRoom(@RequestParam String yournickname,
                              @CookieValue("token") String token) {
         String mynickName = util.getNickname(token, secretKey);
-        //String mynickName = "90000";
         System.out.print(mynickName);
         return chatService.createChatRoom(mynickName, yournickname);
     }

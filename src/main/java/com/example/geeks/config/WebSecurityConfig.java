@@ -34,6 +34,9 @@ public class WebSecurityConfig {
 //                .antMatchers("/user/register").permitAll()
 //                .antMatchers("/board/return").permitAll()
 //                .antMatchers("/user/login").permitAll()
+
+
+                
 //                .antMatchers("/search/recommand").permitAll()
 //                .antMatchers("/search/updateData").permitAll()
 //                .antMatchers("/chat/room").permitAll()
