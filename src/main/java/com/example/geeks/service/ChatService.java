@@ -10,12 +10,12 @@ import com.example.geeks.requestDto.ChatMessage;
 import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.responseDto.MessagesResponse;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,13 +36,17 @@ public class ChatService {
         System.out.println(user.getNickname());
         System.out.println(opponentUser.getNickname());
 
-        ChatRoom chatRoom = findChatRoom(user, opponentUser);
+        Optional<ChatRoom> chatRoom = findChatRoom(user, opponentUser);
+        ChatRoom result;
 
-        if(chatRoom == null){
-            chatRoom = create(user ,opponentUser);
-            chatRoomRepository.save(chatRoom);
+        if(!chatRoom.isPresent()){
+            result = create(user ,opponentUser);
+            chatRoomRepository.save(result);
+        } else {
+            result = chatRoom.get();
         }
-        return chatRoom.getRoomId();
+
+        return result.getRoomId();
     }
 
 
@@ -55,7 +59,9 @@ public class ChatService {
     @Transactional
     public Long saveChatMessage(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
         ChatHistory chatHistory = ChatHistory.create(chatRoom, sender, message, createdAt);
-        Long id = chatHistoryRepository.save(chatHistory);
+        chatHistoryRepository.save(chatHistory);
+        // 준형
+        Long id = chatHistory.getId();
         return id;
     }
 
@@ -76,8 +82,8 @@ public class ChatService {
     }
 
 
-    private ChatRoom findChatRoom(Member user, Member opponentUser) {
-        return chatRoomRepository.findByUserAndOpponentUser(user, opponentUser).get();
+    private Optional<ChatRoom> findChatRoom(Member user, Member opponentUser) {
+        return chatRoomRepository.findByUserAndOpponentUser(user, opponentUser);
     }
 
     public Member getUserByNickname(String name) {
@@ -94,7 +100,7 @@ public class ChatService {
 
     public List<ChatRoomDTO> getChatingRooms(String nickname){
         Member user = getUserByNickname(nickname);
-        List<ChatRoom> chatRoom = chatRoomRepository.findByUserOrOpponentUser(user);
+        List<ChatRoom> chatRoom = chatRoomRepository.findByUserOrOpponentUser(user.getId());
 
         List<ChatRoomDTO> chatRoomDTOs = chatRoom.stream()
                 .map(ChatRoom::toDTO)

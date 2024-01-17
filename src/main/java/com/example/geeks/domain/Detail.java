@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @ToString
@@ -37,7 +39,7 @@ public class Detail extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Tendency tendency;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 

@@ -5,14 +5,15 @@ import com.example.geeks.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-@Component
 public class ChatRoomDTO {
     private String roomId;
     private Member user;

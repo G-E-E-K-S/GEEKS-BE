@@ -51,7 +51,11 @@ public class ChatController {
     public List<ChatRoomDTO> getChatRooms(@CookieValue("token") String token){
         String myNickname = util.getNickname(token, secretKey);
         System.out.println(myNickname);
-        return chatService.getChatingRooms(myNickname);
+        List<ChatRoomDTO> chatingRooms = chatService.getChatingRooms(myNickname);
+        for (ChatRoomDTO chatingRoom : chatingRooms) {
+            System.out.println("chatingRoom = " + chatingRoom);
+        }
+        return chatingRooms;
     }
 
     @GetMapping("/all")
