@@ -23,6 +23,7 @@ public class MessageHandler {
     
     @MessageMapping("/message")
     public void greeting(ChatMessage message) throws Exception {
+        message.setCreateAt(LocalDateTime.now());
         log.info("message received, message:{}", message.toString());
         kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message).get();
     }

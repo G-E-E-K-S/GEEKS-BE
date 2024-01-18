@@ -10,6 +10,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @Component
@@ -27,11 +28,12 @@ public class MessagingScheduler {
     @KafkaListener(topics = KafkaConstants.KAFKA_TOPIC, groupId = "${kafka.group.id:${random.uuid}}")
     public void checkNotice(ChatMessage message){
         log.info("checkNotice call");
+        System.out.println("message = " + message);
         try{
             //messagingTemplate.setMessageConverter(new StringMessageConverter());
             Long chatId = chatService.saveMessage(message);
             chatService.readChat(chatId);
-            messagingTemplate.convertAndSend("/subscribe/notice" + message.getRoomid(), SendChatMessage.of(chatId, message));
+            messagingTemplate.convertAndSend("/subscribe/notice/" + message.getRoomid(), SendChatMessage.of(chatId, message));
         }catch(Exception ex){
             log.error(ex.getMessage());
         }
