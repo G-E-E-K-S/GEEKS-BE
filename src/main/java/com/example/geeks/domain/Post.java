@@ -25,6 +25,8 @@ public class Post extends BaseTimeEntity{
 
     private String content;
 
+    private int commentCount;
+
     private int like_count;
 
     private boolean anonymity;
@@ -57,10 +59,15 @@ public class Post extends BaseTimeEntity{
         this.photos.add(photo);
     }
 
+    public void increaseCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
     @Builder
-    public Post(String title, String content, int like_count, boolean anonymity, DormitoryType type) {
+    public Post(String title, String content, int commentCount, int like_count, boolean anonymity, DormitoryType type) {
         this.title = title;
         this.content = content;
+        this.commentCount = commentCount;
         this.like_count = like_count;
         this.anonymity = anonymity;
         this.type = type;

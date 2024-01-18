@@ -63,6 +63,7 @@ public class PostService {
                 .title(requestDTO.getTitle())
                 .content(requestDTO.getContent())
                 .anonymity(requestDTO.isAnonymity())
+                .commentCount(0)
                 .like_count(0)
                 .type(member.getType())
                 .build();
@@ -98,7 +99,7 @@ public class PostService {
                 .map(post -> new PostAllDTO(post.getId(), post.getTitle(), post.getContent(),
                         post.isAnonymity() ? null : post.getMember().getNickname(),
                         !post.getPhotos().isEmpty() ? post.getPhotos().get(0).getPhotoName() : null,
-                        post.getComments().size(), post.getCreatedDate())).toList();
+                        post.getCommentCount(), post.getCreatedDate())).toList();
 
         return result;
     }
@@ -114,6 +115,7 @@ public class PostService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .comments(comments)
+                .commentCount(post.getCommentCount())
                 .photoNames(photoNames)
                 .createdDate(post.getCreatedDate())
                 .writer(post.isAnonymity() ? null : post.getMember().getNickname())
@@ -155,6 +157,18 @@ public class PostService {
         }
 
         commentRepository.save(comment);
+
+        if(comment.getId() != null) {
+            post.increaseCommentCount(post.getCommentCount() + 1);
+        }
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + commentId));
+
+        comment.setDeleted(true);
     }
 
     public List<PostCommentResponseDTO> selectComment(Long postId) {
