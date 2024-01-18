@@ -12,6 +12,7 @@ import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PhotoRepository;
 import com.example.geeks.repository.PostRepository;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
+import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.responseDto.PostAllDTO;
 import com.example.geeks.responseDto.PostCommentResponseDTO;
 import com.example.geeks.responseDto.PostDetailDTO;
@@ -24,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,12 +55,14 @@ public class PostService {
     }
 
     @Transactional
-    public void createPost(Long memberId, String title, String content, List<MultipartFile> files) throws IOException {
-        Member member = memberRepository.findById(memberId).get();
+    public void createPost(Long memberId, PostCreateRequestDTO requestDTO, List<MultipartFile> files) throws IOException {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + memberId));
 
         Post post = Post.builder()
-                .title(title)
-                .content(content)
+                .title(requestDTO.getTitle())
+                .content(requestDTO.getContent())
+                .anonymity(requestDTO.isAnonymity())
                 .like_count(0)
                 .type(member.getType())
                 .build();
@@ -73,7 +75,7 @@ public class PostService {
 
             for (MultipartFile file : files) {
                 LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
                 String current_date = now.format(dateTimeFormatter);
 
                 String fileName = member.getNickname() + current_date + count++;
@@ -94,6 +96,7 @@ public class PostService {
         List<PostAllDTO> result = posts
                 .stream()
                 .map(post -> new PostAllDTO(post.getId(), post.getTitle(), post.getContent(),
+                        post.isAnonymity() ? null : post.getMember().getNickname(),
                         !post.getPhotos().isEmpty() ? post.getPhotos().get(0).getPhotoName() : null,
                         post.getComments().size(), post.getCreatedDate())).toList();
 
@@ -112,6 +115,8 @@ public class PostService {
                 .content(post.getContent())
                 .comments(comments)
                 .photoNames(photoNames)
+                .createdDate(post.getCreatedDate())
+                .writer(post.isAnonymity() ? null : post.getMember().getNickname())
                 .build();
     }
 

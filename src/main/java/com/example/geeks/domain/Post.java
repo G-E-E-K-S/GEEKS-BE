@@ -27,6 +27,8 @@ public class Post extends BaseTimeEntity{
 
     private int like_count;
 
+    private boolean anonymity;
+
     private DormitoryType type;
 
     @ManyToOne(fetch = LAZY)
@@ -56,10 +58,11 @@ public class Post extends BaseTimeEntity{
     }
 
     @Builder
-    public Post(String title, String content, int like_count, DormitoryType type) {
+    public Post(String title, String content, int like_count, boolean anonymity, DormitoryType type) {
         this.title = title;
         this.content = content;
         this.like_count = like_count;
+        this.anonymity = anonymity;
         this.type = type;
     }
 }
