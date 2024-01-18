@@ -35,12 +35,12 @@ public class ChatRoom{
     //@JoinColumn(name = "opponent_user_id")
     private Member opponentUser;
 
-    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY) // FetchType.LAZY로 변경
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
     private List<ChatHistory> histories = new ArrayList<>();
 
 
     public ChatRoomDTO toDTO() {
-        ChatRoomDTO dto = new ChatRoomDTO(this.roomId, this.user, this.opponentUser, this.histories);
+        ChatRoomDTO dto = new ChatRoomDTO(this.roomId, this.user.getNickname(), this.opponentUser.getNickname(), this.histories);
         return dto;
     }
 }

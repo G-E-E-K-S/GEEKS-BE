@@ -16,11 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 public class ChatRoomDTO {
     private String roomId;
-    private Member user;
-    private Member opponentUser;
+    private String user;
+    private String opponentUser;
     private List<ChatHistory> histories;
 
-    public ChatRoomDTO(String roomId, Member user, Member opponentUser, List<ChatHistory> histories) {
+    public ChatRoomDTO(String roomId, String user, String opponentUser, List<ChatHistory> histories) {
         this.roomId = roomId;
         this.user = user;
         this.opponentUser = opponentUser;
