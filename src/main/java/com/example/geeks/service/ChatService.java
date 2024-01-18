@@ -105,7 +105,7 @@ public class ChatService {
         List<ChatRoomDTO> chatRoomDTOs = chatRoom
                 .stream()
                 .map(chatRoom1 -> new ChatRoomDTO(chatRoom1.getRoomId(), chatRoom1.getUser().getNickname(), chatRoom1.getOpponentUser().getNickname(),
-                        chatRoom1.getHistories().stream().map(chatHistory -> new ChatHistoryResponse(chatHistory.getSender().getNickname(), chatHistory.getMessage(), chatHistory.getCreatedAt())).toList())).toList();
+                        chatRoom1.getHistories().stream().map(chatHistory -> new ChatHistoryResponse(chatHistory.getSender().getNickname(), chatHistory.getReadCount(), chatHistory.getMessage(), chatHistory.getCreatedAt())).toList())).toList();
         return chatRoomDTOs;
     }
 
@@ -144,6 +144,7 @@ public class ChatService {
                         .map(chatHistory ->
                                 new ChatHistoryResponse(
                                         chatHistory.getSender().getNickname(),
+                                        chatHistory.getReadCount(),
                                         chatHistory.getMessage(),
                                         chatHistory.getCreatedAt())).toList());
 
