@@ -33,9 +33,9 @@ public class PostController {
             @RequestPart(value = "files", required=false) List<MultipartFile> files,
             @RequestPart(value = "dto") PostCreateRequestDTO requestDTO,
             @CookieValue(value = "token") String token) throws IOException {
-        // 쿠키값 가져와서 멤버ID 넘겨주는거로 바꾸기
+
         Long userId = util.getUserId(token, tokenSecretKey);
-        postService.createPost(userId, requestDTO.getTitle(), requestDTO.getContent(), files);
+        postService.createPost(userId, requestDTO, files);
         return "success";
     }
 
