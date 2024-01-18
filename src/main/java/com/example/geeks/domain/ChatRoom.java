@@ -37,10 +37,4 @@ public class ChatRoom{
 
     @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
     private List<ChatHistory> histories = new ArrayList<>();
-
-
-    public ChatRoomDTO toDTO() {
-        ChatRoomDTO dto = new ChatRoomDTO(this.roomId, this.user.getNickname(), this.opponentUser.getNickname(), this.histories);
-        return dto;
-    }
 }

@@ -8,7 +8,9 @@ import com.example.geeks.repository.ChatRoomRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.requestDto.ChatMessage;
 import com.example.geeks.requestDto.ChatRoomDTO;
+import com.example.geeks.responseDto.ChatHistoryResponse;
 import com.example.geeks.responseDto.MessagesResponse;
+import com.example.geeks.responseDto.PostAllDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,10 +103,10 @@ public class ChatService {
     public List<ChatRoomDTO> getChatingRooms(String nickname){
         Member user = getUserByNickname(nickname);
         List<ChatRoom> chatRoom = chatRoomRepository.findByUserOrOpponentUser(user.getId());
-
-        List<ChatRoomDTO> chatRoomDTOs = chatRoom.stream()
-                .map(ChatRoom::toDTO)
-                .collect(Collectors.toList());
+        List<ChatRoomDTO> chatRoomDTOs = chatRoom
+                .stream()
+                .map(chatRoom1 -> new ChatRoomDTO(chatRoom1.getRoomId(), chatRoom1.getUser().getNickname(), chatRoom1.getOpponentUser().getNickname(),
+                        chatRoom1.getHistories().stream().map(chatHistory -> new ChatHistoryResponse(chatHistory.getSender().getNickname(), chatHistory.getMessage(), chatHistory.getCreatedAt())).toList())).toList();
         return chatRoomDTOs;
     }
 
