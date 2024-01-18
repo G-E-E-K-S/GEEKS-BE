@@ -9,8 +9,8 @@ import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.requestDto.ChatMessage;
 import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.responseDto.ChatHistoryResponse;
+import com.example.geeks.responseDto.ChatRoomDetailDTO;
 import com.example.geeks.responseDto.MessagesResponse;
-import com.example.geeks.responseDto.PostAllDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -53,7 +52,7 @@ public class ChatService {
 
 
     public Long saveMessage(ChatMessage message) {
-        ChatRoom chatRoom = chatRoomRepository.findById(message.getRoomid());
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(message.getRoomid());
         Member sender = getUserByNickname(message.getUser());
         String _message = message.getContent();
         return saveChatMessage(chatRoom, sender ,_message, message.getCreateAt());
@@ -72,7 +71,7 @@ public class ChatService {
     public MessagesResponse getMessages(String sender, String roomUUID, String recipient) {
         Member user = getUserByNickname(sender);
         Member opponentUser = getUserByNickname(recipient);
-        ChatRoom chatRoom = findRoom(roomUUID);
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomUUID);
         reduceReadCountOfChats(chatRoom, user);
         return MessagesResponse.of(opponentUser, chatRoom);
     }
@@ -129,8 +128,25 @@ public class ChatService {
         return chatRoomRepository.findAll();
     }
 
-    public ChatRoom findRoom(String RoomId){
-        return chatRoomRepository.findById(RoomId);
+    public ChatRoomDetailDTO findRoom(String roomId, String nickname){
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+        Member user = chatRoom.getUser();
+
+        Member opponentUser = !user.getNickname().equals(nickname) ? user : chatRoom.getOpponentUser();
+
+        return new ChatRoomDetailDTO(chatRoom.getRoomId(),
+                nickname,
+                opponentUser.getNickname(),
+                opponentUser.getMajor(),
+                opponentUser.getStudentID(),
+                chatRoom.getHistories()
+                        .stream()
+                        .map(chatHistory ->
+                                new ChatHistoryResponse(
+                                        chatHistory.getSender().getNickname(),
+                                        chatHistory.getMessage(),
+                                        chatHistory.getCreatedAt())).toList());
+
     }
 
 }

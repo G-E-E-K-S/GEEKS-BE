@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SendChatMessage {
     private Long chatId;
-    private String roomUUID;
-    private String senderId;
+    private String roomId;
+    private String sender;
     private String message;
     private LocalDateTime createdAt;
 
@@ -21,8 +21,8 @@ public class SendChatMessage {
 
     public SendChatMessage(Long chatId, String roomUUID, String senderId, String message, LocalDateTime createdAt) {
         this.chatId = chatId;
-        this.roomUUID = roomUUID;
-        this.senderId = senderId;
+        this.roomId = roomUUID;
+        this.sender = senderId;
         this.message = message;
         this.createdAt = createdAt;
     }

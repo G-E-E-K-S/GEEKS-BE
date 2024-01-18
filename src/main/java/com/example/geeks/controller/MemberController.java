@@ -108,6 +108,22 @@ public class MemberController {
        return "success";
    }
 
+    @GetMapping("/admin2")
+    public String admin2() {
+        String token = memberService.createToken(2L, "member2");
+        Cookie cookie = new Cookie("token", token);
+
+        cookie.setPath("/");
+        cookie.setSecure(false);
+        cookie.setMaxAge(86400); // 1일
+        cookie.setHttpOnly(true);
+
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.addCookie(cookie);
+        System.out.println("token: " + token);
+        return "success";
+    }
+
     @GetMapping("/check/nickname")
     public String checkNickname(@RequestParam String nickname) {
         if(!memberService.availableNickname(nickname)) return "duplicate";

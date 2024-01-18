@@ -3,6 +3,7 @@ package com.example.geeks.controller;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.ChatRoom;
 import com.example.geeks.requestDto.ChatRoomDTO;
+import com.example.geeks.responseDto.ChatRoomDetailDTO;
 import com.example.geeks.responseDto.MessagesResponse;
 import com.example.geeks.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -64,8 +65,10 @@ public class ChatController {
     }
 
     @GetMapping("/find")
-    public ChatRoom findRoom(String UUID){
-        return chatService.findRoom(UUID);
+    public ChatRoomDetailDTO findRoom(@RequestParam String roomId,
+                                      @CookieValue(value = "token") String token){
+        String nickname = util.getNickname(token, secretKey);
+        return chatService.findRoom(roomId, nickname);
     }
 
 }
