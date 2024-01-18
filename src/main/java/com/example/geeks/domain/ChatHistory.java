@@ -39,5 +39,4 @@ public class ChatHistory {
         chatRoom.getHistories().add(chatHistory);
         return chatHistory;
     }
-
 }
