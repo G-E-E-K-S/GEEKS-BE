@@ -14,16 +14,19 @@ import java.time.LocalDateTime;
 public class ChatHistoryResponse {
     private String sender;
     private String message;
+    private int readCount;
     private LocalDateTime createdAt;
 
-    public ChatHistoryResponse(String sender, String message, LocalDateTime createdAt) {
+    public ChatHistoryResponse(String sender, int readCount, String message, LocalDateTime createdAt) {
         this.sender = sender;
         this.message = message;
+        this.readCount = readCount;
         this.createdAt = createdAt;
     }
     public static ChatHistoryResponse of(ChatHistory chatHistory) {
         return new ChatHistoryResponse(
                 chatHistory.getSender().getNickname(),
+                chatHistory.getReadCount(),
                 chatHistory.getMessage(),
                 chatHistory.getCreatedAt()
         );
