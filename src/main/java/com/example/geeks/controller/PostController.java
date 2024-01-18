@@ -56,8 +56,16 @@ public class PostController {
     }
 
     @PostMapping("/comment")
-    public String comment(@RequestBody PostCommentRequestDTO requestDTO) {
-        postService.createComment(1L, requestDTO);
+    public String comment(@RequestBody PostCommentRequestDTO requestDTO,
+                          @CookieValue(value = "token") String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        postService.createComment(userId, requestDTO);
+        return "success";
+    }
+
+    @GetMapping("/delete/comment")
+    public String deleteComment(@RequestParam Long commentId) {
+        postService.deleteComment(commentId);
         return "success";
     }
 

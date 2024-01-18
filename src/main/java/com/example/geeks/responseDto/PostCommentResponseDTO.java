@@ -15,14 +15,17 @@ public class PostCommentResponseDTO {
 
     private String content;
 
+    private boolean isDeleted;
+
     private LocalDateTime createdDate;
 
     private List<PostCommentResponseDTO> children = new ArrayList<>();
 
-    public PostCommentResponseDTO(Long commentId, String writer, String content, LocalDateTime createdDate) {
+    public PostCommentResponseDTO(Long commentId, String writer, String content, boolean isDeleted, LocalDateTime createdDate) {
         this.commentId = commentId;
         this.writer = writer;
         this.content = content;
+        this.isDeleted = isDeleted;
         this.createdDate = createdDate;
     }
 }

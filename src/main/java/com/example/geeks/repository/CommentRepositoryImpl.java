@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +38,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
                             comment.getId(),
                             comment.getMember().getNickname(),
                             comment.getContent(),
+                            comment.getIsDeleted(),
                             comment.getCreatedDate());
 
             commentResponseDTOMap.put(responseDTO.getCommentId(), responseDTO);

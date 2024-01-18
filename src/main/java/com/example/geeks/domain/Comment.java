@@ -72,6 +72,10 @@ public class Comment extends BaseTimeEntity{
         }
     }
 
+    public void setDeleted(Boolean deleted) {
+        this.isDeleted = deleted;
+    }
+
     public void addComment(Comment comment) {
         this.children.add(comment);
     }
