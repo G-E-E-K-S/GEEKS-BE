@@ -68,7 +68,8 @@ public class ChatController {
     public ChatRoomDetailDTO findRoom(@RequestParam String roomId,
                                       @CookieValue(value = "token") String token){
         String nickname = util.getNickname(token, secretKey);
-        return chatService.findRoom(roomId, nickname);
+        Long userId = util.getUserId(token, secretKey);
+        return chatService.findRoom(roomId, nickname, userId);
     }
 
 }
