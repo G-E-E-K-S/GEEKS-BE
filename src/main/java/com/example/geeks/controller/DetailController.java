@@ -2,6 +2,7 @@ package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
 import com.example.geeks.responseDto.DetailDTO;
+import com.example.geeks.responseDto.DetailResponseDTO;
 import com.example.geeks.service.DetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +24,18 @@ public class DetailController {
     @PostMapping("/register")
     public String register(@CookieValue String token, @RequestBody DetailDTO dto) {
         Long userId = util.getUserId(token, tokenSecretKey);
-        //Long userId = 1L;
 
         detailService.register(userId, dto);
         
         return "success";
     }
+
+    @GetMapping("/send")
+    public DetailResponseDTO sendDetail(@CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return detailService.sendDetail(userId);
+    }
+
 
     @PostMapping("/point")
     public String calculate(@CookieValue String token){
@@ -40,7 +47,7 @@ public class DetailController {
     }
 
     @GetMapping("/details")
-    public List<DetailDTO> sendDetailToFE(@CookieValue String token, @RequestParam Long id){
+    public List<DetailDTO> sendDetails(@CookieValue String token, @RequestParam Long id){
         Long userId = util.getUserId(token, tokenSecretKey);
 
         DetailDTO userDetail = detailService.getUserDetailById(userId);

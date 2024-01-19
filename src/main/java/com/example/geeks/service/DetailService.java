@@ -7,6 +7,7 @@ import com.example.geeks.repository.DetailRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PointRepository;
 import com.example.geeks.responseDto.DetailDTO;
+import com.example.geeks.responseDto.DetailResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,32 @@ public class DetailService {
                 .build();
 
         detailRepository.save(detail);
+    }
+
+    public DetailResponseDTO sendDetail(Long userId) {
+        List<Detail> details = detailRepository.findByMemberId(userId);
+        DetailResponseDTO result;
+
+        if(details.isEmpty()) {
+            result = new DetailResponseDTO(false);
+        }
+        else {
+            Detail detail = details.get(0);
+
+            result = DetailResponseDTO.builder()
+                    .smoking(detail.isSmoking())
+                    .habit(detail.isHabit())
+                    .ear(detail.getEar())
+                    .sleep(detail.getSleeping())
+                    .wakeup(detail.getWakeup())
+                    .out(detail.getOuting())
+                    .cleaning(detail.getCleaning())
+                    .tendency(detail.getTendency())
+                    .exist(true)
+                    .build();
+        }
+
+        return result;
     }
 
     @Transactional

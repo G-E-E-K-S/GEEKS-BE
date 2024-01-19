@@ -9,4 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface DetailRepository extends JpaRepository<Detail, Long> {
+    @Query("select d from Detail d where d.member.id = :id")
+    List<Detail> findByMemberId(@Param("id") Long id);
 }
