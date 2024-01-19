@@ -92,9 +92,11 @@ public class ChatService {
         return members.isEmpty() ? null : members.get(0);
     }
 
+    @Transactional
     public void readChat(Long chatid){
         ChatHistory chatHistory = chatHistoryRepository.findById(chatid).get();
         if(chatHistory != null){
+            System.out.println("chatHistory = " + chatHistory);
             chatHistory.setReadCount(chatHistory.getReadCount() - 1);
         }
     }
@@ -102,10 +104,20 @@ public class ChatService {
     public List<ChatRoomDTO> getChatingRooms(String nickname){
         Member user = getUserByNickname(nickname);
         List<ChatRoom> chatRoom = chatRoomRepository.findByUserOrOpponentUser(user.getId());
+
         List<ChatRoomDTO> chatRoomDTOs = chatRoom
                 .stream()
-                .map(chatRoom1 -> new ChatRoomDTO(chatRoom1.getRoomId(), chatRoom1.getUser().getNickname(), chatRoom1.getOpponentUser().getNickname(),
-                        chatRoom1.getHistories().stream().map(chatHistory -> new ChatHistoryResponse(chatHistory.getSender().getNickname(), chatHistory.getReadCount(), chatHistory.getMessage(), chatHistory.getCreatedAt())).toList())).toList();
+                .map(chatRoom1 -> new ChatRoomDTO(
+                        chatRoom1.getRoomId(),
+                        user.getNickname(),
+                        chatRoom1.getUser().getNickname().equals(nickname)  ?
+                                chatRoom1.getOpponentUser().getNickname() : chatRoom1.getUser().getNickname() ,
+                        chatRoom1.getHistories().stream().map(
+                                chatHistory -> new ChatHistoryResponse(
+                                        chatHistory.getSender().getNickname(),
+                                        chatHistory.getReadCount(),
+                                        chatHistory.getMessage(),
+                                        chatHistory.getCreatedAt())).toList())).toList();
         return chatRoomDTOs;
     }
 
@@ -128,10 +140,13 @@ public class ChatService {
         return chatRoomRepository.findAll();
     }
 
-    public ChatRoomDetailDTO findRoom(String roomId, String nickname){
-        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
-        Member user = chatRoom.getUser();
+    public ChatRoomDetailDTO findRoom(String roomId, String nickname, Long userId){
+        // 채팅방 들어갈 때 readCount 벌크 연산
+        int count = chatHistoryRepository.bulkReadCount(userId);
 
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+
+        Member user = chatRoom.getUser();
         Member opponentUser = !user.getNickname().equals(nickname) ? user : chatRoom.getOpponentUser();
 
         return new ChatRoomDetailDTO(chatRoom.getRoomId(),
