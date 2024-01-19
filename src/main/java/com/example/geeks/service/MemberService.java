@@ -1,5 +1,6 @@
 package com.example.geeks.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
@@ -53,7 +54,8 @@ public class MemberService {
 
     @Transactional
     public void editProfile(ProfileEditDTO dto, Long id) {
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + id));
 
         member.changeProfile(dto);
     }

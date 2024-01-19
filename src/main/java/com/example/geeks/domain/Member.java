@@ -75,6 +75,7 @@ public class Member extends BaseTimeEntity{
     }
 
     public void changeProfile(ProfileEditDTO dto) {
+        this.type = dto.getType();
         this.nickname = dto.getNickname();
         this.major = dto.getMajor();
         this.studentID = dto.getStudentID();

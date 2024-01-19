@@ -121,7 +121,7 @@ public class MemberTest {
         em.clear();
         em.flush();
 
-        ProfileEditDTO dto = new ProfileEditDTO("admin", "소프트웨어", 20, "안녕");
+        ProfileEditDTO dto = new ProfileEditDTO("admin", "소프트웨어", DormitoryType.NEW, 20, "안녕");
         memberService.editProfile(dto, 1L);
 
         Member member2 = memberRepository.findById(1L).get();
