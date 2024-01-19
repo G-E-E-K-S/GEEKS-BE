@@ -7,6 +7,7 @@ import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.PasswordDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.requestDto.RegisterDTO;
+import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -185,5 +186,11 @@ public class MemberController {
         Long userId = util.getUserId(token, tokenSecretKey);
         memberService.editProfile(dto, userId);
         return "success";
+    }
+
+    @GetMapping("/myPage")
+    public MyPageDTO myPage(@CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return memberService.sendMyPage(userId);
     }
 }

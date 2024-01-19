@@ -9,7 +9,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
-@ToString
+@ToString(exclude = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Detail extends BaseTimeEntity{
     @Id

@@ -5,6 +5,7 @@ import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.requestDto.ProfileEditDTO;
+import com.example.geeks.responseDto.MyPageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,20 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + id));
 
         member.changeProfile(dto);
+    }
+
+    public MyPageDTO sendMyPage(Long userId) {
+        Member member = memberRepository.findMemberFetchJoinWithDetail(userId);
+        System.out.println("member = " + member);
+
+        return MyPageDTO.builder()
+                .photoName(member.getPhotoName())
+                .major(member.getMajor())
+                .studentID(member.getStudentID())
+                .introduction(member.getIntroduction())
+                .nickname(member.getNickname())
+                .exist(member.getDetail() != null ? true : false)
+                .build();
     }
 
     public String createToken(Long id, String nickname){

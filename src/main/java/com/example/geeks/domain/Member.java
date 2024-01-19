@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
-@ToString(exclude = "password")
+@ToString(exclude = {"password"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity{
 
@@ -38,7 +38,7 @@ public class Member extends BaseTimeEntity{
 
     private int exp;
 
-    private String image_url;
+    private String photoName;
 
     private String introduction;
 
@@ -91,7 +91,7 @@ public class Member extends BaseTimeEntity{
         this.studentID = studentID;
         this.gender = gender;
         this.exp = exp;
-        this.image_url = image_url;
+        this.photoName = image_url;
         this.introduction = introduction;
         this.type = type;
     }
