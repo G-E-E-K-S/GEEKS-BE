@@ -35,6 +35,8 @@ public class PostService {
 
     private final HeartRepository heartRepository;
 
+    private final PostScrapRepository postScrapRepository;
+
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -202,5 +204,35 @@ public class PostService {
 
         heartRepository.delete(heart);
         postRepository.decreaseHeart(postId);
+    }
+    
+    @Transactional
+    public void insertScrap(Long userId, Long postId) throws Exception {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
+
+        if(postScrapRepository.findByMemberAndPost(member, post).isPresent()) {
+            throw new Exception();
+        }
+
+        PostScrap postScrap = new PostScrap(member, post);
+        postScrapRepository.save(postScrap);
+    }
+
+    @Transactional
+    public void deleteScrap(Long userId, Long postId) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
+
+        PostScrap postScrap = postScrapRepository.findByMemberAndPost(member, post)
+                .orElseThrow(() -> new NotFoundException("Could not found scrap"));
+
+        postScrapRepository.delete(postScrap);
     }
 }

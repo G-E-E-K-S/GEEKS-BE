@@ -89,4 +89,20 @@ public class PostController {
         postService.deleteHeart(userId, postId);
         return "success";
     }
+
+    @GetMapping("/scrap/insert")
+    public String insertScrap(@CookieValue(value = "token") String token,
+                              @RequestParam Long postId) throws Exception {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        postService.insertScrap(userId, postId);
+        return "success";
+    }
+
+    @GetMapping("/scrap/delete")
+    public String deleteScrap(@CookieValue(value = "token") String token,
+                              @RequestParam Long postId) throws Exception {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        postService.deleteScrap(userId, postId);
+        return "success";
+    }
 }
