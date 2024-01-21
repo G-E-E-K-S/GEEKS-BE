@@ -25,12 +25,4 @@ public class ChatHistoryResponse {
         this.readCount = readCount;
         this.createdAt = createdAt;
     }
-    public static ChatHistoryResponse of(ChatHistory chatHistory) {
-        return new ChatHistoryResponse(
-                chatHistory.getSender().getNickname(),
-                chatHistory.getReadCount(),
-                chatHistory.getMessage(),
-                chatHistory.getCreatedAt()
-        );
-    }
 }

@@ -17,8 +17,6 @@ public class SendChatMessage {
     private String message;
     private LocalDateTime createdAt;
 
-
-
     public SendChatMessage(Long chatId, String roomUUID, String senderId, String message, LocalDateTime createdAt) {
         this.chatId = chatId;
         this.roomId = roomUUID;
