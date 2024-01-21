@@ -30,7 +30,6 @@ public class MessagingScheduler {
         log.info("checkNotice call");
         System.out.println("message = " + message);
         try{
-            //messagingTemplate.setMessageConverter(new StringMessageConverter());
             Long chatId = chatService.saveMessage(message);
             chatService.readChat(chatId);
             messagingTemplate.convertAndSend("/subscribe/notice/" + message.getRoomid(), SendChatMessage.of(chatId, message));

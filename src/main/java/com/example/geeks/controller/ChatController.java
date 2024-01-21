@@ -4,7 +4,6 @@ import com.example.geeks.Security.Util;
 import com.example.geeks.domain.ChatRoom;
 import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.responseDto.ChatRoomDetailDTO;
-import com.example.geeks.responseDto.MessagesResponse;
 import com.example.geeks.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,22 +29,6 @@ public class ChatController {
         String mynickName = util.getNickname(token, secretKey);
         System.out.print(mynickName);
         return chatService.createChatRoom(mynickName, yournickname);
-    }
-
-    //읽음 처리 기능
-    /*@GetMapping("/readChat")
-    public void readMessage(@RequestParam Long chatid){
-        chatService.readChat(chatid);
-    }*/
-
-
-    //message가져오기
-    @GetMapping("/messages")
-    public MessagesResponse getMessages(@CookieValue("token") String token,
-                                        @RequestParam String roomid,
-                                        @RequestParam String yournickname){
-        String myNickname = util.getNickname(token, secretKey);
-        return chatService.getMessages(myNickname, roomid, yournickname);
     }
 
     @GetMapping("/main")

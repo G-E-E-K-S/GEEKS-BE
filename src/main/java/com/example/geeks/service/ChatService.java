@@ -10,7 +10,6 @@ import com.example.geeks.requestDto.ChatMessage;
 import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.responseDto.ChatHistoryResponse;
 import com.example.geeks.responseDto.ChatRoomDetailDTO;
-import com.example.geeks.responseDto.MessagesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +49,6 @@ public class ChatService {
         return result.getRoomId();
     }
 
-
     public Long saveMessage(ChatMessage message) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(message.getRoomid());
         Member sender = getUserByNickname(message.getUser());
@@ -65,17 +63,6 @@ public class ChatService {
         Long id = chatHistory.getId();
         return id;
     }
-
-
-
-    public MessagesResponse getMessages(String sender, String roomUUID, String recipient) {
-        Member user = getUserByNickname(sender);
-        Member opponentUser = getUserByNickname(recipient);
-        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomUUID);
-        reduceReadCountOfChats(chatRoom, user);
-        return MessagesResponse.of(opponentUser, chatRoom);
-    }
-
     @Transactional
     public ChatRoom create(Member user, Member opponentUser) {
         ChatRoom chatRoom = new ChatRoom(UUID.randomUUID().toString(), user, opponentUser);
@@ -120,22 +107,6 @@ public class ChatService {
                                         chatHistory.getCreatedAt())).toList())).toList();
         return chatRoomDTOs;
     }
-
-    public void reduceReadCountOfChats(ChatRoom chatRoom, Member me) {
-        chatRoom.getHistories().forEach(chatHistory -> checkAndReduceReadCount(chatHistory, me));
-        chatRoomRepository.save(chatRoom);
-    }
-
-    private void checkAndReduceReadCount(ChatHistory chatHistory, Member me) {
-        if (canReduceReadCount(chatHistory, me)) {
-            chatHistory.setReadCount(chatHistory.getReadCount() - 1);
-        }
-    }
-
-    private boolean canReduceReadCount(ChatHistory chat, Member me) {
-        return !chat.getSender().equals(me) && chat.getReadCount() == 1;
-    }
-
     public List<ChatRoom> getAllRooms(){
         return chatRoomRepository.findAll();
     }
