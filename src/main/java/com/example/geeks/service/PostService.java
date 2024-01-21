@@ -3,14 +3,8 @@ package com.example.geeks.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.example.geeks.domain.Comment;
-import com.example.geeks.domain.Member;
-import com.example.geeks.domain.Photo;
-import com.example.geeks.domain.Post;
-import com.example.geeks.repository.CommentRepository;
-import com.example.geeks.repository.MemberRepository;
-import com.example.geeks.repository.PhotoRepository;
-import com.example.geeks.repository.PostRepository;
+import com.example.geeks.domain.*;
+import com.example.geeks.repository.*;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.responseDto.PostAllDTO;
@@ -38,6 +32,8 @@ public class PostService {
     private final MemberRepository memberRepository;
 
     private final CommentRepository commentRepository;
+
+    private final HeartRepository heartRepository;
 
     private final AmazonS3 amazonS3;
 
@@ -173,5 +169,38 @@ public class PostService {
 
     public List<PostCommentResponseDTO> selectComment(Long postId) {
         return commentRepository.findByPostId(postId);
+    }
+
+    @Transactional
+    public void insertHeart(Long userId, Long postId) throws Exception {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
+
+        if(heartRepository.findByMemberAndPost(member, post).isPresent()) {
+            throw new Exception();
+        }
+
+        Heart heart = new Heart(member, post);
+
+        heartRepository.save(heart);
+        postRepository.increaseHeart(postId);
+    }
+
+    @Transactional
+    public void deleteHeart(Long userId, Long postId) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
+
+        Heart heart = heartRepository.findByMemberAndPost(member, post)
+                .orElseThrow(() -> new NotFoundException("Could not found heart"));
+
+        heartRepository.delete(heart);
+        postRepository.decreaseHeart(postId);
     }
 }
