@@ -73,4 +73,20 @@ public class PostController {
     public List<PostCommentResponseDTO> selectComment(Long postId) {
         return postService.selectComment(postId);
     }
+
+    @GetMapping("/heart/insert")
+    public String insertHeart(@CookieValue(value = "token") String token,
+                              @RequestParam Long postId) throws Exception {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        postService.insertHeart(userId, postId);
+        return "success";
+    }
+
+    @GetMapping("/heart/delete")
+    public String deleteHeart(@CookieValue(value = "token") String token,
+                              @RequestParam Long postId) throws Exception {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        postService.deleteHeart(userId, postId);
+        return "success";
+    }
 }
