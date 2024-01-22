@@ -30,7 +30,7 @@ public class MemberInit {
                 .gender(Gender.MALE)
                 .exp(2)
                 .image_url("")
-                .introduction("")
+                .introduction("외출이 잦아요! 기숙사는 가끔 들어와요")
                 .type(DormitoryType.NEW)
                 .build();
 
@@ -43,7 +43,7 @@ public class MemberInit {
                 .gender(Gender.MALE)
                 .exp(3)
                 .image_url("")
-                .introduction("")
+                .introduction("예민하지 않으신 분들 찾아요")
                 .type(DormitoryType.NEW)
                 .build();
 
@@ -56,7 +56,7 @@ public class MemberInit {
                 .gender(Gender.FEMALE)
                 .exp(0)
                 .image_url("")
-                .introduction("")
+                .introduction("같은 과이신 분들 선호합니다!")
                 .type(DormitoryType.OLD)
                 .build();
 
