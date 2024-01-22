@@ -30,12 +30,17 @@ public class DetailController {
         return "success";
     }
 
+    @PostMapping("/update")
+    public String update(@CookieValue String token, @RequestBody DetailDTO dto) {
+        detailService.update(dto);
+        return "success";
+    }
+
     @GetMapping("/send")
     public DetailResponseDTO sendDetail(@CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         return detailService.sendDetail(userId);
     }
-
 
     @PostMapping("/point")
     public String calculate(@CookieValue String token){
@@ -51,12 +56,12 @@ public class DetailController {
         Long userId = util.getUserId(token, tokenSecretKey);
 
         DetailDTO userDetail = detailService.getUserDetailById(userId);
-        DetailDTO opponentDetail = detailService.getOpponentDetailById(id);
+        //DetailDTO opponentDetail = detailService.getOpponentDetailById(id);
 
         List<DetailDTO> Details = new ArrayList<>();
 
         Details.add(userDetail);
-        Details.add(opponentDetail);
+        //Details.add(opponentDetail);
 
         return Details;
     }

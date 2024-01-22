@@ -11,6 +11,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DetailDTO {
+    private Long detailId;
+
     private boolean smoking;
 
     private boolean habit;

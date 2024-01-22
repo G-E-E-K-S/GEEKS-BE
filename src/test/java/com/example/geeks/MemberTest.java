@@ -200,7 +200,7 @@ public class MemberTest {
         detailRepository.save(yourDetail);
         
         DetailDTO userDetail = detailService.getUserDetailById(member.getId());
-        DetailDTO opponentDetail = detailService.getOpponentDetailById(member1.getId());
+        DetailDTO opponentDetail = detailService.getUserDetailById(member1.getId());
         
         List<DetailDTO> Details = new ArrayList<>();
 
@@ -277,12 +277,12 @@ public class MemberTest {
 
         detailRepository.save(yourDetail);
 
-        roomMateService.saveRoomMate("admin", "admin");
+        roomMateService.saveRoomMate("admin", "90000e");
         roomMateService.findSentRoomMateList("90000e");
         roomMateService.findRecivedRoomMateList("90000e");
 
         roomMateService.getRoomMateDetail("90000e");
 
-        roomMateService.cancelRequest("90000e", "admin");
+        roomMateService.cancelRequest( "admin", "90000e");
     }
 }

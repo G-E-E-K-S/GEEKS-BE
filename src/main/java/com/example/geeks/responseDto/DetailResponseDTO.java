@@ -3,10 +3,11 @@ package com.example.geeks.responseDto;
 import com.example.geeks.Enum.*;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class DetailResponseDTO {
+
+    private Long detailId;
     private boolean smoking;
 
     private boolean habit;
@@ -30,7 +31,8 @@ public class DetailResponseDTO {
     }
 
     @Builder
-    public DetailResponseDTO(boolean smoking, boolean habit, Ear ear, Time sleep, Time wakeup, Out out, Cleaning cleaning, Tendency tendency, boolean exist) {
+    public DetailResponseDTO(Long detailId, boolean smoking, boolean habit, Ear ear, Time sleep, Time wakeup, Out out, Cleaning cleaning, Tendency tendency, boolean exist) {
+        this.detailId = detailId;
         this.smoking = smoking;
         this.habit = habit;
         this.ear = ear;

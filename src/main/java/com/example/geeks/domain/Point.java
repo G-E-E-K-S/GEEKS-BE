@@ -9,7 +9,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
-@ToString
+@ToString(exclude = {"member", "friend"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Point extends BaseTimeEntity{
     @Id
@@ -21,14 +21,20 @@ public class Point extends BaseTimeEntity{
     @JoinColumn(name = "my_id")
     private Member member;
 
-    private Long friend_id;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "friend_id")
+    private Member friend;
 
     private int point;
 
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
     @Builder
-    public Point(Member member, Long friend_id, int point) {
+    public Point(Member member, Member friend, int point) {
         this.member = member;
-        this.friend_id = friend_id;
+        this.friend = friend;
         this.point = point;
     }
 }

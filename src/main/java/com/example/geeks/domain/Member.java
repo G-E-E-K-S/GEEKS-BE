@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
-@ToString(exclude = {"password"})
+@ToString(exclude = {"password", "posts", "point", "comments"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity{
 
@@ -45,14 +45,14 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
 
-    @OneToOne(mappedBy = "member", fetch = LAZY, cascade = ALL)
+    @OneToOne(mappedBy = "member", fetch = LAZY, cascade = {PERSIST, REMOVE})
     @JoinColumn(name = "detail_id")
     private Detail detail;
 
-    @OneToMany(mappedBy = "member", cascade = ALL)
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
     private List<Point> point = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = ALL)
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
