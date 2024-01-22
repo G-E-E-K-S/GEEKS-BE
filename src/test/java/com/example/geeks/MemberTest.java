@@ -9,6 +9,7 @@ import com.example.geeks.responseDto.DetailDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.service.DetailService;
 import com.example.geeks.service.MemberService;
+import com.example.geeks.service.RoomMateService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +39,9 @@ public class MemberTest {
 
     @Autowired
     EntityManager em;
+
+    @Autowired
+    RoomMateService roomMateService;
 
 
     @Test
@@ -206,5 +210,79 @@ public class MemberTest {
         for (DetailDTO detail : Details) {
             System.out.println(detail);
         }
+    }
+    @Test
+    public void testRoommate(){
+        Member member = Member.builder()
+                .nickname("admin")
+                .email("bak3839@naver.com")
+                .password("1234")
+                .major("소프트웨어")
+                .gender(Gender.MALE)
+                .exp(3)
+                .type(DormitoryType.NEW)
+                .image_url("basic")
+                .introduction("")
+                .build();
+
+        memberRepository.save(member);
+
+        Member member1 = Member.builder()
+                .nickname("90000e")
+                .email("gamgam0330@naver.com")
+                .password("1234")
+                .major("소프트웨어")
+                .gender(Gender.MALE)
+                .exp(2)
+                .type(DormitoryType.NEW)
+                .image_url("basic")
+                .introduction("")
+                .build();
+
+        memberRepository.save(member1);
+
+        Optional<Member> result1 = memberRepository.findById(1L);
+
+        Member findMember1 = result1.get();
+        System.out.println("before: " + findMember1);
+
+        Optional<Member> result2 = memberRepository.findById(2L);
+
+        Member findMember2 = result1.get();
+        System.out.println("before: " + findMember2);
+
+        Detail myDetail = Detail.builder()
+                .habit(true)
+                .smoking(false)
+                .ear(Ear.BRIGHT)
+                .sleep(Time.EARLY)
+                .out(Out.OUT)
+                .cleaning(Cleaning.CLEAN)
+                .tendency(Tendency.ALONE)
+                .member(member)
+                .build();
+
+        detailRepository.save(myDetail);
+
+        Detail yourDetail = Detail.builder()
+                .habit(false)
+                .smoking(true)
+                .ear(Ear.BRIGHT)
+                .sleep(Time.EARLY)
+                .out(Out.OUT)
+                .cleaning(Cleaning.CLEAN)
+                .tendency(Tendency.TOGETHER)
+                .member(member1)
+                .build();
+
+        detailRepository.save(yourDetail);
+
+        roomMateService.saveRoomMate("admin", "admin");
+        roomMateService.findSentRoomMateList("90000e");
+        roomMateService.findRecivedRoomMateList("90000e");
+
+        roomMateService.getRoomMateDetail("90000e");
+
+        roomMateService.cancelRequest("90000e", "admin");
     }
 }
