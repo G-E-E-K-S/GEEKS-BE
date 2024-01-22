@@ -71,7 +71,7 @@ public class RoomMateService {
         return roomMateDTOS;
     }
     @Transactional
-    public void cancelRequest(String yourNickName, String myNickName){
+    public void cancelRequest(String myNickName, String yourNickName){
         Member me = findMember(myNickName);
         Member you = findMember(yourNickName);
         roomMateRepository.deleteBySentAndReceived(me, you);

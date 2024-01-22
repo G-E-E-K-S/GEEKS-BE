@@ -8,7 +8,7 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @ToString(exclude = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Detail extends BaseTimeEntity{
@@ -55,4 +55,6 @@ public class Detail extends BaseTimeEntity{
         this.tendency = tendency;
         this.member = member;
     }
+
+
 }
