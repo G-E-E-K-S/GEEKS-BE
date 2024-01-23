@@ -8,6 +8,7 @@ import com.example.geeks.repository.DetailRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PointRepository;
 import com.example.geeks.repository.SaveRoomMateRepository;
+import com.example.geeks.responseDto.DetailCompareDTO;
 import com.example.geeks.responseDto.DetailDTO;
 import com.example.geeks.responseDto.DetailResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +90,7 @@ public class DetailService {
         return result;
     }
 
-    public List<DetailDTO> sendDetails(Long myId, Long opponentId) {
+    public DetailCompareDTO sendDetails(Long myId, Long opponentId) {
         List<DetailDTO> detailDTOS = new ArrayList<>();
 
         DetailDTO myDetail = getUserDetailById(myId);
@@ -102,7 +103,18 @@ public class DetailService {
 
         detailDTOS.add(myDetail);
         detailDTOS.add(opponentDetail);
-        return detailDTOS;
+
+        Member opponent = memberRepository.findById(opponentId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + opponentId));
+
+        return DetailCompareDTO.builder()
+                .details(detailDTOS)
+                .major(opponent.getMajor())
+                .nickname(opponent.getNickname())
+                .photoName(opponent.getPhotoName())
+                .studentID(opponent.getStudentID())
+                .introduction(opponent.getIntroduction())
+                .build();
     }
 
     public DetailDTO getUserDetailById(Long userId){
