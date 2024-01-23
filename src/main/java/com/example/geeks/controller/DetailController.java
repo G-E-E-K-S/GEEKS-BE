@@ -17,6 +17,7 @@ import java.util.List;
 public class DetailController {
     private final DetailService detailService;
 
+
     private final Util util;
     @Value("${jwt.secret}")
     private String tokenSecretKey;
@@ -40,15 +41,6 @@ public class DetailController {
     public DetailResponseDTO sendDetail(@CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         return detailService.sendDetail(userId);
-    }
-
-    @PostMapping("/point")
-    public String calculate(@CookieValue String token){
-        Long userId = util.getUserId(token, tokenSecretKey);
-
-        detailService.calculate(userId);
-
-        return "success";
     }
 
     @GetMapping("/details")

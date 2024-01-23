@@ -5,6 +5,7 @@ import com.example.geeks.responseDto.PointAndMemberDTO;
 import com.example.geeks.responseDto.RoomMateDTO;
 import com.example.geeks.responseDto.RoomMateDetailDTO;
 import com.example.geeks.service.MemberService;
+import com.example.geeks.service.PointService;
 import com.example.geeks.service.RoomMateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ public class RoomMateController {
 
     private final MemberService memberService;
 
+    private final PointService pointService;
     private final Util util;
 
     @GetMapping("/request")
@@ -71,7 +73,6 @@ public class RoomMateController {
     @GetMapping("/savelist")
     public List<PointAndMemberDTO> getSaveList(@CookieValue("token") String token){
         Long myId = util.getUserId(token, secretKey);
-        List<PointAndMemberDTO> pointAndMemberDTOS = roomMateService.getSaveRoomMateList(myId);
-        return pointAndMemberDTOS;
+        return pointService.getSaveRoomMateList(myId);
     }
 }

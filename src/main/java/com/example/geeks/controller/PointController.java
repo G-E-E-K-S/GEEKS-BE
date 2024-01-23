@@ -24,6 +24,9 @@ public class PointController {
     @GetMapping("/find")
     public List<PointAndMemberDTO> point(@CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
+        pointService.calculate(userId);
         return pointService.allPoint(userId);
     }
+
+
 }
