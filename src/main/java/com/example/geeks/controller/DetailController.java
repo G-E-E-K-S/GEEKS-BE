@@ -1,6 +1,7 @@
 package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
+import com.example.geeks.responseDto.DetailCompareDTO;
 import com.example.geeks.responseDto.DetailDTO;
 import com.example.geeks.responseDto.DetailResponseDTO;
 import com.example.geeks.service.DetailService;
@@ -44,7 +45,7 @@ public class DetailController {
     }
 
     @GetMapping("/details")
-    public List<DetailDTO> sendDetails(@CookieValue String token, @RequestParam Long id){
+    public DetailCompareDTO sendDetails(@CookieValue String token, @RequestParam Long id){
         Long userId = util.getUserId(token, tokenSecretKey);
 
         return detailService.sendDetails(userId, id);
