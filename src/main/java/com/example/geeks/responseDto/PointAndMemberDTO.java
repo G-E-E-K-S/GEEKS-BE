@@ -17,9 +17,10 @@ public class PointAndMemberDTO {
 
     private String introduction;
 
+    private String photoName;
+
     private int studentID;
 
     private int point;
-
 
 }

@@ -7,6 +7,7 @@ import com.example.geeks.domain.Point;
 import com.example.geeks.repository.DetailRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PointRepository;
+import com.example.geeks.repository.SaveRoomMateRepository;
 import com.example.geeks.responseDto.DetailDTO;
 import com.example.geeks.responseDto.DetailResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class DetailService {
     private final DetailRepository detailRepository;
     private final MemberRepository memberRepository;
     private final PointRepository pointRepository;
+    private final SaveRoomMateRepository saveRoomMateRepository;
 
     @Transactional
     public void register(Long userId, DetailDTO dto) {
@@ -87,9 +89,20 @@ public class DetailService {
         return result;
     }
 
-    public void sendDetails(Long myId, Long opponentId) {
+    public List<DetailDTO> sendDetails(Long myId, Long opponentId) {
+        List<DetailDTO> detailDTOS = new ArrayList<>();
+
         DetailDTO myDetail = getUserDetailById(myId);
         DetailDTO opponentDetail = getUserDetailById(opponentId);
+
+        if(!saveRoomMateRepository.findByMeIdAndYouId(myId, opponentId).isEmpty()) {
+            myDetail.setSaved(true);
+            opponentDetail.setSaved(true);
+        }
+
+        detailDTOS.add(myDetail);
+        detailDTOS.add(opponentDetail);
+        return detailDTOS;
     }
 
     public DetailDTO getUserDetailById(Long userId){
@@ -99,7 +112,7 @@ public class DetailService {
         DetailDTO userDetailDTO =
                 new DetailDTO(userDetail.getId(), userDetail.isSmoking(), userDetail.isHabit(),
                 userDetail.getEar(), userDetail.getSleeping(), userDetail.getWakeup(),
-                userDetail.getOuting(), userDetail.getCleaning(), userDetail.getTendency());
+                userDetail.getOuting(), userDetail.getCleaning(), userDetail.getTendency(), false);
 
         return userDetailDTO;
     }

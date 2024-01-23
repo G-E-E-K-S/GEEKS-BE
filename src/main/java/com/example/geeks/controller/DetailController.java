@@ -47,14 +47,6 @@ public class DetailController {
     public List<DetailDTO> sendDetails(@CookieValue String token, @RequestParam Long id){
         Long userId = util.getUserId(token, tokenSecretKey);
 
-        DetailDTO userDetail = detailService.getUserDetailById(userId);
-        //DetailDTO opponentDetail = detailService.getOpponentDetailById(id);
-
-        List<DetailDTO> Details = new ArrayList<>();
-
-        Details.add(userDetail);
-        //Details.add(opponentDetail);
-
-        return Details;
+        return detailService.sendDetails(userId, id);
     }
 }
