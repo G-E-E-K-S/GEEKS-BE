@@ -1,17 +1,14 @@
 package com.example.geeks.service;
 
-import com.example.geeks.domain.Detail;
-import com.example.geeks.domain.Member;
-import com.example.geeks.domain.RoomMate;
-import com.example.geeks.repository.DetailRepository;
-import com.example.geeks.repository.MemberRepository;
-import com.example.geeks.repository.RoomMateRepository;
+import com.example.geeks.domain.*;
+import com.example.geeks.repository.*;
 import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.responseDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +18,8 @@ public class RoomMateService {
     private final RoomMateRepository roomMateRepository;
     private final MemberRepository memberRepository;
     private final DetailRepository detailRepository;
+    private final SaveRoomMateRepository saveRoomMateRepository;
+    private final PointRepository pointRepository;
 
     @Transactional
     public void saveRoomMate(String myNickName, String yourNickName){
@@ -104,5 +103,30 @@ public class RoomMateService {
         } else {
             return null;
         }
+    }
+
+    public void saveRoomMateList(String myNickName, String yourNickName){
+        Member me = findMember(myNickName);
+        Member you = findMember(yourNickName);
+        SaveRoomMate saveRoomMate = new SaveRoomMate(me, you);
+        saveRoomMateRepository.save(saveRoomMate);
+    }
+
+    public List<PointAndMemberDTO> getSaveRoomMateList(Long id){
+        List<SaveRoomMate> saveRoomMates = saveRoomMateRepository.findAllByIdFetch(id);
+        List<Point> points = new ArrayList<>();
+        for(SaveRoomMate saveRoomMate : saveRoomMates){
+            points.add(pointRepository.findByMemberAndFriend(saveRoomMate.getMe(), saveRoomMate.getYou()));
+        }
+
+        return points.stream()
+                .map(point ->
+                        new PointAndMemberDTO(
+                                point.getFriend().getId(),
+                                point.getFriend().getNickname(),
+                                point.getFriend().getMajor(),
+                                point.getFriend().getIntroduction(),
+                                point.getFriend().getStudentID(),
+                                point.getPoint())).toList();
     }
 }

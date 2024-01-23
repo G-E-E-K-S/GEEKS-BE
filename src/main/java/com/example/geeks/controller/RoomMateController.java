@@ -1,10 +1,10 @@
 package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
-import com.example.geeks.domain.Member;
-import com.example.geeks.responseDto.MyPageDTO;
+import com.example.geeks.responseDto.PointAndMemberDTO;
 import com.example.geeks.responseDto.RoomMateDTO;
 import com.example.geeks.responseDto.RoomMateDetailDTO;
+import com.example.geeks.service.MemberService;
 import com.example.geeks.service.RoomMateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +20,8 @@ public class RoomMateController {
     private String secretKey;
 
     private final RoomMateService roomMateService;
+
+    private final MemberService memberService;
 
     private final Util util;
 
@@ -57,5 +59,19 @@ public class RoomMateController {
     public RoomMateDetailDTO roomMateDetail(@RequestParam String yournickname){
         RoomMateDetailDTO roomMateDetailDTO = roomMateService.getRoomMateDetail(yournickname);
         return roomMateDetailDTO;
+    }
+
+    @GetMapping("/save")
+    public void saveRoomMate(@RequestParam String yourNickname,
+                                                @CookieValue("token") String token){
+        String myNickname = util.getNickname(token, secretKey);
+        roomMateService.saveRoomMateList(myNickname, yourNickname);
+    }
+
+    @GetMapping("/savelist")
+    public List<PointAndMemberDTO> getSaveList(@CookieValue("token") String token){
+        Long myId = util.getUserId(token, secretKey);
+        List<PointAndMemberDTO> pointAndMemberDTOS = roomMateService.getSaveRoomMateList(myId);
+        return pointAndMemberDTOS;
     }
 }
