@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class RoomMateService {
     private final MemberRepository memberRepository;
     private final DetailRepository detailRepository;
     private final SaveRoomMateRepository saveRoomMateRepository;
-    private final PointRepository pointRepository;
 
     @Transactional
     public void saveRoomMate(String myNickName, String yourNickName){
@@ -49,7 +49,8 @@ public class RoomMateService {
                         roomMate.getReceived().getMajor(),
                         roomMate.getReceived().getIntroduction(),
                         roomMate.getReceived().getPhotoName(),
-                        roomMate.getReceived().getStudentID())).toList();
+                        roomMate.getReceived().getStudentID(),
+                        LocalDateTime.now())).toList();
 
         return roomMateDTOS;
     }
@@ -65,7 +66,8 @@ public class RoomMateService {
                         roomMate.getSent().getMajor(),
                         roomMate.getSent().getIntroduction(),
                         roomMate.getSent().getPhotoName(),
-                        roomMate.getSent().getStudentID())).toList();
+                        roomMate.getSent().getStudentID(),
+                        LocalDateTime.now())).toList();
 
         return roomMateDTOS;
     }
