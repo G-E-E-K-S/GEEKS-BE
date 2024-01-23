@@ -78,4 +78,8 @@ public class MemberService {
     public String createToken(Long id, String nickname){
         return util.createJwt(id, nickname, secretKey);
     }
+
+    public Long findId(String nickname){
+        return memberRepository.findIdByNickname(nickname);
+    }
 }
