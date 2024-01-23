@@ -16,4 +16,8 @@ public interface SaveRoomMateRepository extends JpaRepository<SaveRoomMate, Long
             "left join fetch s.you y " +
             "where m.id = :memberId ")
     List<SaveRoomMate> findAllByIdFetch(@Param("memberId")Long memberId);
+
+    //@Query("select s from SaveRoomMate s where s.me.id = :meId and s.you.id = :youId")
+    List<SaveRoomMate> findByMeIdAndYouId(@Param("meId") Long meId,
+                                          @Param("youId") Long youId);
 }

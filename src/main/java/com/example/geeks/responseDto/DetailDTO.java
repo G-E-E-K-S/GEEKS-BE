@@ -28,4 +28,10 @@ public class DetailDTO {
     private Cleaning cleaning;
 
     private Tendency tendency;
+
+    private boolean saved;
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
 }

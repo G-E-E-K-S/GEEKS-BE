@@ -35,6 +35,7 @@ public class PointService {
                                 point.getFriend().getNickname(),
                                 point.getFriend().getMajor(),
                                 point.getFriend().getIntroduction(),
+                                point.getFriend().getPhotoName(),
                                 point.getFriend().getStudentID(),
                                 point.getPoint())).toList();
     }
@@ -93,6 +94,7 @@ public class PointService {
                                 point.getFriend().getNickname(),
                                 point.getFriend().getMajor(),
                                 point.getFriend().getIntroduction(),
+                                point.getFriend().getPhotoName(),
                                 point.getFriend().getStudentID(),
                                 point.getPoint())).toList();
     }
