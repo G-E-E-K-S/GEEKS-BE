@@ -105,28 +105,11 @@ public class RoomMateService {
         }
     }
 
+    @Transactional
     public void saveRoomMateList(String myNickName, String yourNickName){
         Member me = findMember(myNickName);
         Member you = findMember(yourNickName);
         SaveRoomMate saveRoomMate = new SaveRoomMate(me, you);
         saveRoomMateRepository.save(saveRoomMate);
-    }
-
-    public List<PointAndMemberDTO> getSaveRoomMateList(Long id){
-        List<SaveRoomMate> saveRoomMates = saveRoomMateRepository.findAllByIdFetch(id);
-        List<Point> points = new ArrayList<>();
-        for(SaveRoomMate saveRoomMate : saveRoomMates){
-            points.add(pointRepository.findByMemberAndFriend(saveRoomMate.getMe(), saveRoomMate.getYou()));
-        }
-
-        return points.stream()
-                .map(point ->
-                        new PointAndMemberDTO(
-                                point.getFriend().getId(),
-                                point.getFriend().getNickname(),
-                                point.getFriend().getMajor(),
-                                point.getFriend().getIntroduction(),
-                                point.getFriend().getStudentID(),
-                                point.getPoint())).toList();
     }
 }
