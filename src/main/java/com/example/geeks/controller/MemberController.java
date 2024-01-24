@@ -193,4 +193,16 @@ public class MemberController {
         Long userId = util.getUserId(token, tokenSecretKey);
         return memberService.sendMyPage(userId);
     }
+
+    @PostMapping("/editpassword")
+    public String editPassword(@RequestBody PasswordDTO dto,
+                               @CookieValue String token,
+                               HttpSession session){
+       Long userId = util.getUserId(token, tokenSecretKey);
+       String encodePassword = encoder.encode(dto.getPassword());
+       session.setAttribute("password", encodePassword);
+       memberService.editPassword(encodePassword, userId);
+
+       return "success";
+    }
 }
