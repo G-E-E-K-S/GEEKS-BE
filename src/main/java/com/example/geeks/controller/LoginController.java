@@ -13,7 +13,6 @@ import javax.servlet.http.Cookie;
 @RestController
 @RequestMapping("/login")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class LoginController {
     private final MemberService memberService;
 
@@ -25,12 +24,13 @@ public class LoginController {
             System.out.println("Not user" + token + " " + loginDTO.getPassword());
             return "fail";
         }
+
         Cookie cookie = new Cookie("token", token);
 
         cookie.setPath("/");
         cookie.setSecure(false);
         cookie.setMaxAge(86400); //1일
-        cookie.setHttpOnly(false);
+        cookie.setHttpOnly(true);
 
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         response.addCookie(cookie);
