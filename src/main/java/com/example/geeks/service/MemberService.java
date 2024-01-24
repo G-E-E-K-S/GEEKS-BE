@@ -4,10 +4,12 @@ import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
+import com.example.geeks.requestDto.LoginDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     private final Util util;
+
+    private final BCryptPasswordEncoder encoder;
 
     public boolean availableEmail(String email) {
         return memberRepository.findByEmail(email).isEmpty();
@@ -81,5 +85,25 @@ public class MemberService {
 
     public Long findId(String nickname){
         return memberRepository.findIdByNickname(nickname);
+    }
+
+    public String login(LoginDTO loginDTO){
+        // 1. Id가 틀린 경우
+        if(memberRepository.findByEmail(loginDTO.getEmail()).isEmpty()) return "Email Not Found";
+        // 2. Pw가 틀린 경우
+        Member user = memberRepository.findByEmail(loginDTO.getEmail()).get(0);
+        // 사용자가 입력한 비밀번호 (rawPassword)와 암호화된 비밀번호 (hashedPassword)를 비교
+        if(!encoder.matches(loginDTO.getPassword(), user.getPassword())) return "Password Not Equal";
+        String nickname = user.getNickname();
+        Long id = user.getId();
+        return Util.createJwt(id, nickname, secretKey);
+    }
+
+    @Transactional
+    public void editPassword(String encodePassword, Long userId){
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        member.changePassword(encodePassword);
     }
 }
