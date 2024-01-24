@@ -1,15 +1,18 @@
 package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
+import com.example.geeks.domain.Post;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.responseDto.PostAllDTO;
 import com.example.geeks.responseDto.PostCommentResponseDTO;
+import com.example.geeks.responseDto.PostCursorPageDTO;
 import com.example.geeks.responseDto.PostDetailDTO;
 import com.example.geeks.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,9 +42,15 @@ public class PostController {
         return "success";
     }
 
-    @GetMapping("/showAll")
-    public List<PostAllDTO> showAll() {
-        return postService.findAllPost();
+    @GetMapping("/main")
+    public PostCursorPageDTO cursorPage(@RequestParam Long cursor) {
+        return postService.cursorBasePaging(cursor);
+    }
+
+    @GetMapping("/test")
+    public PostCursorPageDTO test() {
+        return postService.cursorBasePaging(9L);
+        //postService.cursorBasePaging(9L);
     }
 
     @GetMapping("/show")

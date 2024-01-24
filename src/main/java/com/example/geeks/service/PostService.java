@@ -9,9 +9,13 @@ import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.responseDto.PostAllDTO;
 import com.example.geeks.responseDto.PostCommentResponseDTO;
+import com.example.geeks.responseDto.PostCursorPageDTO;
 import com.example.geeks.responseDto.PostDetailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -89,17 +93,27 @@ public class PostService {
         }
     }
 
-    public List<PostAllDTO> findAllPost() {
-        List<Post> posts = postRepository.findAll();
+    public PostCursorPageDTO cursorBasePaging(Long cursor) {
+        PageRequest pageRequest =
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
 
-        List<PostAllDTO> result = posts
-                .stream()
-                .map(post -> new PostAllDTO(post.getId(), post.getTitle(), post.getContent(),
+        Page<Post> pages;
+
+        if(cursor == 0L) {
+            pages = postRepository.findPostCursorBasePagingFirst(pageRequest);
+        } else {
+            pages = postRepository.findPostCursorBasePaging(cursor, pageRequest);
+        }
+
+        List<PostAllDTO> postAllDTOS = pages.map(post ->
+                new PostAllDTO(
+                        post.getId(), post.getTitle(), post.getContent(),
                         post.isAnonymity() ? null : post.getMember().getNickname(),
                         !post.getPhotos().isEmpty() ? post.getPhotos().get(0).getPhotoName() : null,
-                        post.getCommentCount(), post.getCreatedDate())).toList();
+                        post.getCommentCount(), post.isAnonymity(), post.getCreatedDate())).stream().toList();
 
-        return result;
+
+        return new PostCursorPageDTO(postAllDTOS.get(postAllDTOS.size() - 1).getPostId(), pages.hasNext(), postAllDTOS);
     }
 
     public PostDetailDTO findDetailPost(Long postId) {

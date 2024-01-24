@@ -19,15 +19,22 @@ public class PostAllDTO {
 
     private int commentCount;
 
+    private boolean anonymity;
+
     private LocalDateTime createdDate;
 
-    public PostAllDTO(Long postId, String title, String content, String writer, String photoName, int commentCount, LocalDateTime createdDate) {
+    public PostAllDTO(Long postId, String title, String content, String writer, String photoName, int commentCount, boolean anonymity, LocalDateTime createdDate) {
         this.postId = postId;
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.photoName = photoName;
         this.commentCount = commentCount;
+        this.anonymity = anonymity;
         this.createdDate = createdDate;
+    }
+
+    public PostAllDTO toEntity() {
+        return new PostAllDTO(postId, title, content, writer, photoName, commentCount, anonymity, createdDate);
     }
 }
