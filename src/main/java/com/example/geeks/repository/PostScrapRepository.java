@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface PostScrapRepository extends JpaRepository<PostScrap, Long> {
     Optional<PostScrap> findByMemberAndPost(@Param("member")Member member,
                                             @Param("post")Post post);
+
+    Optional<PostScrap> findByMemberIdAndPostId(@Param("memberId") Long memberId,
+                                                @Param("postId") Long postId);
 }
