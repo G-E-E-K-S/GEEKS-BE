@@ -199,7 +199,9 @@ public class PostService {
             throw new Exception();
         }
 
-        Heart heart = new Heart(member, post);
+        Heart heart = new Heart();
+        heart.setPost(post);
+        heart.setMember(member);
 
         heartRepository.save(heart);
         postRepository.increaseHeart(postId);
@@ -232,7 +234,10 @@ public class PostService {
             throw new Exception();
         }
 
-        PostScrap postScrap = new PostScrap(member, post);
+        PostScrap postScrap = new PostScrap();
+        postScrap.setPost(post);
+        postScrap.setMember(member);
+
         postScrapRepository.save(postScrap);
     }
 

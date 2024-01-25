@@ -49,14 +49,20 @@ public class Member extends BaseTimeEntity{
     @JoinColumn(name = "detail_id")
     private Detail detail;
 
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<Point> point = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<Heart> hearts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<PostScrap> scraps = new ArrayList<>();
 
     public void changeIntroduction(String introduction) {
         this.introduction = introduction;
@@ -76,6 +82,14 @@ public class Member extends BaseTimeEntity{
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void addHeart(Heart heart) {
+        this.hearts.add(heart);
+    }
+
+    public void addScrap(PostScrap postScrap) {
+        this.scraps.add(postScrap);
     }
 
     public void changeProfile(ProfileEditDTO dto) {
