@@ -2,9 +2,11 @@ package com.example.geeks.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.geeks.domain.Detail;
+import com.example.geeks.domain.Member;
 import com.example.geeks.domain.Point;
 import com.example.geeks.domain.SaveRoomMate;
 import com.example.geeks.repository.DetailRepository;
+import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PointRepository;
 import com.example.geeks.repository.SaveRoomMateRepository;
 import com.example.geeks.responseDto.PointAndMemberDTO;
@@ -22,6 +24,8 @@ public class PointService {
     private final PointRepository pointRepository;
 
     private final DetailRepository detailRepository;
+
+    private final MemberRepository memberRepository;
 
     private final SaveRoomMateRepository saveRoomMateRepository;
 
@@ -42,9 +46,10 @@ public class PointService {
 
     @Transactional
     public void calculate(Long userId) {
-
-        Detail myDetail = detailRepository.findById(userId)
+        Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Detail myDetail = member.getDetail();
 
         List<Long> friendIds = new ArrayList<>();
         friendIds.add(userId);
@@ -60,7 +65,7 @@ public class PointService {
             }
         }
 
-        List<Detail> detailList = detailRepository.findListNotInFriendId(friendIds);
+        List<Detail> detailList = detailRepository.findListNotInFriendId(friendIds, member.getGender(), member.getType());
 
         for (Detail detail : detailList) {
             Point result = Point.builder()

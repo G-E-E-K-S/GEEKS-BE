@@ -59,7 +59,7 @@ public class PostService {
 
     @Transactional
     public void createPost(Long memberId, PostCreateRequestDTO requestDTO, List<MultipartFile> files) throws IOException {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdFetchDetail(memberId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + memberId));
 
         Post post = Post.builder()
@@ -157,7 +157,7 @@ public class PostService {
 
     @Transactional
     public void createComment(Long memberId, PostCommentRequestDTO requestDTO) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdFetchDetail(memberId)
                 .orElseThrow(() -> new NotFoundException("Could not found member id : " + memberId));
 
         Post post = postRepository.findById(requestDTO.getPostId())
@@ -196,7 +196,7 @@ public class PostService {
 
     @Transactional
     public void insertHeart(Long userId, Long postId) throws Exception {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         Post post = postRepository.findById(postId)
@@ -216,7 +216,7 @@ public class PostService {
 
     @Transactional
     public void deleteHeart(Long userId, Long postId) {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         Post post = postRepository.findById(postId)
@@ -231,7 +231,7 @@ public class PostService {
     
     @Transactional
     public void insertScrap(Long userId, Long postId) throws Exception {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         Post post = postRepository.findById(postId)
@@ -250,7 +250,7 @@ public class PostService {
 
     @Transactional
     public void deleteScrap(Long userId, Long postId) {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         Post post = postRepository.findById(postId)
