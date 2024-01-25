@@ -34,19 +34,19 @@ public class RoomMateController {
         roomMateService.saveRoomMate(myNickname, yourNickname);
     }
 
-    //나에게 보낸사람
+    //내가 보낸사람
     @GetMapping("/sent")
     public List<RoomMateDTO> sentRoomMateList(@CookieValue("token") String token){
-        String myNickname = util.getNickname(token, secretKey);
-        List<RoomMateDTO> roomMates = roomMateService.findSentRoomMateList(myNickname);
+        Long id = util.getUserId(token, secretKey);
+        List<RoomMateDTO> roomMates = roomMateService.findSentRoomMateList(id);
         return roomMates;
     }
 
-    //내가 보낸사람
+    //나에게 보낸사람
     @GetMapping("/recived")
     public List<RoomMateDTO> recivedRoomMateList(@CookieValue("token") String token){
-        String myNickname = util.getNickname(token, secretKey);
-        List<RoomMateDTO> roomMates = roomMateService.findRecivedRoomMateList(myNickname);
+        Long id = util.getUserId(token, secretKey);
+        List<RoomMateDTO> roomMates = roomMateService.findRecivedRoomMateList(id);
         return roomMates;
     }
 

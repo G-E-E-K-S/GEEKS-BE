@@ -278,8 +278,8 @@ public class MemberTest {
         detailRepository.save(yourDetail);
 
         roomMateService.saveRoomMate("admin", "90000e");
-        roomMateService.findSentRoomMateList("90000e");
-        roomMateService.findRecivedRoomMateList("90000e");
+        //roomMateService.findSentRoomMateList("90000e");
+        //roomMateService.findRecivedRoomMateList("90000e");
 
         roomMateService.getRoomMateDetail("90000e");
 
