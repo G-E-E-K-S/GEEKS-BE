@@ -25,6 +25,8 @@ public class Post extends BaseTimeEntity{
 
     private String content;
 
+    private String photoName;
+
     private int commentCount;
 
     private int like_count;
@@ -85,5 +87,9 @@ public class Post extends BaseTimeEntity{
         this.like_count = like_count;
         this.anonymity = anonymity;
         this.type = type;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 }
