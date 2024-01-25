@@ -95,7 +95,7 @@ public class MemberService {
         // 2. Pw가 틀린 경우
         Member user = memberRepository.findByEmail(loginDTO.getEmail()).get(0);
         // 사용자가 입력한 비밀번호 (rawPassword)와 암호화된 비밀번호 (hashedPassword)를 비교
-        if(!matches(loginDTO.getPassword(), user.getPassword())) return "Password Not Equal";
+        if(!encoder.matches(loginDTO.getPassword(), user.getPassword())) return "Password Not Equal";
         String nickname = user.getNickname();
         Long id = user.getId();
         return Util.createJwt(id, nickname, secretKey);

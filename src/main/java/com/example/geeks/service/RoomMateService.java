@@ -57,7 +57,7 @@ public class RoomMateService {
                         roomMate.getReceived().getIntroduction(),
                         roomMate.getReceived().getPhotoName(),
                         roomMate.getReceived().getStudentID(),
-                        LocalDateTime.now()))
+                        roomMate.getCreatedDate()))
                 .toList();
 
         for(RoomMateDTO roomMateDTO : roomMateDTOS){
@@ -79,7 +79,7 @@ public class RoomMateService {
                         roomMate.getSent().getIntroduction(),
                         roomMate.getSent().getPhotoName(),
                         roomMate.getSent().getStudentID(),
-                        LocalDateTime.now())).toList();
+                        roomMate.getCreatedDate())).toList();
 
         for (RoomMateDTO roomMateDTO : roomMateDTOS) {
             System.out.println(roomMateDTO.getNickname());
