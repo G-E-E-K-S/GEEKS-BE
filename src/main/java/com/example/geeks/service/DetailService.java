@@ -30,7 +30,7 @@ public class DetailService {
 
     @Transactional
     public void register(Long userId, DetailDTO dto) {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         Detail detail = Detail.builder()

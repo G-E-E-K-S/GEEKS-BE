@@ -103,7 +103,7 @@ public class MemberService {
 
     @Transactional
     public void editPassword(String encodePassword, Long userId){
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         member.changePassword(encodePassword);
