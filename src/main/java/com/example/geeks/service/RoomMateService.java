@@ -22,12 +22,20 @@ public class RoomMateService {
     private final SaveRoomMateRepository saveRoomMateRepository;
 
     @Transactional
-    public void saveRoomMate(String myNickName, String yourNickName){
+    public void saveRoomMate(String myNickName, String yourNickName) {
         Member me = findMember(myNickName);
         Member you = findMember(yourNickName);
-        RoomMate roomMate = new RoomMate(me, you);
-        roomMateRepository.save(roomMate);
+
+        RoomMate existingRoomMate = roomMateRepository.findBySentAndReceived(me, you);
+
+        if (existingRoomMate == null) {
+            RoomMate roomMate = new RoomMate(me, you);
+            roomMateRepository.save(roomMate);
+        } else {
+            System.out.println("이미 저장되어있음");
+        }
     }
+
 
     public Member findMember(String nickname){
         List<Member> members = memberRepository.findByNickname(nickname);
@@ -38,29 +46,33 @@ public class RoomMateService {
         }
     }
 
-    public List<RoomMateDTO> findSentRoomMateList(String nickName){
-        Member me = findMember(nickName);
-        List<RoomMate> roommates = roomMateRepository.findSentByMember(me); //보낸 사람 목록이 받아짐.
+    public List<RoomMateDTO> findSentRoomMateList(Long id) {
+        List<RoomMate> roommates = roomMateRepository.findSentByMemberId(id);
 
         List<RoomMateDTO> roomMateDTOS = roommates
                 .stream()
                 .map(roomMate -> new RoomMateDTO(
-                    roomMate.getReceived().getNickname(),
+                        roomMate.getReceived().getNickname(),
                         roomMate.getReceived().getMajor(),
                         roomMate.getReceived().getIntroduction(),
                         roomMate.getReceived().getPhotoName(),
                         roomMate.getReceived().getStudentID(),
-                        LocalDateTime.now())).toList();
+                        LocalDateTime.now()))
+                .toList();
+
+        for(RoomMateDTO roomMateDTO : roomMateDTOS){
+            System.out.println(roomMateDTO.getNickname());
+        }
 
         return roomMateDTOS;
     }
 
-    public List<RoomMateDTO> findRecivedRoomMateList(String nickName){
-        Member me = findMember(nickName);
-        List<RoomMate> roommates = roomMateRepository.findRecivedByMember(me);
+    public List<RoomMateDTO> findRecivedRoomMateList(Long id) {
+        List<RoomMate> roommates = roomMateRepository.findRecivedById(id);
 
         List<RoomMateDTO> roomMateDTOS = roommates
                 .stream()
+                .filter(roomMate -> roomMate.getSent() != null) // 필터 추가
                 .map(roomMate -> new RoomMateDTO(
                         roomMate.getSent().getNickname(),
                         roomMate.getSent().getMajor(),
@@ -69,8 +81,13 @@ public class RoomMateService {
                         roomMate.getSent().getStudentID(),
                         LocalDateTime.now())).toList();
 
+        for (RoomMateDTO roomMateDTO : roomMateDTOS) {
+            System.out.println(roomMateDTO.getNickname());
+        }
+
         return roomMateDTOS;
     }
+
     @Transactional
     public void cancelRequest(String myNickName, String yourNickName){
         Member me = findMember(myNickName);
