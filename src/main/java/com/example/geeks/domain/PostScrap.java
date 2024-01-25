@@ -12,7 +12,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostScrap {
 
     @Id
@@ -28,8 +27,28 @@ public class PostScrap {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public PostScrap() {
+
+    }
+
     public PostScrap(Member member, Post post) {
         this.member = member;
         this.post = post;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+
+        if(!member.getScraps().contains(this)) {
+            member.addScrap(this);
+        }
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+
+        if(!post.getScraps().contains(this)) {
+            post.addScrap(this);
+        }
     }
 }

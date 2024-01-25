@@ -43,6 +43,12 @@ public class Post extends BaseTimeEntity{
     @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<Photo> photos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<Heart> hearts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    private List<PostScrap> scraps = new ArrayList<>();
+
     public void setMember(Member member) {
         this.member = member;
 
@@ -57,6 +63,14 @@ public class Post extends BaseTimeEntity{
 
     public void addPhoto(Photo photo) {
         this.photos.add(photo);
+    }
+
+    public void addHeart(Heart heart) {
+        this.hearts.add(heart);
+    }
+
+    public void addScrap(PostScrap postScrap) {
+        this.scraps.add(postScrap);
     }
 
     public void increaseCommentCount(int commentCount) {

@@ -10,7 +10,6 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Heart {
 
     @Id
@@ -26,8 +25,27 @@ public class Heart {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public Heart() {
+    }
+
     public Heart(Member member, Post post) {
         this.member = member;
         this.post = post;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+
+        if(!member.getHearts().contains(this)) {
+            member.addHeart(this);
+        }
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+
+        if(!post.getHearts().contains(this)) {
+            post.addHeart(this);
+        }
     }
 }
