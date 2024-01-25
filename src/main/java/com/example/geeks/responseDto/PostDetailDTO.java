@@ -16,6 +16,12 @@ public class PostDetailDTO {
 
     private int commentCount;
 
+    private boolean writerState;
+
+    private boolean heartState;
+
+    private boolean scrapState;
+
     private LocalDateTime createdDate;
 
     private List<String> photoNames;
@@ -23,11 +29,14 @@ public class PostDetailDTO {
     private List<PostCommentResponseDTO> comments;
 
     @Builder
-    public PostDetailDTO(String title, String content, String writer, int commentCount, LocalDateTime createdDate, List<String> photoNames, List<PostCommentResponseDTO> comments) {
+    public PostDetailDTO(String title, String content, String writer, int commentCount, boolean writerState, boolean heartState, boolean scrapState, LocalDateTime createdDate, List<String> photoNames, List<PostCommentResponseDTO> comments) {
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.commentCount = commentCount;
+        this.writerState = writerState;
+        this.heartState = heartState;
+        this.scrapState = scrapState;
         this.createdDate = createdDate;
         this.photoNames = photoNames;
         this.comments = comments;

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -116,12 +117,15 @@ public class PostService {
         return new PostCursorPageDTO(postAllDTOS.get(postAllDTOS.size() - 1).getPostId(), pages.hasNext(), postAllDTOS);
     }
 
-    public PostDetailDTO findDetailPost(Long postId) {
+    public PostDetailDTO findDetailPost(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
 
         List<PostCommentResponseDTO> comments = commentRepository.findByPostId(postId);
         List<String> photoNames = photoRepository.findPhotoNamesByPostId(postId);
+
+        Optional<Heart> heart = heartRepository.findByMemberIdAndPostId(userId, postId);
+        Optional<PostScrap> postScrap = postScrapRepository.findByMemberIdAndPostId(userId, postId);
 
         return PostDetailDTO.builder()
                 .title(post.getTitle())
@@ -131,6 +135,9 @@ public class PostService {
                 .photoNames(photoNames)
                 .createdDate(post.getCreatedDate())
                 .writer(post.isAnonymity() ? null : post.getMember().getNickname())
+                .writerState(post.getMember().getId().equals(userId))
+                .scrapState(postScrap.isPresent())
+                .heartState(heart.isPresent())
                 .build();
     }
 

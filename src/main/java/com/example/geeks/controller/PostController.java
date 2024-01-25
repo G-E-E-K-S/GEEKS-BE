@@ -54,8 +54,10 @@ public class PostController {
     }
 
     @GetMapping("/show")
-    public PostDetailDTO show(@RequestParam Long postId) {
-        return postService.findDetailPost(postId);
+    public PostDetailDTO show(@RequestParam Long postId,
+                              @CookieValue(value = "token") String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return postService.findDetailPost(userId, postId);
     }
 
     @GetMapping("/delete")
