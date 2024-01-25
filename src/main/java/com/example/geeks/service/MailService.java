@@ -80,6 +80,7 @@ public class MailService {
 
     public String sendSimpleMessage(String to) throws Exception {
         // TODO Auto-generated method stub
+        System.out.println("to = " + to);
         MimeMessage message = createMessage(to);
         try{//예외처리
             emailSender.send(message);

@@ -5,11 +5,12 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
-@ToString
+@ToString(exclude = {"post"})
 public class Heart {
 
     @Id

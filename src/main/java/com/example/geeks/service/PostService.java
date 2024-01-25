@@ -83,7 +83,10 @@ public class PostService {
                 String current_date = now.format(dateTimeFormatter);
 
                 String fileName = member.getNickname() + current_date + count++;
-                System.out.println("file name: " + fileName);
+
+                if(count == 2) {
+                    post.setPhotoName(fileName);
+                }
 
                 Photo photo = Photo.createPhoto(fileName, post);
                 photoRepository.save(photo);
@@ -110,7 +113,7 @@ public class PostService {
                 new PostAllDTO(
                         post.getId(), post.getTitle(), post.getContent(),
                         post.isAnonymity() ? null : post.getMember().getNickname(),
-                        !post.getPhotos().isEmpty() ? post.getPhotos().get(0).getPhotoName() : null,
+                        !post.getPhotos().isEmpty() ? post.getPhotoName() : null,
                         post.getCommentCount(), post.isAnonymity(), post.getCreatedDate())).stream().toList();
 
 
@@ -131,6 +134,7 @@ public class PostService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .comments(comments)
+                .likeCount(post.getLike_count())
                 .commentCount(post.getCommentCount())
                 .photoNames(photoNames)
                 .createdDate(post.getCreatedDate())
@@ -225,8 +229,10 @@ public class PostService {
         Heart heart = heartRepository.findByMemberAndPost(member, post)
                 .orElseThrow(() -> new NotFoundException("Could not found heart"));
 
-        heartRepository.delete(heart);
+        member.getHearts().remove(heart);
         postRepository.decreaseHeart(postId);
+        heartRepository.delete(heart);
+
     }
     
     @Transactional
@@ -259,6 +265,7 @@ public class PostService {
         PostScrap postScrap = postScrapRepository.findByMemberAndPost(member, post)
                 .orElseThrow(() -> new NotFoundException("Could not found scrap"));
 
+        member.getScraps().remove(postScrap);
         postScrapRepository.delete(postScrap);
     }
 }

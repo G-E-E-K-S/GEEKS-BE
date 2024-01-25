@@ -35,8 +35,8 @@ public class MemberController {
     @Value("${jwt.secret}")
     private String tokenSecretKey;
 
-   /* @GetMapping("/register")
-    public String register(HttpSession session) {
+    @GetMapping("/register")
+    public void register(HttpSession session) {
         Member member = Member.builder()
                 .nickname((String) session.getAttribute("nickname"))
                 .email((String) session.getAttribute("email"))
@@ -45,7 +45,7 @@ public class MemberController {
                 .gender((Gender) session.getAttribute("gender"))
                 .exp((int) session.getAttribute("exp"))
                 .type((DormitoryType) session.getAttribute("type"))
-                .image_url("basic")
+                .image_url("")
                 .introduction("")
                 .build();
         memberService.join(member);
@@ -60,9 +60,7 @@ public class MemberController {
 
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         response.addCookie(cookie);
-
-        return "";
-    }*/
+    }
 //   @PostMapping("/register")
 //   public String register(@RequestBody RegisterDTO dto) {
 //       Member member = Member.builder()
