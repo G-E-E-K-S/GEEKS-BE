@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Modifying(clearAutomatically = true)
@@ -20,14 +23,19 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "select p from Post p " +
             "left join fetch p.member " +
-            "left join fetch p.photos " +
             "where p.id < :cursor",
     countQuery = "select count(p) from Post p")
     Page<Post> findPostCursorBasePaging(Long cursor, Pageable pageable);
 
     @Query(value = "select p from Post p " +
-            "left join fetch p.member " +
-            "left join fetch p.photos",
+            "left join fetch p.member",
     countQuery = "select count(p) from Post p")
     Page<Post> findPostCursorBasePagingFirst(Pageable pageable);
+
+    @Query("select p from Post p " +
+            "where p.createdDate > :time " +
+            "order by p.like_count desc, p.commentCount desc ")
+    List<Post> findPostToHome(@Param("time") LocalDateTime time,
+                              Pageable pageable);
+
 }

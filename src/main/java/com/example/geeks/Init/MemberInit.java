@@ -275,7 +275,7 @@ public class MemberInit {
                 .anonymity(true)
                 .title("피자 같이 먹을 사람 구해요1")
                 .content("ㅈㄱㄴ")
-                .like_count(5)
+                .like_count(10)
                 .type(DormitoryType.NEW)
                 .build();
 
@@ -316,11 +316,11 @@ public class MemberInit {
                 .build();
 
         Post post6 = Post.builder()
-                .commentCount(2)
+                .commentCount(8)
                 .anonymity(true)
                 .title("피자 같이 먹을 사람 구해요6")
                 .content("ㅈㄱㄴ")
-                .like_count(5)
+                .like_count(8)
                 .type(DormitoryType.NEW)
                 .build();
 
@@ -347,7 +347,7 @@ public class MemberInit {
                 .anonymity(true)
                 .title("피자 같이 먹을 사람 구해요9")
                 .content("ㅈㄱㄴ")
-                .like_count(5)
+                .like_count(8)
                 .type(DormitoryType.NEW)
                 .build();
 

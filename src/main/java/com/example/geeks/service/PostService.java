@@ -7,10 +7,7 @@ import com.example.geeks.domain.*;
 import com.example.geeks.repository.*;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
-import com.example.geeks.responseDto.PostAllDTO;
-import com.example.geeks.responseDto.PostCommentResponseDTO;
-import com.example.geeks.responseDto.PostCursorPageDTO;
-import com.example.geeks.responseDto.PostDetailDTO;
+import com.example.geeks.responseDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -118,6 +115,20 @@ public class PostService {
 
 
         return new PostCursorPageDTO(postAllDTOS.get(postAllDTOS.size() - 1).getPostId(), pages.hasNext(), postAllDTOS);
+    }
+
+    public List<HomeRealTimePostDTO> homePostList() {
+        LocalDateTime time = LocalDateTime.now().minusHours(12);
+        PageRequest pageRequest = PageRequest.of(0, 3);
+        List<Post> posts = postRepository.findPostToHome(time, pageRequest);
+
+        return posts.stream().map(post ->
+                HomeRealTimePostDTO.builder()
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .likeCount(post.getLike_count())
+                        .commentCount(post.getCommentCount())
+                        .createdDate(post.getCreatedDate()).build()).toList();
     }
 
     public PostDetailDTO findDetailPost(Long userId, Long postId) {
