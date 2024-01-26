@@ -20,5 +20,7 @@ public class DetailCompareDTO {
 
     private int studentID;
 
+    private int point;
+
     List<DetailDTO> details;
 }

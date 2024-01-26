@@ -77,6 +77,7 @@ public class MemberService {
                 .studentID(member.getStudentID())
                 .introduction(member.getIntroduction())
                 .nickname(member.getNickname())
+                .type(member.getType())
                 .exist(member.getDetail() != null ? true : false)
                 .build();
     }

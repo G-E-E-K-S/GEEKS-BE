@@ -31,4 +31,10 @@ public interface PointRepository extends JpaRepository<Point, Long> {
             "left join fetch p.friend f " +
             "where f.id in :friend ")
     List<Point> findByFriendIdInListFetch(@Param("friend") List<Long> friend);
+
+    @Query("select p.point from Point p " +
+            "where p.member.id = :myId and p.friend.id = :friendId")
+    int findPointByMemberIdAndFriendId(@Param("myId") Long myId,
+                                       @Param("friendId") Long friendId);
+
 }

@@ -107,7 +107,10 @@ public class DetailService {
         Member opponent = memberRepository.findById(opponentId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + opponentId));
 
+        int point = pointRepository.findPointByMemberIdAndFriendId(myId, opponentId);
+
         return DetailCompareDTO.builder()
+                .point(point)
                 .details(detailDTOS)
                 .major(opponent.getMajor())
                 .nickname(opponent.getNickname())
