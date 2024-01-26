@@ -23,4 +23,6 @@ public class PointAndMemberDTO {
 
     private int point;
 
+    private boolean smoking;
+
 }

@@ -11,6 +11,8 @@ import com.example.geeks.repository.PointRepository;
 import com.example.geeks.repository.SaveRoomMateRepository;
 import com.example.geeks.responseDto.PointAndMemberDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +43,7 @@ public class PointService {
                                 point.getFriend().getIntroduction(),
                                 point.getFriend().getPhotoName(),
                                 point.getFriend().getStudentID(),
-                                point.getPoint())).toList();
+                                point.getPoint(), point.getFriend().getDetail().isSmoking())).toList();
     }
 
     @Transactional
@@ -101,7 +103,43 @@ public class PointService {
                                 point.getFriend().getIntroduction(),
                                 point.getFriend().getPhotoName(),
                                 point.getFriend().getStudentID(),
-                                point.getPoint())).toList();
+                                point.getPoint(), point.getFriend().getDetail().isSmoking())).toList();
+    }
+
+    @Transactional
+    public List<PointAndMemberDTO> homePointList(Long userId) {
+        Member member = memberRepository.findByIdFetchDetail(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Detail myDetail = member.getDetail();
+
+        List<Long> friendIds = new ArrayList<>();
+        friendIds.add(userId);
+
+        PageRequest pageRequest =
+                PageRequest.of(0, 3);
+
+        List<Point> points = pointRepository.findByMemberIdFetchToHome(userId, pageRequest);
+
+        for (Point point : points) {
+            friendIds.add(point.getFriend().getId());
+
+            if(point.getLastModifiedDate().isAfter(myDetail.getLastModifiedDate()) ||
+                    point.getLastModifiedDate().isAfter(point.getFriend().getLastModifiedDate())) {
+                point.setPoint(pointCalculator(myDetail, point.getFriend().getDetail()));
+            }
+        }
+
+        return points.stream()
+                .map(point ->
+                        new PointAndMemberDTO(
+                                point.getFriend().getId(),
+                                point.getFriend().getNickname(),
+                                point.getFriend().getMajor(),
+                                point.getFriend().getIntroduction(),
+                                point.getFriend().getPhotoName(),
+                                point.getFriend().getStudentID(),
+                                point.getPoint(), point.getFriend().getDetail().isSmoking())).toList();
     }
 
     public int pointCalculator(Detail myDetail, Detail detail) {

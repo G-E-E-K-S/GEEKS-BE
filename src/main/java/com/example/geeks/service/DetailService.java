@@ -63,6 +63,16 @@ public class DetailService {
         detail.setWakeup(dto.getWakeup());
     }
 
+    public boolean detailExist(Long userId) {
+        Optional<Detail> detail = detailRepository.findById(userId);
+
+        if(detail.isPresent()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public DetailResponseDTO sendDetail(Long userId) {
         List<Detail> details = detailRepository.findByMemberId(userId);
         DetailResponseDTO result;
