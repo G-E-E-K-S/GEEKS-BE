@@ -65,7 +65,7 @@ public class RoomMateController {
 
     @GetMapping("/save")
     public void saveRoomMate(@RequestParam String yourNickname,
-                                                @CookieValue("token") String token){
+                             @CookieValue("token") String token){
         String myNickname = util.getNickname(token, secretKey);
         roomMateService.saveRoomMateList(myNickname, yourNickname);
     }
@@ -74,5 +74,14 @@ public class RoomMateController {
     public List<PointAndMemberDTO> getSaveList(@CookieValue("token") String token){
         Long myId = util.getUserId(token, secretKey);
         return pointService.getSaveRoomMateList(myId);
+    }
+
+    @GetMapping("/removesave")
+    public void removeSaveList(@RequestParam List<String> nickname,
+                               @CookieValue("token") String token){
+        String myName = util.getNickname(token, secretKey);
+        for(String opponentName : nickname){
+            roomMateService.removeSaveList(myName, opponentName);
+        }
     }
 }

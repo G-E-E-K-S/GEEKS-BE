@@ -128,7 +128,21 @@ public class RoomMateService {
     public void saveRoomMateList(String myNickName, String yourNickName){
         Member me = findMember(myNickName);
         Member you = findMember(yourNickName);
-        SaveRoomMate saveRoomMate = new SaveRoomMate(me, you);
-        saveRoomMateRepository.save(saveRoomMate);
+
+        SaveRoomMate existingRoomMate = saveRoomMateRepository.findByMeAndYou(me, you);
+
+        if (existingRoomMate == null) {
+            SaveRoomMate saveRoomMate = new SaveRoomMate(me, you);
+            saveRoomMateRepository.save(saveRoomMate);
+        } else {
+            System.out.println("이미 저장되어있음");
+        }
+    }
+
+    @Transactional
+    public void removeSaveList(String myName, String opponentName){
+        Member me = findMember(myName);
+        Member you = findMember(opponentName);
+        saveRoomMateRepository.deleteByMeAndYou(me, you);
     }
 }
