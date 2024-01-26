@@ -47,11 +47,15 @@ public class PointService {
     }
 
     @Transactional
-    public void calculate(Long userId) {
+    public boolean calculate(Long userId) {
         Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         Detail myDetail = member.getDetail();
+
+        if(myDetail == null) {
+            return false;
+        }
 
         List<Long> friendIds = new ArrayList<>();
         friendIds.add(userId);
@@ -78,6 +82,8 @@ public class PointService {
 
             pointRepository.save(result);
         }
+
+        return true;
     }
 
     @Transactional
