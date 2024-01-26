@@ -8,11 +8,8 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class HomeMainDTo {
-
-    private String nickname;
+public class PointMainDTO {
     private boolean exist;
-    private List<PointAndMemberDTO> points = new ArrayList<>();
 
-    private List<HomeRealTimePostDTO> posts = new ArrayList<>();
+    private List<PointAndMemberDTO> points = new ArrayList<>();
 }

@@ -33,8 +33,10 @@ public class HomeController {
     @GetMapping("/main")
     public HomeMainDTo home(@CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
+        String nickname = util.getNickname(token, tokenSecretKey);
 
         return new HomeMainDTo(
+                nickname,
                 detailService.detailExist(userId),
                 pointService.homePointList(userId),
                 postService.homePostList());
