@@ -66,7 +66,7 @@ public class MemberController {
        Member member = Member.builder()
                .nickname(dto.getNickname())
                .email(dto.getEmail())
-               .password(dto.getPassword())
+               .password(encoder.encode(dto.getPassword()))
                .major(dto.getMajor())
                .gender(dto.getGender())
                .exp(dto.getExp())
@@ -198,7 +198,7 @@ public class MemberController {
         Long userId = util.getUserId(token, tokenSecretKey);
         memberService.editOpen(userId, open);
         return "success";
-    } 
+    }
 
     @PostMapping("/editpassword")
     public String editPassword(@RequestBody PasswordDTO dto,

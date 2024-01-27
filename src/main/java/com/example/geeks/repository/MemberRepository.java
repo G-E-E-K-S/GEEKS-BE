@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    @Query("select m from Member m where m.email = :email")
+    @Query("select m from Member m " +
+            "left join fetch m.detail " +
+            "where m.email = :email")
     List<Member> findByEmail(@Param("email") String email);
 
     @Query("select m from Member m where m.nickname = :nickname")
