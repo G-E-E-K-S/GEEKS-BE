@@ -36,8 +36,6 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private int exp;
-
     private String photoName;
 
     private String introduction;
@@ -109,14 +107,13 @@ public class Member extends BaseTimeEntity{
     }
 
     @Builder
-    public Member(String nickname, String email, String password, String major, int studentID, Gender gender, int exp, String image_url, String introduction, boolean open, DormitoryType type) {
+    public Member(String nickname, String email, String password, String major, int studentID, Gender gender, String image_url, String introduction, boolean open, DormitoryType type) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.major = major;
         this.studentID = studentID;
         this.gender = gender;
-        this.exp = exp;
         this.photoName = image_url;
         this.introduction = introduction;
         this.open = open;

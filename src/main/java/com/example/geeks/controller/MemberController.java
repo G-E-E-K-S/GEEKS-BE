@@ -43,8 +43,8 @@ public class MemberController {
                 .password((String) session.getAttribute("password"))
                 .major((String) session.getAttribute("major"))
                 .gender((Gender) session.getAttribute("gender"))
-                .exp((int) session.getAttribute("exp"))
                 .type((DormitoryType) session.getAttribute("type"))
+                .studentID((int) session.getAttribute("studentID"))
                 .image_url("")
                 .introduction("")
                 .build();
@@ -69,7 +69,6 @@ public class MemberController {
                .password(encoder.encode(dto.getPassword()))
                .major(dto.getMajor())
                .gender(dto.getGender())
-               .exp(dto.getExp())
                .type(dto.getType())
                .image_url("basic")
                .introduction("")
