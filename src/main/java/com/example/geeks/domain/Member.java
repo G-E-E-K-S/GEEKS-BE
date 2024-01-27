@@ -42,8 +42,12 @@ public class Member extends BaseTimeEntity{
 
     private String introduction;
 
+    private boolean open;
+
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
+
+
 
     @OneToOne(mappedBy = "member", fetch = LAZY, cascade = {PERSIST, REMOVE})
     @JoinColumn(name = "detail_id")
@@ -92,6 +96,10 @@ public class Member extends BaseTimeEntity{
         this.scraps.add(postScrap);
     }
 
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+
     public void changeProfile(ProfileEditDTO dto) {
         this.type = dto.getType();
         this.nickname = dto.getNickname();
@@ -101,7 +109,7 @@ public class Member extends BaseTimeEntity{
     }
 
     @Builder
-    public Member(String nickname, String email, String password, String major, int studentID, Gender gender, int exp, String image_url, String introduction, DormitoryType type) {
+    public Member(String nickname, String email, String password, String major, int studentID, Gender gender, int exp, String image_url, String introduction, boolean open, DormitoryType type) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
@@ -111,6 +119,7 @@ public class Member extends BaseTimeEntity{
         this.exp = exp;
         this.photoName = image_url;
         this.introduction = introduction;
+        this.open = open;
         this.type = type;
     }
 }

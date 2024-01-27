@@ -18,16 +18,19 @@ public class MyPageDTO {
 
     private boolean exist;
 
+    private boolean open;
+
     private DormitoryType type;
 
     @Builder
-    public MyPageDTO(String nickname, String major, String introduction, String photoName, int studentID, boolean exist, DormitoryType type) {
+    public MyPageDTO(String nickname, String major, String introduction, String photoName, int studentID, boolean exist, boolean open, DormitoryType type) {
         this.nickname = nickname;
         this.major = major;
         this.introduction = introduction;
         this.photoName = photoName;
         this.studentID = studentID;
         this.exist = exist;
+        this.open = open;
         this.type = type;
     }
 }

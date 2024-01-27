@@ -192,6 +192,14 @@ public class MemberController {
         return memberService.sendMyPage(userId);
     }
 
+    @GetMapping("/open")
+    public String openProfile(@CookieValue String token,
+                       @RequestParam boolean open) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        memberService.editOpen(userId, open);
+        return "success";
+    } 
+
     @PostMapping("/editpassword")
     public String editPassword(@RequestBody PasswordDTO dto,
                                @CookieValue String token,

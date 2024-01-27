@@ -36,6 +36,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("외출이 잦아요! 기숙사는 가끔 들어와요")
                 .type(DormitoryType.NEW)
+                .open(true)
                 .build();
 
         Member member2 = Member.builder()
@@ -49,6 +50,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("예민하지 않으신 분들 찾아요")
                 .type(DormitoryType.NEW)
+                .open(true)
                 .build();
 
         Member member3 = Member.builder()
@@ -62,6 +64,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("같은 과이신 분들 선호합니다!")
                 .type(DormitoryType.OLD)
+                .open(true)
                 .build();
 
         Member member4 = Member.builder()
@@ -75,6 +78,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("같은 과이신 분들 선호합니다!")
                 .type(DormitoryType.NEW)
+                .open(true)
                 .build();
 
         Member member5 = Member.builder()
@@ -88,6 +92,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("외출 잦은 사람 선호합니다!")
                 .type(DormitoryType.NEW)
+                .open(true)
                 .build();
 
         Member member6 = Member.builder()
@@ -101,6 +106,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("외출 잦은 사람 선호합니다!")
                 .type(DormitoryType.NEW)
+                .open(true)
                 .build();
 
         Member member7 = Member.builder()
@@ -114,6 +120,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("외출 잦은 사람 선호합니다!")
                 .type(DormitoryType.NEW)
+                .open(true)
                 .build();
 
         Member member8 = Member.builder()
@@ -127,6 +134,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("외출 잦은 사람 선호합니다!")
                 .type(DormitoryType.NEW)
+                .open(true)
                 .build();
 
         Member member9 = Member.builder()
@@ -140,6 +148,7 @@ public class MemberInit {
                 .image_url("")
                 .introduction("외출 잦은 사람 선호합니다!")
                 .type(DormitoryType.NEW)
+                .open(false)
                 .build();
 
         memberRepository.save(member1);
