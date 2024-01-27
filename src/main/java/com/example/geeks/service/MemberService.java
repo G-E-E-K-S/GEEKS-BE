@@ -79,6 +79,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .type(member.getType())
                 .exist(member.getDetail() != null ? true : false)
+                .open(member.isOpen())
                 .build();
     }
 
@@ -108,5 +109,13 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         member.changePassword(encodePassword);
+    }
+
+    @Transactional
+    public void editOpen(Long userId, boolean open) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        member.setOpen(open);
     }
 }
