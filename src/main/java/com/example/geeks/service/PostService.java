@@ -44,7 +44,13 @@ public class PostService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public void uploadToS3(MultipartFile file, String fileName) throws IOException {
+    public String  uploadToS3(MultipartFile file, String nickname, int count) throws IOException {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String current_date = now.format(dateTimeFormatter);
+
+        String fileName = nickname + current_date + count++;
+
         ObjectMetadata metadata = new ObjectMetadata();
 
         metadata.setContentLength(file.getSize());
@@ -52,6 +58,8 @@ public class PostService {
 
         amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
         System.out.println("사진 URL" + amazonS3.getUrl(bucket, fileName));
+
+        return fileName;
     }
 
     @Transactional
@@ -75,11 +83,8 @@ public class PostService {
             int count = 1;
 
             for (MultipartFile file : files) {
-                LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-                String current_date = now.format(dateTimeFormatter);
-
-                String fileName = member.getNickname() + current_date + count++;
+                //S3 Upload
+                String fileName = uploadToS3(file, member.getNickname(), count++);
 
                 if(count == 2) {
                     post.setPhotoName(fileName);
@@ -87,9 +92,6 @@ public class PostService {
 
                 Photo photo = Photo.createPhoto(fileName, post);
                 photoRepository.save(photo);
-
-                //S3 Upload
-                uploadToS3(file, fileName);
             }
         }
     }
@@ -109,8 +111,7 @@ public class PostService {
         List<PostAllDTO> postAllDTOS = pages.map(post ->
                 new PostAllDTO(
                         post.getId(), post.getTitle(), post.getContent(),
-                        post.isAnonymity() ? null : post.getMember().getNickname(),
-                        !post.getPhotos().isEmpty() ? post.getPhotoName() : null,
+                        post.isAnonymity() ? null : post.getMember().getNickname(), post.getPhotoName(),
                         post.getCommentCount(), post.isAnonymity(), post.getCreatedDate())).stream().toList();
 
 

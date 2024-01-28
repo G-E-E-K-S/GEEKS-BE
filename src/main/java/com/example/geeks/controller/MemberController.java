@@ -18,9 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/member")
@@ -178,10 +181,12 @@ public class MemberController {
     }
 
     @PostMapping("/edit/profile")
-    public String editProfile(@RequestBody ProfileEditDTO dto,
-                              @CookieValue String token) {
+    public String editProfile(
+            @RequestPart(value = "file", required=false) List<MultipartFile> file
+            ,@RequestPart(value = "dto") ProfileEditDTO dto,
+             @CookieValue String token) throws IOException {
         Long userId = util.getUserId(token, tokenSecretKey);
-        memberService.editProfile(dto, userId);
+        memberService.editProfile(dto, userId, file);
         return "success";
     }
 

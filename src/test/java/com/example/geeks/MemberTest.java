@@ -17,6 +17,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +53,6 @@ public class MemberTest {
                 .password("1234")
                 .major("소프트웨어")
                 .gender(Gender.MALE)
-                .exp(3)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
                 .introduction("")
@@ -80,7 +80,6 @@ public class MemberTest {
                 .password("1234")
                 .major("소프트웨어")
                 .gender(Gender.MALE)
-                .exp(3)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
                 .introduction("")
@@ -102,7 +101,7 @@ public class MemberTest {
     }
 
     @Test
-    public void editProfile() {
+    public void editProfile() throws IOException {
         Member member = Member.builder()
                 .nickname("admin")
                 .email("bak3839@naver.com")
@@ -110,7 +109,6 @@ public class MemberTest {
                 .major("소프트웨어")
                 .gender(Gender.MALE)
                 .studentID(19)
-                .exp(3)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
                 .introduction("")
@@ -126,7 +124,7 @@ public class MemberTest {
         em.flush();
 
         ProfileEditDTO dto = new ProfileEditDTO("admin", "소프트웨어", DormitoryType.NEW, 20, "안녕");
-        memberService.editProfile(dto, 1L);
+        memberService.editProfile(dto, 1L, null);
 
         Member member2 = memberRepository.findById(1L).get();
 
@@ -141,7 +139,6 @@ public class MemberTest {
                 .password("1234")
                 .major("소프트웨어")
                 .gender(Gender.MALE)
-                .exp(3)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
                 .introduction("")
@@ -155,7 +152,6 @@ public class MemberTest {
                 .password("1234")
                 .major("소프트웨어")
                 .gender(Gender.MALE)
-                .exp(2)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
                 .introduction("")
@@ -219,7 +215,6 @@ public class MemberTest {
                 .password("1234")
                 .major("소프트웨어")
                 .gender(Gender.MALE)
-                .exp(3)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
                 .introduction("")
@@ -233,7 +228,6 @@ public class MemberTest {
                 .password("1234")
                 .major("소프트웨어")
                 .gender(Gender.MALE)
-                .exp(2)
                 .type(DormitoryType.NEW)
                 .image_url("basic")
                 .introduction("")

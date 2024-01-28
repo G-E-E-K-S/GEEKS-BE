@@ -38,6 +38,7 @@ public class PostController {
             @CookieValue(value = "token") String token) throws IOException {
 
         Long userId = util.getUserId(token, tokenSecretKey);
+        System.out.println("files = " + files.size());
         postService.createPost(userId, requestDTO, files);
         return "success";
     }
@@ -50,7 +51,6 @@ public class PostController {
     @GetMapping("/test")
     public PostCursorPageDTO test() {
         return postService.cursorBasePaging(9L);
-        //postService.cursorBasePaging(9L);
     }
 
     @GetMapping("/show")

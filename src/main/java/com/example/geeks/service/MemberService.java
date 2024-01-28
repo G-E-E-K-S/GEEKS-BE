@@ -1,6 +1,8 @@
 package com.example.geeks.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.MemberRepository;
@@ -12,7 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +36,29 @@ public class MemberService {
     private final Util util;
 
     private final BCryptPasswordEncoder encoder;
+
+    private final AmazonS3 amazonS3;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    public String  uploadToS3(MultipartFile file, String nickname, int count) throws IOException {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String current_date = now.format(dateTimeFormatter);
+
+        String fileName = nickname + current_date + count++;
+
+        ObjectMetadata metadata = new ObjectMetadata();
+
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+
+        amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
+        System.out.println("사진 URL" + amazonS3.getUrl(bucket, fileName));
+
+        return fileName;
+    }
 
     public boolean availableEmail(String email) {
         return memberRepository.findByEmail(email).isEmpty();
@@ -61,9 +90,20 @@ public class MemberService {
     }
 
     @Transactional
-    public void editProfile(ProfileEditDTO dto, Long id) {
+    public void editProfile(ProfileEditDTO dto, Long id, List<MultipartFile> files) throws IOException {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + id));
+
+        if(files != null) {
+            if(!member.getPhotoName().equals("")) {
+                amazonS3.deleteObject(bucket, member.getPhotoName());
+            }
+
+            for (MultipartFile file : files) {
+                String fileName = uploadToS3(file, member.getNickname(), 1);
+                member.setPhotoName(fileName);
+            }
+        }
 
         member.changeProfile(dto);
     }
@@ -81,6 +121,7 @@ public class MemberService {
                 .type(member.getType())
                 .exist(member.getDetail() != null ? true : false)
                 .open(member.isOpen())
+                .gender(member.getGender())
                 .build();
     }
 
