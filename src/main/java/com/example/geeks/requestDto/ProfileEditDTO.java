@@ -15,6 +15,7 @@ public class ProfileEditDTO {
 
     private String introduction;
 
+
     public ProfileEditDTO(String nickname, String major, DormitoryType type, int studentID, String introduction) {
         this.nickname = nickname;
         this.major = major;

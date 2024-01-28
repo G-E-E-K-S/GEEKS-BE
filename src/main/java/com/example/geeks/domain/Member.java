@@ -45,8 +45,6 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private DormitoryType type;
 
-
-
     @OneToOne(mappedBy = "member", fetch = LAZY, cascade = {PERSIST, REMOVE})
     @JoinColumn(name = "detail_id")
     private Detail detail;
@@ -96,6 +94,10 @@ public class Member extends BaseTimeEntity{
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 
     public void changeProfile(ProfileEditDTO dto) {

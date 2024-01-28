@@ -8,11 +8,13 @@ import com.example.geeks.repository.DetailRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.TimeZone;
 
 @Component
 @RequiredArgsConstructor
@@ -23,12 +25,16 @@ public class MemberInit {
 
     private final PostRepository postRepository;
 
+    private final BCryptPasswordEncoder encoder;
+
     @PostConstruct
     public void memberInit() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+
         Member member1 = Member.builder()
                 .nickname("member1")
-                .email("m1@test.com")
-                .password("1234")
+                .email("201921002@sangmyung.kr")
+                .password(encoder.encode("1234"))
                 .major("소프트웨어")
                 .studentID(19)
                 .gender(Gender.MALE)
@@ -41,7 +47,7 @@ public class MemberInit {
         Member member2 = Member.builder()
                 .nickname("member2")
                 .email("m2@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("소프트웨어")
                 .studentID(17)
                 .gender(Gender.FEMALE)
@@ -54,7 +60,7 @@ public class MemberInit {
         Member member3 = Member.builder()
                 .nickname("눈누난나")
                 .email("m3@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("소프트웨어")
                 .studentID(22)
                 .gender(Gender.FEMALE)
@@ -67,7 +73,7 @@ public class MemberInit {
         Member member4 = Member.builder()
                 .nickname("종강하고싶다")
                 .email("m3@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("전자공학과")
                 .studentID(22)
                 .gender(Gender.MALE)
@@ -80,7 +86,7 @@ public class MemberInit {
         Member member5 = Member.builder()
                 .nickname("멋쟁이 토마토")
                 .email("m3@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("인더스트리얼디자인")
                 .studentID(21)
                 .gender(Gender.FEMALE)
@@ -93,7 +99,7 @@ public class MemberInit {
         Member member6 = Member.builder()
                 .nickname("수뭉이")
                 .email("m3@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("디지털만화영상")
                 .studentID(21)
                 .gender(Gender.FEMALE)
@@ -106,7 +112,7 @@ public class MemberInit {
         Member member7 = Member.builder()
                 .nickname("피자먹고싶다")
                 .email("m3@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("한국언어문화")
                 .studentID(20)
                 .gender(Gender.FEMALE)
@@ -119,7 +125,7 @@ public class MemberInit {
         Member member8 = Member.builder()
                 .nickname("슴우D")
                 .email("m3@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("커뮤니케이션디자인")
                 .studentID(19)
                 .gender(Gender.MALE)
@@ -132,7 +138,7 @@ public class MemberInit {
         Member member9 = Member.builder()
                 .nickname("너무추워")
                 .email("m3@test.com")
-                .password("1234")
+                .password(encoder.encode("1234"))
                 .major("문화예술경영")
                 .studentID(18)
                 .gender(Gender.MALE)

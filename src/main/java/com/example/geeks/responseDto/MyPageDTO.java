@@ -1,6 +1,7 @@
 package com.example.geeks.responseDto;
 
 import com.example.geeks.Enum.DormitoryType;
+import com.example.geeks.Enum.Gender;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,8 +23,10 @@ public class MyPageDTO {
 
     private DormitoryType type;
 
+    private Gender gender;
+
     @Builder
-    public MyPageDTO(String nickname, String major, String introduction, String photoName, int studentID, boolean exist, boolean open, DormitoryType type) {
+    public MyPageDTO(String nickname, String major, String introduction, String photoName, int studentID, boolean exist, boolean open, DormitoryType type, Gender gender) {
         this.nickname = nickname;
         this.major = major;
         this.introduction = introduction;
@@ -32,5 +35,6 @@ public class MyPageDTO {
         this.exist = exist;
         this.open = open;
         this.type = type;
+        this.gender = gender;
     }
 }
