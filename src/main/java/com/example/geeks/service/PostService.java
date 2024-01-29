@@ -136,7 +136,7 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + postId));
 
-        List<PostCommentResponseDTO> comments = commentRepository.findByPostId(postId);
+        List<PostCommentResponseDTO> comments = commentRepository.findByPostId(postId, userId);
         List<String> photoNames = photoRepository.findPhotoNamesByPostId(postId);
 
         Optional<Heart> heart = heartRepository.findByMemberIdAndPostId(userId, postId);
@@ -179,7 +179,7 @@ public class PostService {
         Post post = postRepository.findById(requestDTO.getPostId())
                 .orElseThrow(() -> new NotFoundException("Could not found post id : " + requestDTO.getPostId()));
 
-        Comment comment = new Comment(requestDTO.getContent(), false);
+        Comment comment = new Comment(requestDTO.getContent(), false, requestDTO.isAnonymity());
         comment.setMember(member);
         comment.setPost(post);
 
@@ -204,10 +204,6 @@ public class PostService {
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + commentId));
 
         comment.setDeleted(true);
-    }
-
-    public List<PostCommentResponseDTO> selectComment(Long postId) {
-        return commentRepository.findByPostId(postId);
     }
 
     @Transactional

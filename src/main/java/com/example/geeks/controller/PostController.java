@@ -76,11 +76,6 @@ public class PostController {
         return "success";
     }
 
-    @GetMapping("/select/comment")
-    public List<PostCommentResponseDTO> selectComment(Long postId) {
-        return postService.selectComment(postId);
-    }
-
     @GetMapping("/heart/insert")
     public String insertHeart(@CookieValue(value = "token") String token,
                               @RequestParam Long postId) throws Exception {
