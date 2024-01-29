@@ -26,7 +26,9 @@ public class Comment extends BaseTimeEntity{
     private String content;
 
     @ColumnDefault("FALSE")
-    private Boolean isDeleted;
+    private boolean isDeleted;
+
+    private boolean anonymity;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -43,9 +45,10 @@ public class Comment extends BaseTimeEntity{
     @OneToMany(mappedBy = "parent")
     private List<Comment> children = new ArrayList<>();
 
-    public Comment(String content, Boolean isDeleted) {
+    public Comment(String content, boolean isDeleted, boolean anonymity) {
         this.content = content;
         this.isDeleted = isDeleted;
+        this.anonymity = anonymity;
     }
 
     public void setMember(Member member) {
@@ -72,7 +75,7 @@ public class Comment extends BaseTimeEntity{
         }
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(boolean deleted) {
         this.isDeleted = deleted;
     }
 

@@ -13,4 +13,6 @@ public class PostCommentRequestDTO {
     private Long parentId;
 
     private String content;
+
+    private boolean anonymity;
 }

@@ -18,12 +18,13 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
     private final EntityManager em;
 
     @Override
-    public List<PostCommentResponseDTO> findByPostId(Long postId) {
+    public List<PostCommentResponseDTO> findByPostId(Long postId, Long userId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         List<Comment> comments = queryFactory
                 .selectFrom(comment)
                 .leftJoin(comment.parent).fetchJoin()
+                .leftJoin(comment.member).fetchJoin()
                 .where(comment.post.id.eq(postId))
                 .orderBy(comment.parent.id.asc().nullsFirst(),
                         comment.createdDate.asc())
@@ -36,9 +37,10 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
             PostCommentResponseDTO responseDTO =
                     new PostCommentResponseDTO(
                             comment.getId(),
-                            comment.getMember().getNickname(),
+                            comment.isAnonymity() ? null : comment.getMember().getNickname(),
                             comment.getContent(),
-                            comment.getIsDeleted(),
+                            comment.isDeleted(),
+                            comment.getMember().getId().equals(userId),
                             comment.getCreatedDate());
 
             commentResponseDTOMap.put(responseDTO.getCommentId(), responseDTO);

@@ -5,5 +5,5 @@ import com.example.geeks.responseDto.PostCommentResponseDTO;
 import java.util.List;
 
 public interface CommentRepositoryCustom {
-    List<PostCommentResponseDTO> findByPostId(Long postId);
+    List<PostCommentResponseDTO> findByPostId(Long postId, Long userId);
 }
