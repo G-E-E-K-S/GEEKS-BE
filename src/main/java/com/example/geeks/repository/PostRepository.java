@@ -38,4 +38,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostToHome(@Param("time") LocalDateTime time,
                               Pageable pageable);
 
+    @Query("select p from Post p " +
+            "where p.member.id = :userId")
+    List<Post> findPostHistory(@Param("userId") Long userId);
+
 }

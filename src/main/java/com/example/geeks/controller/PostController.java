@@ -4,10 +4,7 @@ import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Post;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
-import com.example.geeks.responseDto.PostAllDTO;
-import com.example.geeks.responseDto.PostCommentResponseDTO;
-import com.example.geeks.responseDto.PostCursorPageDTO;
-import com.example.geeks.responseDto.PostDetailDTO;
+import com.example.geeks.responseDto.*;
 import com.example.geeks.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +35,6 @@ public class PostController {
             @CookieValue(value = "token") String token) throws IOException {
 
         Long userId = util.getUserId(token, tokenSecretKey);
-        System.out.println("files = " + files.size());
         postService.createPost(userId, requestDTO, files);
         return "success";
     }
@@ -60,8 +56,8 @@ public class PostController {
         return postService.findDetailPost(userId, postId);
     }
 
-    @GetMapping("/delete")
-    public String delete(@RequestParam Long postId) {
+    @PostMapping("/delete/{postId}")
+    public String delete(@PathVariable Long postId) {
         postService.deletePost(postId);
         return "success";
     }
@@ -74,8 +70,8 @@ public class PostController {
         return "success";
     }
 
-    @GetMapping("/delete/comment")
-    public String deleteComment(@RequestParam Long commentId) {
+    @PostMapping("/delete/comment/{commentId}")
+    public String deleteComment(@PathVariable Long commentId) {
         postService.deleteComment(commentId);
         return "success";
     }
@@ -115,5 +111,17 @@ public class PostController {
         Long userId = util.getUserId(token, tokenSecretKey);
         postService.deleteScrap(userId, postId);
         return "success";
+    }
+
+    @GetMapping("/scrap/history")
+    public List<PostHistoryDTO> scrapHistory(@CookieValue(value = "token") String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return postService.scrapList(userId);
+    }
+
+    @GetMapping("/community/history")
+    public CommunityHistoryDTO communityHistory(@CookieValue(value = "token") String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return postService.postList(userId);
     }
 }

@@ -98,7 +98,7 @@ public class PointService {
             friendIds.add(saveRoomMate.getYou().getId());
         }
 
-        List<Point> points = pointRepository.findByFriendIdInListFetch(friendIds);
+        List<Point> points = pointRepository.findByFriendIdInListFetch(friendIds, userId);
 
         return points.stream()
                 .map(point ->

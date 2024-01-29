@@ -280,4 +280,42 @@ public class PostService {
         member.getScraps().remove(postScrap);
         postScrapRepository.delete(postScrap);
     }
+
+    public List<PostHistoryDTO> scrapList(Long userId) {
+        List<PostScrap> posts = postScrapRepository.findPostUserScraps(userId);
+
+        return posts.stream().map(post ->
+                PostHistoryDTO.builder()
+                        .title(post.getPost().getTitle())
+                        .content(post.getPost().getContent())
+                        .commentCount(post.getPost().getCommentCount())
+                        .postId(post.getPost().getId())
+                        .likeCount(post.getPost().getLike_count())
+                        .createdDate(post.getPost().getCreatedDate()).build()).toList();
+    }
+
+    public CommunityHistoryDTO postList(Long userId) {
+        List<Post> postHistory = postRepository.findPostHistory(userId);
+        List<Comment> commentHistory = commentRepository.findCommentHistory(userId);
+
+        List<PostHistoryDTO> postHistoryDTOS = postHistory.stream().map(post ->
+                PostHistoryDTO.builder()
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .commentCount(post.getCommentCount())
+                        .postId(post.getId())
+                        .likeCount(post.getLike_count())
+                        .createdDate(post.getCreatedDate()).build()).toList();
+
+        List<CommentHistoryDTO> commentHistoryDTOS = commentHistory.stream().map(post ->
+                CommentHistoryDTO.builder()
+                        .title(post.getPost().getTitle())
+                        .commentCount(post.getPost().getCommentCount())
+                        .content(post.getContent())
+                        .postId(post.getPost().getId())
+                        .createdDate(post.getPost().getCreatedDate())
+                        .likeCount(post.getPost().getLike_count()).build()).toList();
+
+        return new CommunityHistoryDTO(postHistoryDTOS, commentHistoryDTOS);
+    }
 }
