@@ -23,7 +23,7 @@ public interface PointRepository extends JpaRepository<Point, Long> {
     @Query("select p from Point p " +
             "left join fetch p.friend f " +
             "left join fetch f.detail d " +
-            "where p.member.id = :memberId " +
+            "where p.member.id = :memberId and f.open = true " +
             "order by p.point desc ")
     List<Point> findByMemberIdFetchToHome(@Param("memberId")Long memberId,
                                           Pageable pageable);
@@ -42,8 +42,9 @@ public interface PointRepository extends JpaRepository<Point, Long> {
     @Query("select p from Point p " +
             "left join fetch p.friend f " +
             "left join fetch f.detail d " +
-            "where f.id in :friend ")
-    List<Point> findByFriendIdInListFetch(@Param("friend") List<Long> friend);
+            "where f.id in :friend and p.member.id = :userId")
+    List<Point> findByFriendIdInListFetch(@Param("friend") List<Long> friend,
+                                          @Param("userId") Long userId);
 
     @Query("select p.point from Point p " +
             "where p.member.id = :myId and p.friend.id = :friendId")

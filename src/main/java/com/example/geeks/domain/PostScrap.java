@@ -11,7 +11,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@ToString
+@ToString(exclude = {"member", "post"})
 public class PostScrap {
 
     @Id

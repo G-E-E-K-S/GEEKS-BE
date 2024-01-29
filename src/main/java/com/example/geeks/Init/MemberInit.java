@@ -59,7 +59,7 @@ public class MemberInit {
 
         Member member3 = Member.builder()
                 .nickname("눈누난나")
-                .email("m3@test.com")
+                .email("3@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("소프트웨어")
                 .studentID(22)
@@ -72,7 +72,7 @@ public class MemberInit {
 
         Member member4 = Member.builder()
                 .nickname("종강하고싶다")
-                .email("m3@test.com")
+                .email("4@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("전자공학과")
                 .studentID(22)
