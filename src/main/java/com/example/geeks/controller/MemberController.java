@@ -50,6 +50,7 @@ public class MemberController {
                 .studentID((int) session.getAttribute("studentID"))
                 .image_url("")
                 .introduction("")
+                .open(true)
                 .build();
         memberService.join(member);
 

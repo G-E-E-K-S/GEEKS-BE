@@ -14,5 +14,7 @@ public class HomeMainDTo {
     private boolean exist;
     private List<PointAndMemberDTO> points = new ArrayList<>();
 
-    private List<HomeRealTimePostDTO> posts = new ArrayList<>();
+    private List<HomeRealTimePostDTO> livePosts = new ArrayList<>();
+
+    private List<HomeRealTimePostDTO> weeklyPosts = new ArrayList<>();
 }
