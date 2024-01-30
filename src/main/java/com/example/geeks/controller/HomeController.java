@@ -2,8 +2,6 @@ package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
 import com.example.geeks.responseDto.HomeMainDTo;
-import com.example.geeks.responseDto.HomeRealTimePostDTO;
-import com.example.geeks.responseDto.PointAndMemberDTO;
 import com.example.geeks.service.DetailService;
 import com.example.geeks.service.PointService;
 import com.example.geeks.service.PostService;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/home")
@@ -39,6 +35,7 @@ public class HomeController {
                 nickname,
                 detailService.detailExist(userId),
                 pointService.homePointList(userId),
-                postService.homePostList());
+                postService.homeLivePost(),
+                postService.homeWeeklyPost());
     }
 }

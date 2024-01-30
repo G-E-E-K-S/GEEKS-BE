@@ -112,14 +112,28 @@ public class PostService {
                 new PostAllDTO(
                         post.getId(), post.getTitle(), post.getContent(),
                         post.isAnonymity() ? null : post.getMember().getNickname(), post.getPhotoName(),
-                        post.getCommentCount(), post.isAnonymity(), post.getCreatedDate())).stream().toList();
+                        post.getCommentCount(), post.getLike_count(), post.isAnonymity(), post.getCreatedDate())).stream().toList();
 
 
         return new PostCursorPageDTO(postAllDTOS.get(postAllDTOS.size() - 1).getPostId(), pages.hasNext(), postAllDTOS);
     }
 
-    public List<HomeRealTimePostDTO> homePostList() {
+    public List<HomeRealTimePostDTO> homeLivePost() {
         LocalDateTime time = LocalDateTime.now().minusHours(12);
+        PageRequest pageRequest = PageRequest.of(0, 3);
+        List<Post> posts = postRepository.findPostToHome(time, pageRequest);
+
+        return posts.stream().map(post ->
+                HomeRealTimePostDTO.builder()
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .likeCount(post.getLike_count())
+                        .commentCount(post.getCommentCount())
+                        .createdDate(post.getCreatedDate()).build()).toList();
+    }
+
+    public List<HomeRealTimePostDTO> homeWeeklyPost() {
+        LocalDateTime time = LocalDateTime.now().minusHours(168);
         PageRequest pageRequest = PageRequest.of(0, 3);
         List<Post> posts = postRepository.findPostToHome(time, pageRequest);
 
