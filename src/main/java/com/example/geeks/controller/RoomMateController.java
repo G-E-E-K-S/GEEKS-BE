@@ -88,7 +88,7 @@ public class RoomMateController {
 
     @PostMapping("/accept/{senderId}")
     public String accept(@CookieValue("token") String token,
-                       @PathVariable Long senderId) {
+                         @PathVariable Long senderId) {
         Long userId = util.getUserId(token, secretKey);
         roomMateService.acceptRoommate(userId, senderId);
         return "success";

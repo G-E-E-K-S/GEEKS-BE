@@ -26,6 +26,10 @@ public class RoomMateService {
         Member me = findMember(myNickName);
         Member you = findMember(yourNickName);
 
+        if(me == null || you == null) {
+            return;
+        }
+
         RoomMate existingRoomMate = roomMateRepository.findBySentAndReceived(me, you);
 
         if (existingRoomMate == null) {
@@ -157,5 +161,7 @@ public class RoomMateService {
 
         AcceptRoomMate acceptRoomMate = new AcceptRoomMate(accept, sender);
         acceptRoomMateRepository.save(acceptRoomMate);
+
+        roomMateRepository.deleteAllRoomMate(acceptId, senderId);
     }
 }

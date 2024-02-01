@@ -4,6 +4,7 @@ import com.example.geeks.domain.ChatRoom;
 import com.example.geeks.domain.Member;
 import com.example.geeks.domain.RoomMate;
 import com.example.geeks.domain.SaveRoomMate;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,8 +24,20 @@ public interface RoomMateRepository extends JpaRepository<RoomMate, Long> {
             "where m.id = :memberId ")
     List<RoomMate> findRecivedById(@Param("memberId") Long memberId);
 
-
     RoomMate findBySentAndReceived(Member sent, Member received);
+
+    @Modifying
+    @Query("delete from RoomMate rm where rm.sent.id = :userId")
+    void deleteSent(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("delete from RoomMate rm " +
+            "where rm.received.id = :acceptId " +
+            "or rm.sent.id = :acceptId " +
+            "or rm.received.id = :senderId " +
+            "or rm.sent.id = :senderId")
+    void deleteAllRoomMate(@Param("acceptId") Long acceptId,
+                        @Param("senderId") Long senderId);
 
     void deleteBySentAndReceived(Member sent, Member received);
 }

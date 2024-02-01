@@ -8,6 +8,7 @@ import com.example.geeks.requestDto.PasswordDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.requestDto.RegisterDTO;
 import com.example.geeks.responseDto.MyPageDTO;
+import com.example.geeks.responseDto.MyProfileDTO;
 import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -215,5 +216,11 @@ public class MemberController {
        memberService.editPassword(encodePassword, userId);
 
        return "success";
+    }
+
+    @GetMapping("/profile")
+    public MyProfileDTO profile(@CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return memberService.showProfile(userId);
     }
 }

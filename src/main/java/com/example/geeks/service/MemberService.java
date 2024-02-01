@@ -4,11 +4,14 @@ import com.amazonaws.services.kms.model.NotFoundException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.geeks.Security.Util;
+import com.example.geeks.domain.AcceptRoomMate;
 import com.example.geeks.domain.Member;
+import com.example.geeks.repository.AcceptRoomMateRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.requestDto.LoginDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.responseDto.MyPageDTO;
+import com.example.geeks.responseDto.MyProfileDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +35,8 @@ public class MemberService {
     private String secretKey;
 
     private final MemberRepository memberRepository;
+
+    private final AcceptRoomMateRepository acceptRoomMateRepository;
 
     private final Util util;
 
@@ -163,5 +168,45 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         member.setOpen(open);
+    }
+
+    public MyProfileDTO showProfile(Long userId) {
+        Member member = memberRepository.findMemberFetchDetail(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Optional<AcceptRoomMate> acceptRoomMate = acceptRoomMateRepository.findAcceptRoomMateOptional(userId);
+
+        MyProfileDTO dto;
+
+        if(acceptRoomMate.isPresent()) {
+            Member roommate;
+
+            if(acceptRoomMate.get().getAccept().getId().equals(userId)) {
+                roommate = acceptRoomMate.get().getSender();
+            } else {
+                roommate = acceptRoomMate.get().getAccept();
+            }
+
+            dto = MyProfileDTO.builder()
+                    .myMajor(member.getMajor())
+                    .myNickname(member.getNickname())
+                    .myPhotoName(member.getPhotoName())
+                    .myStudentID(member.getStudentID())
+                    .type(roommate.getType())
+                    .major(roommate.getMajor())
+                    .nickname(roommate.getNickname())
+                    .photoName(roommate.getPhotoName())
+                    .studentID(roommate.getStudentID())
+                    .build();
+        } else {
+            dto = MyProfileDTO.builder()
+                    .myMajor(member.getMajor())
+                    .myNickname(member.getNickname())
+                    .myPhotoName(member.getPhotoName())
+                    .myStudentID(member.getStudentID())
+                    .build();
+        }
+
+        return dto;
     }
 }
