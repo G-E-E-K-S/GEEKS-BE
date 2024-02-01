@@ -205,7 +205,7 @@ public class MemberController {
         return "success";
     }
 
-    @PostMapping("/editpassword")
+    @PostMapping("/edit/password")
     public String editPassword(@RequestBody PasswordDTO dto,
                                @CookieValue String token,
                                HttpSession session){

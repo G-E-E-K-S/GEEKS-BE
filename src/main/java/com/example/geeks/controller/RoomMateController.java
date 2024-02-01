@@ -25,6 +25,7 @@ public class RoomMateController {
     private final MemberService memberService;
 
     private final PointService pointService;
+
     private final Util util;
 
     @GetMapping("/request")
@@ -83,5 +84,13 @@ public class RoomMateController {
         for(String opponentName : nickname){
             roomMateService.removeSaveList(myName, opponentName);
         }
+    }
+
+    @PostMapping("/accept/{senderId}")
+    public String accept(@CookieValue("token") String token,
+                       @PathVariable Long senderId) {
+        Long userId = util.getUserId(token, secretKey);
+        roomMateService.acceptRoommate(userId, senderId);
+        return "success";
     }
 }

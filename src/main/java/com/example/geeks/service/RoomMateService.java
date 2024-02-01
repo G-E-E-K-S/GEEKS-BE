@@ -1,15 +1,13 @@
 package com.example.geeks.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.geeks.domain.*;
 import com.example.geeks.repository.*;
-import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.responseDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +18,8 @@ public class RoomMateService {
     private final MemberRepository memberRepository;
     private final DetailRepository detailRepository;
     private final SaveRoomMateRepository saveRoomMateRepository;
+
+    private final AcceptRoomMateRepository acceptRoomMateRepository;
 
     @Transactional
     public void saveRoomMate(String myNickName, String yourNickName) {
@@ -52,6 +52,7 @@ public class RoomMateService {
         List<RoomMateDTO> roomMateDTOS = roommates
                 .stream()
                 .map(roomMate -> new RoomMateDTO(
+                        roomMate.getReceived().getId(),
                         roomMate.getReceived().getNickname(),
                         roomMate.getReceived().getMajor(),
                         roomMate.getReceived().getIntroduction(),
@@ -74,6 +75,7 @@ public class RoomMateService {
                 .stream()
                 .filter(roomMate -> roomMate.getSent() != null) // 필터 추가
                 .map(roomMate -> new RoomMateDTO(
+                        roomMate.getSent().getId(),
                         roomMate.getSent().getNickname(),
                         roomMate.getSent().getMajor(),
                         roomMate.getSent().getIntroduction(),
@@ -144,5 +146,16 @@ public class RoomMateService {
         Member me = findMember(myName);
         Member you = findMember(opponentName);
         saveRoomMateRepository.deleteByMeAndYou(me, you);
+    }
+    @Transactional
+    public void acceptRoommate(Long acceptId, Long senderId) {
+        Member accept = memberRepository.findMemberFetchDetail(acceptId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + acceptId));
+
+        Member sender = memberRepository.findMemberFetchDetail(senderId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + senderId));
+
+        AcceptRoomMate acceptRoomMate = new AcceptRoomMate(accept, sender);
+        acceptRoomMateRepository.save(acceptRoomMate);
     }
 }

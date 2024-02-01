@@ -24,7 +24,7 @@ public interface RoomMateRepository extends JpaRepository<RoomMate, Long> {
     List<RoomMate> findRecivedById(@Param("memberId") Long memberId);
 
 
-    RoomMate findBySentAndReceived(Member sent, Member recived);
+    RoomMate findBySentAndReceived(Member sent, Member received);
 
     void deleteBySentAndReceived(Member sent, Member received);
 }
