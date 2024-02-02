@@ -166,4 +166,9 @@ public class RoomMateService {
         sender.setOpen(false);
         roomMateRepository.deleteAllRoomMate(acceptId, senderId);
     }
+
+    @Transactional
+    public void refuseRoommate(Long myId, Long senderId) {
+        roomMateRepository.deleteRoomMate(myId, senderId);
+    }
 }
