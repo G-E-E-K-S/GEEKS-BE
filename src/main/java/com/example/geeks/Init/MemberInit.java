@@ -46,7 +46,7 @@ public class MemberInit {
 
         Member member2 = Member.builder()
                 .nickname("member2")
-                .email("m2@test.com")
+                .email("201920990@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("소프트웨어")
                 .studentID(17)
