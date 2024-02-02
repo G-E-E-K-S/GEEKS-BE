@@ -162,6 +162,8 @@ public class RoomMateService {
         AcceptRoomMate acceptRoomMate = new AcceptRoomMate(accept, sender);
         acceptRoomMateRepository.save(acceptRoomMate);
 
+        accept.setOpen(false);
+        sender.setOpen(false);
         roomMateRepository.deleteAllRoomMate(acceptId, senderId);
     }
 }
