@@ -93,4 +93,12 @@ public class RoomMateController {
         roomMateService.acceptRoommate(userId, senderId);
         return "success";
     }
+
+    @PostMapping("/refuse/{senderId}")
+    public String refuse(@CookieValue("token") String token,
+                         @PathVariable Long senderId) {
+        Long userId = util.getUserId(token, secretKey);
+        roomMateService.refuseRoommate(userId, senderId);
+        return "success";
+    }
 }
