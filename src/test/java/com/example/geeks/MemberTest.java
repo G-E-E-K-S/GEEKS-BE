@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.geeks.service.MailService.generatePassword;
+
 @SpringBootTest
 @Transactional
 @Rollback(false)
@@ -278,5 +280,11 @@ public class MemberTest {
         roomMateService.getRoomMateDetail("90000e");
 
         roomMateService.cancelRequest( "admin", "90000e");
+    }
+
+    @Test
+    public void testPassword(){
+        String password = generatePassword();
+        System.out.println(password);
     }
 }

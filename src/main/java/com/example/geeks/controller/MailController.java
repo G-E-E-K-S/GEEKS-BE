@@ -1,9 +1,12 @@
 package com.example.geeks.controller;
 
+import com.example.geeks.Security.Util;
 import com.example.geeks.service.MailAuthService;
 import com.example.geeks.service.MailService;
 import com.example.geeks.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +22,13 @@ public class MailController {
     private final MemberService memberService;
 
     private final MailAuthService emailAuthService;
+
+    private final Util util;
+
+    @Value("${jwt.secret}")
+    private String tokenSecretKey;
+
+    private final BCryptPasswordEncoder encoder;
 
     @GetMapping("/send")
     public String mailConfirm(@RequestParam String email, HttpSession session) throws Exception{
@@ -51,5 +61,24 @@ public class MailController {
             System.out.println("인증 코드 시간이 만료되었습니다.");
             return "timeout";
         }
+    }
+
+    @GetMapping("/temporary")
+    public String mailTemporary(@RequestParam String email,
+                                @CookieValue String token,
+                                HttpSession session) throws Exception{
+        boolean pass = memberService.availableEmail(email);
+        if(pass) return "duplicate";
+
+        session.setAttribute("email", email);
+
+        String password = mailService.sendPasswordMessage(email);
+
+        Long userId = util.getUserId(token, tokenSecretKey);
+        String encodePassword = encoder.encode(password);
+        session.setAttribute("password", encodePassword);
+        memberService.editPassword(encodePassword, userId);
+
+        return "success";
     }
 }
