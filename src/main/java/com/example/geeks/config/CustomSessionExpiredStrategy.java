@@ -1,5 +1,8 @@
 package com.example.geeks.config;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.stereotype.Component;
@@ -15,12 +18,8 @@ public class CustomSessionExpiredStrategy implements SessionInformationExpiredSt
 
     @Override
     public void onExpiredSessionDetected(SessionInformationExpiredEvent event) throws IOException, ServletException {
-        HttpServletRequest request = event.getRequest();
         HttpServletResponse response = event.getResponse();
-        HttpSession session = request.getSession();
-
-        session.setAttribute("DUPLICATE_LOGIN", true);
-
-        response.sendRedirect("/login");
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.getWriter().write("Session expired"); // JSON 형태의 응답도 가능
     }
 }

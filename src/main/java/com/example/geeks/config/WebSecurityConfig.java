@@ -9,15 +9,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.session.SessionInformationExpiredEvent;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
+import java.io.IOException;
 
 
 @Configuration
@@ -29,6 +34,8 @@ public class WebSecurityConfig {
 
     @Value("${jwt.secret}")
     private String secretKey;
+
+    private final CustomSessionExpiredStrategy customSessionExpiredStrategy;
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -83,9 +90,9 @@ public class WebSecurityConfig {
         http
                 .sessionManagement()
                 .sessionFixation().changeSessionId()
-                .maximumSessions(1)
-                //.expiredSessionStrategy(customSessionExpiredStrategy)
-                .maxSessionsPreventsLogin(false)
+                .maximumSessions(1) // 최대 동시 세션 수를 1로 설정
+                .expiredSessionStrategy(customSessionExpiredStrategy) // 세션이 만료된 경우 처리할 전략 설정
+                .maxSessionsPreventsLogin(true) // 동시에 여러 세션을 허용하지 않도록 설정
                 .sessionRegistry(sessionRegistry());
         return http.build();
     }
@@ -99,8 +106,6 @@ public class WebSecurityConfig {
     public static ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
         return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
     }
-
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

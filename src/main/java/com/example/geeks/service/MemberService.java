@@ -210,6 +210,7 @@ public class MemberService {
         return dto;
     }
 
+    @Transactional
     public void deletMember(Long id){
         memberRepository.deleteById(id);
     }
