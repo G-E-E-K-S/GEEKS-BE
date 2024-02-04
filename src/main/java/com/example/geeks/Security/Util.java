@@ -28,7 +28,7 @@ public class Util {
                 .getBody().getExpiration().before(new Date());
     }
 
-    private static final long expireMs = 86400000; // 토큰 만료 시간 (하루)
+    private static final long expireMs = 30 * 24 * 60 * 60 * 1000L; // 토큰 만료 시간 (한 달)
 
     //아이디와 닉네임 가지고 토큰 생성.
     public static String createJwt(Long id, String nickname, String secretKey) {
