@@ -18,6 +18,10 @@ public class DetailCompareDTO {
 
     private String introduction;
 
+    private boolean roommateApply; // 룸메이트 신청을 보냈는지 여부
+
+    private boolean roommateState; // 서로 룸메이트인지 여부
+
     private int studentID;
 
     private int point;

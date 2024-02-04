@@ -125,6 +125,7 @@ public class PostService {
 
         return posts.stream().map(post ->
                 HomeRealTimePostDTO.builder()
+                        .postId(post.getId())
                         .title(post.getTitle())
                         .content(post.getContent())
                         .likeCount(post.getLike_count())
@@ -139,6 +140,7 @@ public class PostService {
 
         return posts.stream().map(post ->
                 HomeRealTimePostDTO.builder()
+                        .postId(post.getId())
                         .title(post.getTitle())
                         .content(post.getContent())
                         .likeCount(post.getLike_count())

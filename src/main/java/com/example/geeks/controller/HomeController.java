@@ -26,6 +26,11 @@ public class HomeController {
 
     private final DetailService detailService;
 
+    @GetMapping("/healthy")
+    public String healthyCheck() {
+        return ".";
+    }
+
     @GetMapping("/main")
     public HomeMainDTo home(@CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);

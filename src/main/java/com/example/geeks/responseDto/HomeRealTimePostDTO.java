@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class HomeRealTimePostDTO {
+    private Long postId;
+
     private String title;
 
     private String content;

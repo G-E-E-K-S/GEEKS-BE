@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoomMateRepository extends JpaRepository<RoomMate, Long> {
     @Query("select r from RoomMate r " +
@@ -25,6 +26,11 @@ public interface RoomMateRepository extends JpaRepository<RoomMate, Long> {
     List<RoomMate> findRecivedById(@Param("memberId") Long memberId);
 
     RoomMate findBySentAndReceived(Member sent, Member received);
+
+    @Query("select rm from RoomMate rm " +
+            "where rm.sent.id = :myId and rm.received.id = :opponentId")
+    Optional<RoomMate> findRoomMateState(@Param("myId") Long myId,
+                                         @Param("opponentId") Long opponentId);
 
     @Modifying
     @Query("delete from RoomMate rm where rm.sent.id = :userId")
