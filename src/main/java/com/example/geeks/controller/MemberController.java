@@ -223,4 +223,11 @@ public class MemberController {
         Long userId = util.getUserId(token, tokenSecretKey);
         return memberService.showProfile(userId);
     }
+
+    @GetMapping("/withdrawal")
+    public String withdrawal(@CookieValue String token){
+        Long userId = util.getUserId(token, tokenSecretKey);
+        memberService.deletMember(userId);
+        return "success";
+    }
 }

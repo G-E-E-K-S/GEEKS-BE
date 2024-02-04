@@ -209,4 +209,8 @@ public class MemberService {
 
         return dto;
     }
+
+    public void deletMember(Long id){
+        memberRepository.deleteById(id);
+    }
 }
