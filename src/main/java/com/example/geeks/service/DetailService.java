@@ -4,10 +4,7 @@ import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.geeks.domain.Detail;
 import com.example.geeks.domain.Member;
 import com.example.geeks.domain.Point;
-import com.example.geeks.repository.DetailRepository;
-import com.example.geeks.repository.MemberRepository;
-import com.example.geeks.repository.PointRepository;
-import com.example.geeks.repository.SaveRoomMateRepository;
+import com.example.geeks.repository.*;
 import com.example.geeks.responseDto.DetailCompareDTO;
 import com.example.geeks.responseDto.DetailDTO;
 import com.example.geeks.responseDto.DetailResponseDTO;
@@ -27,6 +24,8 @@ public class DetailService {
     private final MemberRepository memberRepository;
     private final PointRepository pointRepository;
     private final SaveRoomMateRepository saveRoomMateRepository;
+    private final AcceptRoomMateRepository acceptRoomMateRepository;
+    private final RoomMateRepository roomMateRepository;
 
     @Transactional
     public void register(Long userId, DetailDTO dto) {
@@ -114,15 +113,28 @@ public class DetailService {
         detailDTOS.add(myDetail);
         detailDTOS.add(opponentDetail);
 
-        Member opponent = memberRepository.findById(opponentId)
+        Member opponent = memberRepository.findMemberFetchDetail(opponentId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + opponentId));
 
         int point = pointRepository.findPointByMemberIdAndFriendId(myId, opponentId);
+
+        boolean roommateApply = false;
+        boolean roommateState = false;
+
+        if(roomMateRepository.findRoomMateState(myId, opponentId).isPresent()) {
+            roommateApply = true;
+        }
+
+        if(!roommateApply && acceptRoomMateRepository.findAcceptRoomMate(myId, opponentId).isPresent()) {
+            roommateState = true;
+        }
 
         return DetailCompareDTO.builder()
                 .point(point)
                 .details(detailDTOS)
                 .major(opponent.getMajor())
+                .roommateApply(roommateApply)
+                .roommateState(roommateState)
                 .nickname(opponent.getNickname())
                 .photoName(opponent.getPhotoName())
                 .studentID(opponent.getStudentID())
