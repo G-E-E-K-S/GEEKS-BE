@@ -11,7 +11,11 @@ import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,7 +24,7 @@ import java.util.Random;
 public class MailService {
     private final JavaMailSender emailSender;
 
-    public static final String ePw = createKey();
+    public static String ePw = "";
 
     public static final StringBuilder password = new StringBuilder();
 
@@ -73,20 +77,36 @@ public class MailService {
     }
 
 
-    public static String createKey() {
-        StringBuffer key = new StringBuffer();
-        Random rnd = new Random();
+    public static String createKey(int length) {
+        StringBuilder code = new StringBuilder();
+        Random random = new Random();
+        Set<Integer> usedNumbers = new HashSet<>();
 
-        for (int i = 0; i < 4; i++) { // 인증코드 8자리
-            key.append((rnd.nextInt(10)));
+        while (code.length() < length) {
+            SimpleDateFormat format1 = new SimpleDateFormat ( "ss");
+            Date time = new Date();
+            int time1 = Integer.parseInt(format1.format(time));
+
+            int randomNumber = random.nextInt(10) * time1;// 0부터 9 사이의 랜덤 숫자 생성
+
+            if (randomNumber >= 10) {
+                randomNumber = randomNumber % (randomNumber / 10);
+            }
+
+            // 생성된 숫자가 중복되지 않도록 확인
+            if (!usedNumbers.contains(randomNumber)) {
+                code.append(randomNumber);
+                usedNumbers.add(randomNumber);
+            }
         }
 
-        return key.toString();
+        return code.toString();
     }
 
+
     public String sendSimpleMessage(String to) throws Exception {
-        // TODO Auto-generated method stub
-        System.out.println("to = " + to);
+        ePw = createKey(4);
+
         MimeMessage message = createMessage(to);
         try{//예외처리
             emailSender.send(message);
