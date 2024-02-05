@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.geeks.domain.*;
 import com.example.geeks.repository.*;
+import com.example.geeks.requestDto.ModifyCommentDTO;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.responseDto.*;
@@ -212,6 +213,14 @@ public class PostService {
         if(comment.getId() != null) {
             post.increaseCommentCount(post.getCommentCount() + 1);
         }
+    }
+
+    @Transactional
+    public void modifyComment(ModifyCommentDTO dto) {
+        Comment comment = commentRepository.findById(dto.getCommentId())
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + dto.getCommentId()));
+
+        comment.setContent(dto.getContent());
     }
 
     @Transactional
