@@ -7,6 +7,7 @@ import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.PasswordDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.requestDto.RegisterDTO;
+import com.example.geeks.responseDto.InformationDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.responseDto.MyProfileDTO;
 import com.example.geeks.service.MemberService;
@@ -227,11 +228,17 @@ public class MemberController {
         return memberService.showProfile(userId);
     }
 
+    @GetMapping("/information")
+    public InformationDTO information(@CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return memberService.information(userId);
+    }
+
     @GetMapping("/withdrawal")
     public String withdrawal(@CookieValue String token){
         Long userId = util.getUserId(token, tokenSecretKey);
         roomMateService.deletList(userId);
-        memberService.deletMember(userId);
+        memberService.deleteMember(userId);
         return "success";
     }
 }
