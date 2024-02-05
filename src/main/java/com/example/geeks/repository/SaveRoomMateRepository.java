@@ -5,6 +5,7 @@ import com.example.geeks.domain.Point;
 import com.example.geeks.domain.RoomMate;
 import com.example.geeks.domain.SaveRoomMate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,4 +24,11 @@ public interface SaveRoomMateRepository extends JpaRepository<SaveRoomMate, Long
     SaveRoomMate findByMeAndYou(Member me, Member you);
 
     void deleteByMeAndYou(Member me, Member you);
+
+
+    @Modifying
+    @Query("delete from SaveRoomMate sm " +
+            "where sm.me = :member or sm.you = :member")
+    void deleteByMeOrYou(@Param("member") Member member);
+
 }

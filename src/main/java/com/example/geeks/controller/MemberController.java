@@ -10,6 +10,7 @@ import com.example.geeks.requestDto.RegisterDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.responseDto.MyProfileDTO;
 import com.example.geeks.service.MemberService;
+import com.example.geeks.service.RoomMateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +39,8 @@ public class MemberController {
 
     @Value("${jwt.secret}")
     private String tokenSecretKey;
+
+    private final RoomMateService roomMateService;
 
     @GetMapping("/register")
     public void register(HttpSession session) {
@@ -227,6 +230,7 @@ public class MemberController {
     @GetMapping("/withdrawal")
     public String withdrawal(@CookieValue String token){
         Long userId = util.getUserId(token, tokenSecretKey);
+        roomMateService.deletList(userId);
         memberService.deletMember(userId);
         return "success";
     }

@@ -51,5 +51,10 @@ public interface RoomMateRepository extends JpaRepository<RoomMate, Long> {
     void deleteRoomMate(@Param("myId") Long myId,
                         @Param("senderId") Long senderId);
 
+    @Modifying
+    @Query("delete from RoomMate rm " +
+            "where rm.received.id = :myId or rm.sent.id = :myId")
+    void deleteRoomMateMyidOrSenderid(@Param("myId") Long myId);
+
     void deleteBySentAndReceived(Member sent, Member received);
 }

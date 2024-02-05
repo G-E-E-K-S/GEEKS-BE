@@ -171,4 +171,13 @@ public class RoomMateService {
     public void refuseRoommate(Long myId, Long senderId) {
         roomMateRepository.deleteRoomMate(myId, senderId);
     }
+
+    @Transactional
+    public void deletList(Long id){
+        roomMateRepository.deleteRoomMateMyidOrSenderid(id);
+        Member me = memberRepository.findById(id).get();
+        saveRoomMateRepository.deleteByMeOrYou(me);
+    }
+
+
 }
