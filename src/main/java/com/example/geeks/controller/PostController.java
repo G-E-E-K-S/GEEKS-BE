@@ -40,16 +40,6 @@ public class PostController {
         return "success";
     }
 
-    @GetMapping("/main")
-    public PostCursorPageDTO cursorPage(@RequestParam Long cursor) {
-        return postService.cursorBasePaging(cursor);
-    }
-
-    @GetMapping("/test")
-    public PostCursorPageDTO test() {
-        return postService.cursorBasePaging(9L);
-    }
-
     @GetMapping("/show")
     public PostDetailDTO show(@RequestParam Long postId,
                               @CookieValue(value = "token") String token) {
@@ -57,10 +47,20 @@ public class PostController {
         return postService.findDetailPost(userId, postId);
     }
 
+    @PostMapping("/modify")
+    public String modify() {
+        return "";
+    }
+
     @PostMapping("/delete/{postId}")
     public String delete(@PathVariable Long postId) {
         postService.deletePost(postId);
         return "success";
+    }
+
+    @GetMapping("/main")
+    public PostCursorPageDTO cursorPage(@RequestParam Long cursor) {
+        return postService.cursorBasePaging(cursor);
     }
 
     @PostMapping("/comment")

@@ -10,6 +10,7 @@ import com.example.geeks.repository.AcceptRoomMateRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.requestDto.LoginDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
+import com.example.geeks.responseDto.InformationDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.responseDto.MyProfileDTO;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.regex.Pattern.matches;
 
 @Service
 @Transactional(readOnly = true)
@@ -210,8 +209,15 @@ public class MemberService {
         return dto;
     }
 
+    public InformationDTO information(Long userId) {
+        Member member = memberRepository.findMemberFetchDetail(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        return new InformationDTO(member.getEmail(), member.getCreatedDate());
+    }
+
     @Transactional
-    public void deletMember(Long id){
+    public void deleteMember(Long id){
         memberRepository.deleteById(id);
     }
 }
