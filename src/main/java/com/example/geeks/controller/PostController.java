@@ -2,6 +2,7 @@ package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Post;
+import com.example.geeks.requestDto.ModifyCommentDTO;
 import com.example.geeks.requestDto.PostCommentRequestDTO;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.responseDto.*;
@@ -67,6 +68,12 @@ public class PostController {
                           @CookieValue(value = "token") String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         postService.createComment(userId, requestDTO);
+        return "success";
+    }
+
+    @PostMapping("/modify/comment")
+    public String modifyComment(@RequestBody ModifyCommentDTO dto) {
+        postService.modifyComment(dto);
         return "success";
     }
 

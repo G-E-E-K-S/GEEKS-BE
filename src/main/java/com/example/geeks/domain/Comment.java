@@ -51,6 +51,10 @@ public class Comment extends BaseTimeEntity{
         this.anonymity = anonymity;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public void setMember(Member member) {
         this.member = member;
 
