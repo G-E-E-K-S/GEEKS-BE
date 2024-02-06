@@ -131,6 +131,11 @@ public class MemberController {
         return "success";
     }
 
+    @GetMapping("/auto/login")
+    public String autoLogin(@CookieValue String token) {
+        return "success";
+    }
+
     @GetMapping("/check/nickname")
     public String checkNickname(@RequestParam String nickname) {
         if(!memberService.availableNickname(nickname)) return "duplicate";
