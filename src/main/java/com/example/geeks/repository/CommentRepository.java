@@ -11,6 +11,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Comment
 
     @Query("select c from Comment c " +
             "left join fetch c.post p " +
-            "where c.member.id = :userId ")
+            "where c.member.id = :userId " +
+            "order by c.createdDate desc ")
     List<Comment> findCommentHistory(@Param("userId") Long userId);
 }
