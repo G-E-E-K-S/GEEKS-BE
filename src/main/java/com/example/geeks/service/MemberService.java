@@ -8,6 +8,7 @@ import com.example.geeks.domain.AcceptRoomMate;
 import com.example.geeks.domain.Member;
 import com.example.geeks.repository.AcceptRoomMateRepository;
 import com.example.geeks.repository.MemberRepository;
+import com.example.geeks.repository.PointRepository;
 import com.example.geeks.requestDto.LoginDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.responseDto.InformationDTO;
@@ -36,6 +37,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     private final AcceptRoomMateRepository acceptRoomMateRepository;
+
+    private final PointRepository pointRepository;
 
     private final Util util;
 
@@ -95,7 +98,7 @@ public class MemberService {
 
     @Transactional
     public void editProfile(ProfileEditDTO dto, Long id, List<MultipartFile> files) throws IOException {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findMemberFetchDetail(id)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + id));
 
         if(files != null) {
@@ -107,6 +110,10 @@ public class MemberService {
                 String fileName = uploadToS3(file, member.getNickname(), 1);
                 member.setPhotoName(fileName);
             }
+        }
+
+        if(!member.getType().equals(dto.getType())) {
+            pointRepository.deletePointWhenChangeType(id);
         }
 
         member.changeProfile(dto);
@@ -218,6 +225,7 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Long id){
+        pointRepository.deletePointWhenMemberWithDraw(id);
         memberRepository.deleteById(id);
     }
 }
