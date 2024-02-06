@@ -39,7 +39,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                               Pageable pageable);
 
     @Query("select p from Post p " +
-            "where p.member.id = :userId")
+            "where p.member.id = :userId " +
+            "order by p.createdDate desc ")
     List<Post> findPostHistory(@Param("userId") Long userId);
 
 }
