@@ -5,6 +5,7 @@ import com.example.geeks.domain.Point;
 import com.example.geeks.responseDto.PointAndMemberDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -50,5 +51,15 @@ public interface PointRepository extends JpaRepository<Point, Long> {
             "where p.member.id = :myId and p.friend.id = :friendId")
     int findPointByMemberIdAndFriendId(@Param("myId") Long myId,
                                        @Param("friendId") Long friendId);
+
+    @Modifying
+    @Query("delete from Point p " +
+            "where p.member.id = :userId or p.friend.id = :userId")
+    void deletePointWhenChangeType(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("delete from Point p " +
+            "where p.friend.id = :userId")
+    void deletePointWhenMemberWithDraw(@Param("userId") Long userId);
 
 }
