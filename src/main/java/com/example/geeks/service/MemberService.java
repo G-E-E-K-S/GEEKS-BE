@@ -6,11 +6,14 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.geeks.Security.Util;
 import com.example.geeks.domain.AcceptRoomMate;
 import com.example.geeks.domain.Member;
+import com.example.geeks.domain.Withdrawal;
 import com.example.geeks.repository.AcceptRoomMateRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PointRepository;
+import com.example.geeks.repository.WithdrawalRepository;
 import com.example.geeks.requestDto.LoginDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
+import com.example.geeks.requestDto.ReasonDTO;
 import com.example.geeks.responseDto.InformationDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.responseDto.MyProfileDTO;
@@ -34,6 +37,7 @@ public class MemberService {
     @Value("${jwt.secret}")
     private String secretKey;
 
+    private final WithdrawalRepository withdrawalRepository;
     private final MemberRepository memberRepository;
 
     private final AcceptRoomMateRepository acceptRoomMateRepository;
@@ -227,5 +231,11 @@ public class MemberService {
     public void deleteMember(Long id){
         pointRepository.deletePointWhenMemberWithDraw(id);
         memberRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void saveReason(ReasonDTO reasonDTO){
+        Withdrawal withdrawal = new Withdrawal(reasonDTO.getReason(), reasonDTO.getDetailReasonl());
+        withdrawalRepository.save(withdrawal);
     }
 }
