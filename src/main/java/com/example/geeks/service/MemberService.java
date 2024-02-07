@@ -7,10 +7,7 @@ import com.example.geeks.Security.Util;
 import com.example.geeks.domain.AcceptRoomMate;
 import com.example.geeks.domain.Member;
 import com.example.geeks.domain.Withdrawal;
-import com.example.geeks.repository.AcceptRoomMateRepository;
-import com.example.geeks.repository.MemberRepository;
-import com.example.geeks.repository.PointRepository;
-import com.example.geeks.repository.WithdrawalRepository;
+import com.example.geeks.repository.*;
 import com.example.geeks.requestDto.LoginDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.requestDto.ReasonDTO;
@@ -49,6 +46,7 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
 
     private final AmazonS3 amazonS3;
+
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;

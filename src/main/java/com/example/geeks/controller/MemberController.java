@@ -11,8 +11,7 @@ import com.example.geeks.requestDto.RegisterDTO;
 import com.example.geeks.responseDto.InformationDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.responseDto.MyProfileDTO;
-import com.example.geeks.service.MemberService;
-import com.example.geeks.service.RoomMateService;
+import com.example.geeks.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,6 +34,9 @@ import java.util.List;
 public class MemberController {
     private final MemberService memberService;
 
+    private final ChatService chatService;
+    private final DetailService detailService;
+    private final PostService postService;
     private final BCryptPasswordEncoder encoder;
 
     private final Util util;
@@ -250,6 +252,8 @@ public class MemberController {
     public String withdrawal(@CookieValue String token){
         Long userId = util.getUserId(token, tokenSecretKey);
         roomMateService.deletList(userId);
+        chatService.deletHistoryAndChatRoom(userId);
+        postService.deletPostAndCommentAndHeartsAndPostScraps(userId);
         memberService.deleteMember(userId);
         return "success";
     }

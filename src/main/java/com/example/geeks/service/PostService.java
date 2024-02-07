@@ -339,4 +339,12 @@ public class PostService {
 
         return new CommunityHistoryDTO(postHistoryDTOS, commentHistoryDTOS);
     }
+
+    @Transactional
+    public void deletPostAndCommentAndHeartsAndPostScraps(Long id){
+        commentRepository.deleteByMemberId(id);
+        heartRepository.deleteByMemberId(id);
+        postScrapRepository.deleteByMemberId(id);
+        postRepository.deleteByMemberId(id);
+    }
 }
