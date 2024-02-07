@@ -239,7 +239,11 @@ public class MemberService {
     }
 
     public List<SearchMemberDTO> searchMember(Long userId, String keyword) {
-        List<Member> members = memberRepository.findSearchMember(userId, "%" + keyword + "%");
+        Member member1 = memberRepository.findMemberFetchDetail(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        List<Member> members =
+                memberRepository.findSearchMember(userId, "%" + keyword + "%", member1.getType(), member1.getGender());
 
         return members.stream().map(member ->
                 new SearchMemberDTO(

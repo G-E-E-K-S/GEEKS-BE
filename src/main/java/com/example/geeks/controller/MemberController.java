@@ -251,9 +251,9 @@ public class MemberController {
     @GetMapping("/withdrawal")
     public String withdrawal(@CookieValue String token){
         Long userId = util.getUserId(token, tokenSecretKey);
-        roomMateService.deletList(userId);
-        chatService.deletHistoryAndChatRoom(userId);
-        postService.deletPostAndCommentAndHeartsAndPostScraps(userId);
+        roomMateService.deleteList(userId);
+        chatService.deleteHistoryAndChatRoom(userId);
+        postService.deletePostAndCommentAndHeartsAndPostScraps(userId);
         memberService.deleteMember(userId);
         return "success";
     }

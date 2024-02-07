@@ -43,7 +43,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("select p from Post p " +
             "where p.title like :keyword or " +
-            "p.content like :keyowrd ")
+            "p.content like :keyword ")
     Page<Post> SearchCursorBasePagingFirst(@Param("keyword") String keyword,
                                       Pageable pageable);
 

@@ -1,5 +1,7 @@
 package com.example.geeks.repository;
 
+import com.example.geeks.Enum.DormitoryType;
+import com.example.geeks.Enum.Gender;
 import com.example.geeks.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,7 +33,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m " +
             "left join fetch m.detail " +
             "where m.nickname like :keyword and " +
-            "m.id <> :userId")
+            "m.type = :type and " +
+            "m.gender = :gender and " +
+            "m.id <> :userId ")
     List<Member> findSearchMember(@Param("userId") Long userId,
-                                  @Param("keyword") String keyword);
+                                  @Param("keyword") String keyword,
+                                  @Param("type") DormitoryType type,
+                                  @Param("gender") Gender gender);
 }

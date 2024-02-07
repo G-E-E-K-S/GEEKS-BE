@@ -344,7 +344,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deletPostAndCommentAndHeartsAndPostScraps(Long id) {
+    public void deletePostAndCommentAndHeartsAndPostScraps(Long id) {
         commentRepository.deleteByMemberId(id);
         heartRepository.deleteByMemberId(id);
         postScrapRepository.deleteByMemberId(id);
