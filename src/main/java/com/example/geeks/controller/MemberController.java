@@ -6,6 +6,7 @@ import com.example.geeks.Security.Util;
 import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.PasswordDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
+import com.example.geeks.requestDto.ReasonDTO;
 import com.example.geeks.requestDto.RegisterDTO;
 import com.example.geeks.responseDto.InformationDTO;
 import com.example.geeks.responseDto.MyPageDTO;
@@ -237,6 +238,12 @@ public class MemberController {
     public InformationDTO information(@CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         return memberService.information(userId);
+    }
+
+    @GetMapping("/reason")
+    public String reasonWithdrawal(@RequestParam ReasonDTO reasonDTO){
+        memberService.saveReason(reasonDTO);
+        return "success";
     }
 
     @GetMapping("/withdrawal")
