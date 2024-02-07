@@ -432,7 +432,7 @@ public class MemberInit {
         Post post18 = Post.builder()
                 .commentCount(2)
                 .anonymity(true)
-                .title("피자 같이 먹을 사람 구해요18")
+                .title("피자 같이 먹을 사람 구해요오오오오오오오오오오오오오오오오오오오18")
                 .content("ㅈㄱㄴ")
                 .like_count(5)
                 .type(DormitoryType.NEW)

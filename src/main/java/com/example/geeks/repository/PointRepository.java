@@ -59,7 +59,8 @@ public interface PointRepository extends JpaRepository<Point, Long> {
 
     @Modifying
     @Query("delete from Point p " +
-            "where p.friend.id = :userId")
+            "where p.friend.id = :userId " +
+            "or p.member.id = :userId")
     void deletePointWhenMemberWithDraw(@Param("userId") Long userId);
 
 }
