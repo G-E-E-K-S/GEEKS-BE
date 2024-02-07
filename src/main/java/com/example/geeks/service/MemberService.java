@@ -14,6 +14,7 @@ import com.example.geeks.requestDto.ReasonDTO;
 import com.example.geeks.responseDto.InformationDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.responseDto.MyProfileDTO;
+import com.example.geeks.responseDto.SearchMemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -235,5 +236,15 @@ public class MemberService {
     public void saveReason(ReasonDTO reasonDTO){
         Withdrawal withdrawal = new Withdrawal(reasonDTO.getReason(), reasonDTO.getDetailReason());
         withdrawalRepository.save(withdrawal);
+    }
+
+    public List<SearchMemberDTO> searchMember(Long userId, String keyword) {
+        List<Member> members = memberRepository.findSearchMember(userId, "%" + keyword + "%");
+
+        return members.stream().map(member ->
+                new SearchMemberDTO(
+                        member.getId(),
+                        member.getNickname(),
+                        member.getMajor())).toList();
     }
 }

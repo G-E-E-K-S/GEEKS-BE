@@ -115,6 +115,9 @@ public class PostService {
                         post.isAnonymity() ? null : post.getMember().getNickname(), post.getPhotoName(),
                         post.getCommentCount(), post.getLike_count(), post.isAnonymity(), post.getCreatedDate())).stream().toList();
 
+        if(postAllDTOS.isEmpty()) {
+            return new PostCursorPageDTO(0L, pages.hasNext(), postAllDTOS);
+        }
 
         return new PostCursorPageDTO(postAllDTOS.get(postAllDTOS.size() - 1).getPostId(), pages.hasNext(), postAllDTOS);
     }
@@ -341,10 +344,33 @@ public class PostService {
     }
 
     @Transactional
-    public void deletPostAndCommentAndHeartsAndPostScraps(Long id){
+    public void deletPostAndCommentAndHeartsAndPostScraps(Long id) {
         commentRepository.deleteByMemberId(id);
         heartRepository.deleteByMemberId(id);
         postScrapRepository.deleteByMemberId(id);
         postRepository.deleteByMemberId(id);
+    }
+
+    public SearchPostCursorDTO searchPost(Long cursor, String keyword) {
+        PageRequest pageRequest =
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Post> pages;
+
+        if(cursor == 0L) {
+            pages = postRepository.SearchCursorBasePagingFirst("%" + keyword + "%", pageRequest);
+        }else {
+            pages = postRepository.SearchCursorBasePaging(cursor, "%" + keyword + "%", pageRequest);
+        }
+
+        List<SearchPostDTO> posts = pages.map(post ->
+                new SearchPostDTO(post.getId(), post.getTitle(),
+                        post.getContent(), post.getCreatedDate())).stream().toList();
+
+        if(posts.isEmpty()) {
+            return new SearchPostCursorDTO(0L, pages.hasNext(), posts);
+        }
+
+        return new SearchPostCursorDTO(posts.get(posts.size() - 1).getPostId(), pages.hasNext(), posts);
     }
 }
