@@ -2,15 +2,17 @@ package com.example.geeks.controller;
 
 import com.example.geeks.Security.Util;
 import com.example.geeks.responseDto.HomeMainDTo;
+import com.example.geeks.responseDto.SearchMemberDTO;
+import com.example.geeks.responseDto.SearchPostCursorDTO;
 import com.example.geeks.service.DetailService;
+import com.example.geeks.service.MemberService;
 import com.example.geeks.service.PointService;
 import com.example.geeks.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/home")
@@ -25,6 +27,8 @@ public class HomeController {
     private final PostService postService;
 
     private final DetailService detailService;
+
+    private final MemberService memberService;
 
     @GetMapping("/healthy")
     public String healthyCheck() {
@@ -42,5 +46,18 @@ public class HomeController {
                 pointService.homePointList(userId),
                 postService.homeLivePost(),
                 postService.homeWeeklyPost());
+    }
+
+    @GetMapping("/search/post")
+    public SearchPostCursorDTO searchPost(@RequestParam String keyword,
+                                      @RequestParam Long cursor) {
+        return postService.searchPost(cursor, keyword);
+    }
+
+    @GetMapping("/search/member")
+    public List<SearchMemberDTO> searchMember(@RequestParam String keyword,
+                                              @CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return memberService.searchMember(userId, keyword);
     }
 }

@@ -34,6 +34,20 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findPostCursorBasePagingFirst(Pageable pageable);
 
     @Query("select p from Post p " +
+            "where p.id < :cursor and " +
+            "(p.title like :keyword or " +
+            "p.content like :keyword)")
+    Page<Post> SearchCursorBasePaging(@Param("cursor") Long cursor,
+                                      @Param("keyword") String keyword,
+                                      Pageable pageable);
+
+    @Query("select p from Post p " +
+            "where p.title like :keyword or " +
+            "p.content like :keyowrd ")
+    Page<Post> SearchCursorBasePagingFirst(@Param("keyword") String keyword,
+                                      Pageable pageable);
+
+    @Query("select p from Post p " +
             "where p.createdDate > :time " +
             "order by p.like_count desc, p.commentCount desc ")
     List<Post> findPostToHome(@Param("time") LocalDateTime time,
