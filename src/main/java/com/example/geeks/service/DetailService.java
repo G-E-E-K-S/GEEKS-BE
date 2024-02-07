@@ -154,5 +154,6 @@ public class DetailService {
         return userDetailDTO;
     }
 
+
 }
 

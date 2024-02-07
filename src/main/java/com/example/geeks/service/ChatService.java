@@ -136,4 +136,10 @@ public class ChatService {
 
     }
 
+    @Transactional
+    public void deletHistoryAndChatRoom(Long id){
+        chatHistoryRepository.deleteBySender(id);
+        chatRoomRepository.deleteByUserOrOpponentuser(id);
+    }
+
 }

@@ -6,6 +6,7 @@ import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.ChatRoomDTO;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -21,4 +22,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     @Query("SELECT cr FROM ChatRoom cr WHERE cr.user.id = :user OR cr.opponentUser.id = :user")
     List<ChatRoom> findByUserOrOpponentUser(@Param("user") Long user);
+
+    @Modifying
+    @Query("delete from ChatRoom cr " +
+            "where cr.user.id = :id or cr.opponentUser = :id")
+    void deleteByUserOrOpponentuser(@Param("id") Long id);
 }

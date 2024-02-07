@@ -15,4 +15,9 @@ public interface ChatHistoryRepository extends JpaRepository<ChatHistory, Long> 
     @Query("update ChatHistory ch set ch.readCount = ch.readCount - 1 " +
             "where ch.readCount >= 1 and ch.sender.id != :id")
     int bulkReadCount(@Param("id") Long id);
+
+    @Modifying
+    @Query("delete from ChatHistory ch " +
+            "where ch.sender.id = :id ")
+    void deleteBySender(@Param("id") Long id);
 }

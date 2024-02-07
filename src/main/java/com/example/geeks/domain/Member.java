@@ -49,19 +49,19 @@ public class Member extends BaseTimeEntity{
     @JoinColumn(name = "detail_id")
     private Detail detail;
 
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "member")
     private List<Point> point = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE})
+    @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "member")
     private List<Heart> hearts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "member")
     private List<PostScrap> scraps = new ArrayList<>();
 
     public void changeIntroduction(String introduction) {

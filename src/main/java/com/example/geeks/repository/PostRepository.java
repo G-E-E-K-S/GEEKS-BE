@@ -1,5 +1,6 @@
 package com.example.geeks.repository;
 
+import com.example.geeks.domain.Member;
 import com.example.geeks.domain.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,4 +44,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "order by p.createdDate desc ")
     List<Post> findPostHistory(@Param("userId") Long userId);
 
+    @Modifying
+    @Query("delete from Post p " +
+            "where p.member.id = :id ")
+    void deleteByMemberId(@Param("id") Long id);
 }
