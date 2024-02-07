@@ -235,7 +235,7 @@ public class MemberService {
 
     @Transactional
     public void saveReason(ReasonDTO reasonDTO){
-        Withdrawal withdrawal = new Withdrawal(reasonDTO.getReason(), reasonDTO.getDetailReasonl());
+        Withdrawal withdrawal = new Withdrawal(reasonDTO.getReason(), reasonDTO.getDetailReason());
         withdrawalRepository.save(withdrawal);
     }
 }

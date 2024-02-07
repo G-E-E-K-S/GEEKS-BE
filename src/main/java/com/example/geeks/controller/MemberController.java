@@ -240,8 +240,8 @@ public class MemberController {
         return memberService.information(userId);
     }
 
-    @GetMapping("/reason")
-    public String reasonWithdrawal(@RequestParam ReasonDTO reasonDTO){
+    @PostMapping("/reason")
+    public String reasonWithdrawal(@RequestBody ReasonDTO reasonDTO){
         memberService.saveReason(reasonDTO);
         return "success";
     }
