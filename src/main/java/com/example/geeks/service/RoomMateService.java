@@ -179,5 +179,12 @@ public class RoomMateService {
         saveRoomMateRepository.deleteByMeOrYou(me);
     }
 
+    @Transactional
+    public void quitRoommate(Long userId, Long roommateId) {
+        AcceptRoomMate acceptRoomMate = acceptRoomMateRepository.findAcceptRoomMate(userId, roommateId)
+                .orElseThrow(() -> new NotFoundException("Could not found id"));
+
+        acceptRoomMateRepository.delete(acceptRoomMate);
+    }
 
 }

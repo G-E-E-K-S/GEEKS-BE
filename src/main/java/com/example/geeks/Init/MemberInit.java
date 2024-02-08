@@ -1,9 +1,11 @@
 package com.example.geeks.Init;
 
 import com.example.geeks.Enum.*;
+import com.example.geeks.domain.AcceptRoomMate;
 import com.example.geeks.domain.Detail;
 import com.example.geeks.domain.Member;
 import com.example.geeks.domain.Post;
+import com.example.geeks.repository.AcceptRoomMateRepository;
 import com.example.geeks.repository.DetailRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.PostRepository;
@@ -19,6 +21,7 @@ import java.util.TimeZone;
 @Component
 @RequiredArgsConstructor
 public class MemberInit {
+    private final AcceptRoomMateRepository acceptRoomMateRepository;
     private final MemberRepository memberRepository;
 
     private final DetailRepository detailRepository;
@@ -275,6 +278,8 @@ public class MemberInit {
         detailRepository.save(detail7);
         detailRepository.save(detail8);
         detailRepository.save(detail9);
+
+        acceptRoomMateRepository.save(new AcceptRoomMate(member1, member4));
 
         Post post1 = Post.builder()
                 .commentCount(2)

@@ -101,4 +101,12 @@ public class RoomMateController {
         roomMateService.refuseRoommate(userId, senderId);
         return "success";
     }
+
+    @DeleteMapping("/quit/{roommateId}")
+    public String quit(@CookieValue("token") String token,
+                       @PathVariable Long roommateId) {
+        Long userId = util.getUserId(token, secretKey);
+        roomMateService.quitRoommate(userId, roommateId);
+        return "success";
+    }
 }

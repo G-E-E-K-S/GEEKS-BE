@@ -21,8 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,6 +51,7 @@ public class PostService {
     private String bucket;
 
     public String  uploadToS3(MultipartFile file, String nickname, int count) throws IOException {
+
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String current_date = now.format(dateTimeFormatter);
@@ -61,6 +67,44 @@ public class PostService {
         System.out.println("사진 URL" + amazonS3.getUrl(bucket, fileName));
 
         return fileName;
+    }
+
+    public List<String>  uploadToS32(List<MultipartFile> files, String nickname) {
+        List<String> fileNames = new ArrayList<>();
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()); // 최적의 스레드 풀 크기
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String current_date = now.format(dateTimeFormatter);
+
+        try {
+            AtomicInteger count = new AtomicInteger(1); // 고유한 파일 번호를 생성하기 위한 AtomicInteger
+
+            CompletableFuture<?>[] futures = files.stream()
+                    .map(file -> CompletableFuture.runAsync(() -> {
+                        try {
+                            String fileName = nickname + current_date + count.getAndIncrement();
+
+                            ObjectMetadata metadata = new ObjectMetadata();
+
+                            metadata.setContentLength(file.getSize());
+                            metadata.setContentType(file.getContentType());
+
+                            amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
+                            System.out.println("사진 URL" + amazonS3.getUrl(bucket, fileName));
+                            fileNames.add(fileName);
+                        } catch (IOException e) {
+                            // 에러 처리
+                        }
+                    }, executor))
+                    .toArray(CompletableFuture[]::new);
+
+            CompletableFuture.allOf(futures).join(); // 모든 작업이 완료될 때까지 대기
+        } finally {
+            executor.shutdown(); // ExecutorService 종료
+        }
+
+        return fileNames;
     }
 
     @Transactional
@@ -80,17 +124,12 @@ public class PostService {
 
         postRepository.save(post);
 
+
         if (files != null) {
-            int count = 1;
+            List<String> fileNames = uploadToS32(files, member.getNickname());
+            post.setPhotoName(fileNames.get(0));
 
-            for (MultipartFile file : files) {
-                //S3 Upload
-                String fileName = uploadToS3(file, member.getNickname(), count++);
-
-                if(count == 2) {
-                    post.setPhotoName(fileName);
-                }
-
+            for (String fileName : fileNames) {
                 Photo photo = Photo.createPhoto(fileName, post);
                 photoRepository.save(photo);
             }
