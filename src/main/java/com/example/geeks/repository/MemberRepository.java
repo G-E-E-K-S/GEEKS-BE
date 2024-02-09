@@ -30,6 +30,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m left join fetch m.detail where m.id = :id")
     Optional<Member> findByIdFetchDetail(@Param("id") Long id);
 
+    @Query("select m.password from Member m where m.id = :userId")
+    String findPassword(@Param("userId") Long userId);
+
     @Query("select m from Member m " +
             "left join fetch m.detail " +
             "where m.nickname like :keyword and " +

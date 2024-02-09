@@ -230,6 +230,13 @@ public class MemberController {
        return "success";
     }
 
+    @PostMapping("/check/password")
+    public boolean checkPassword(@RequestBody PasswordDTO dto,
+                                @CookieValue String token) {
+        Long userId = util.getUserId(token, tokenSecretKey);
+        return memberService.checkPassword(userId, dto.getPassword());
+    }
+
     @GetMapping("/profile")
     public MyProfileDTO profile(@CookieValue String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
