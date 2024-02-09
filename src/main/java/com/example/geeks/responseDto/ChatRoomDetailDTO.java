@@ -6,6 +6,7 @@ import java.util.List;
 
 @Getter
 public class ChatRoomDetailDTO {
+    private Long roommateId;
     private String roomId;
 
     private String user;
@@ -18,7 +19,8 @@ public class ChatRoomDetailDTO {
 
     private List<ChatHistoryResponse> histories;
 
-    public ChatRoomDetailDTO(String roomId, String user, String opponentUser, String major, int studentID, List<ChatHistoryResponse> histories) {
+    public ChatRoomDetailDTO(Long roommateId, String roomId, String user, String opponentUser, String major, int studentID, List<ChatHistoryResponse> histories) {
+        this.roommateId = roommateId;
         this.roomId = roomId;
         this.user = user;
         this.opponentUser = opponentUser;
