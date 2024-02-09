@@ -120,7 +120,7 @@ public class ChatService {
         Member user = chatRoom.getUser();
         Member opponentUser = !user.getNickname().equals(nickname) ? user : chatRoom.getOpponentUser();
 
-        return new ChatRoomDetailDTO(chatRoom.getRoomId(),
+        return new ChatRoomDetailDTO(opponentUser.getId(), chatRoom.getRoomId(),
                 nickname,
                 opponentUser.getNickname(),
                 opponentUser.getMajor(),
