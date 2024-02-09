@@ -171,6 +171,14 @@ public class MemberService {
         member.changePassword(encodePassword);
     }
 
+    public boolean checkPassword(Long userId, String password) {
+        String encodePassword = memberRepository.findPassword(userId);
+
+        if(!encoder.matches(password, encodePassword)) return false;
+
+        return true;
+    }
+
     @Transactional
     public void editOpen(Long userId, boolean open) {
         Member member = memberRepository.findById(userId)
