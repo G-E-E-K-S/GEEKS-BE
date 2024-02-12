@@ -177,6 +177,7 @@ public class RoomMateService {
         roomMateRepository.deleteRoomMateMyidOrSenderid(id);
         Member me = memberRepository.findById(id).get();
         saveRoomMateRepository.deleteByMeOrYou(me);
+        acceptRoomMateRepository.deleteAcceptRoomMateForWithdraw(id);
     }
 
     @Transactional

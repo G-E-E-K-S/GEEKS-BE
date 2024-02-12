@@ -19,5 +19,5 @@ public class HomeMainDTo {
 
     private List<HomeRealTimePostDTO> livePosts;
 
-    private List<HomeRealTimePostDTO> weeklyPost;
+    private List<HomeRealTimePostDTO> weeklyPosts;
 }
