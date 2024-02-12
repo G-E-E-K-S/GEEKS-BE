@@ -42,7 +42,7 @@ public class MailController {
         String code = mailService.sendSimpleMessage(email);
         System.out.println("인증코드 : " + code);
 
-        emailAuthService.saveDataWithExpiration(email, code, 300);
+        emailAuthService.saveDataWithExpiration(email, code, 180);
         return code;
     }
 
