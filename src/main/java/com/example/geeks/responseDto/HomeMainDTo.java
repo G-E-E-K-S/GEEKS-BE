@@ -12,9 +12,12 @@ public class HomeMainDTo {
 
     private String nickname;
     private boolean exist;
-    private List<PointAndMemberDTO> points = new ArrayList<>();
 
-    private List<HomeRealTimePostDTO> livePosts = new ArrayList<>();
+    private boolean roommateApply;
 
-    private List<HomeRealTimePostDTO> weeklyPosts = new ArrayList<>();
+    private List<PointAndMemberDTO> points;
+
+    private List<HomeRealTimePostDTO> livePosts;
+
+    private List<HomeRealTimePostDTO> weeklyPost;
 }

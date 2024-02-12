@@ -4,10 +4,7 @@ import com.example.geeks.Security.Util;
 import com.example.geeks.responseDto.HomeMainDTo;
 import com.example.geeks.responseDto.SearchMemberDTO;
 import com.example.geeks.responseDto.SearchPostCursorDTO;
-import com.example.geeks.service.DetailService;
-import com.example.geeks.service.MemberService;
-import com.example.geeks.service.PointService;
-import com.example.geeks.service.PostService;
+import com.example.geeks.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +27,8 @@ public class HomeController {
 
     private final MemberService memberService;
 
+    private final RoomMateService roomMateService;
+
     @GetMapping("/healthy")
     public String healthyCheck() {
         return ".";
@@ -43,6 +42,7 @@ public class HomeController {
         return new HomeMainDTo(
                 nickname,
                 detailService.detailExist(userId),
+                roomMateService.applyRoommate(userId),
                 pointService.homePointList(userId),
                 postService.homeLivePost(),
                 postService.homeWeeklyPost());

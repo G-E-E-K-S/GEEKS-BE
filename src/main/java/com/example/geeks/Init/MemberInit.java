@@ -36,7 +36,7 @@ public class MemberInit {
 
         Member member1 = Member.builder()
                 .nickname("member1")
-                .email("201921002@sangmyung.kr")
+                .email("1@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("소프트웨어")
                 .studentID(19)
@@ -49,7 +49,7 @@ public class MemberInit {
 
         Member member2 = Member.builder()
                 .nickname("member2")
-                .email("201920990@sangmyung.kr")
+                .email("2@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("소프트웨어")
                 .studentID(17)
@@ -88,7 +88,7 @@ public class MemberInit {
 
         Member member5 = Member.builder()
                 .nickname("멋쟁이 토마토")
-                .email("m3@test.com")
+                .email("5@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("인더스트리얼디자인")
                 .studentID(21)
@@ -101,7 +101,7 @@ public class MemberInit {
 
         Member member6 = Member.builder()
                 .nickname("수뭉이")
-                .email("m3@test.com")
+                .email("6@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("디지털만화영상")
                 .studentID(21)
@@ -114,7 +114,7 @@ public class MemberInit {
 
         Member member7 = Member.builder()
                 .nickname("피자먹고싶다")
-                .email("m3@test.com")
+                .email("7@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("한국언어문화")
                 .studentID(20)
@@ -127,7 +127,7 @@ public class MemberInit {
 
         Member member8 = Member.builder()
                 .nickname("슴우D")
-                .email("m3@test.com")
+                .email("8@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("커뮤니케이션디자인")
                 .studentID(19)
@@ -140,7 +140,7 @@ public class MemberInit {
 
         Member member9 = Member.builder()
                 .nickname("너무추워")
-                .email("m3@test.com")
+                .email("9@sangmyung.kr")
                 .password(encoder.encode("1234"))
                 .major("문화예술경영")
                 .studentID(18)
