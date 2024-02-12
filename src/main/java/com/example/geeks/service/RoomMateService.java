@@ -187,4 +187,8 @@ public class RoomMateService {
         acceptRoomMateRepository.delete(acceptRoomMate);
     }
 
+    public boolean applyRoommate(Long userId) {
+        return !roomMateRepository.findRoomMateByReceivedId(userId).isEmpty();
+    }
+
 }

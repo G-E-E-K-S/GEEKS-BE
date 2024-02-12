@@ -39,31 +39,22 @@ public class MailService {
         // https://drive.google.com/uc?export=view&amp;id=1Sq-EX7P31_gwDoSmUh5SJDD-8z1dfhKq
 
         String msgg =
-                "<!DOCTYPE html>\n" +
-                        "<html style=\"padding: 0;margin: 0; font-family: Pretendard;word-break: break-all;\">\n" +
-                        "  <head style=\"background-color: #fff4cd;height: 19vh;display: flex;justify-content: center;align-items: center;\">\n" +
-                        "    <meta charset=\"UTF-8\" />\n" +
-                        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n" +
-                        "    <title>Email</title>\n" +
-                        "    <link rel=\"stylesheet\" href=\"./Email.css\" />\n" +
-                        "  </head>\n" +
-                        "  <header>\n" +
-                        "    <img class=\"logo\" src=\"https://seumu-s3-bucket.s3.ap-northeast-2.amazonaws.com/geeksLogo.svg\" />\n" +
-                        "  </header>\n" +
-                        "  <body>\n" +
-                        "    <div style=\"padding-left: 6.94vw;\">\n" +
-                        "      <div style=\"color: #525252;font-size: 24px;font-weight: 500;margin-top: 9.19vh;\">\n" +
+                "<div style=\"width: 100vw;max-width: 100%;box-sizing: border-box; height:180px; right:0; left:0; top:0; background-color: #FFD540; margin: 0; padding: 0;display: flex;justify-content: center;align-items: center;\">\n" +
+                        "    <img style=\"margin: 69px 0;\" src=\"https://bucket-geeks.s3.ap-northeast-2.amazonaws.com/logo.svg\"/>\n" +
+                        "  </div>\n" +
+                        "  <div style=\"width: 95vw;margin: 0 auto;padding: 0;background-color: #fff;box-sizing: border-box;\">\n" +
+                        "    <div style=\"padding: 0px 1rem\">\n" +
+                        "      <div style=\"color: #525252;font-size: 1.2rem;font-weight: 500;margin-top: 9.19vh;\">\n" +
                         "        안녕하세요, 긱스에서 요청하신 인증번호를 보내드려요.\n" +
                         "      </div>\n" +
-                        "      <div style=\"color: #333;font-size: 64px;font-weight: 500;line-height: normal;margin-top: 11.63vh;margin-bottom: 11.7vh;\">"+ ePw +"</div>\n" +
-                        "      <div style=\"color: #525252;font-size: 32px;font-style: normal;font-weight: 500;\">위 인증번호 4자리를 인증번호 입력창에 정확히 입력해 주세요.</div>\n" +
-                        "      <div style=\"color: #525252;font-size: 24px;font-style: normal;font-weight: 500;margin-top: 3.46vh;\">인증번호를 요청하지 않았을 경우 본 이메일을 무시해 주세요.</div>\n" +
+                        "      <div style=\"color: #333;font-size: 3.3rem;font-weight: 500;line-height: normal;margin-top: 4rem;margin-bottom: 2rem;\">"+ePw+"</div>\n" +
+                        "      <div style=\"color: #525252;font-size: 1.25rem;font-style: normal;font-weight: 500;\">위 인증번호 4자리를 인증번호 입력창에 정확히 입력해주세요.</div>\n" +
+                        "      <div style=\"color: #525252;font-size: 1rem;font-style: normal;font-weight: 500;margin-top: 1rem;margin-bottom:3rem;\">인증번호를 요청하지 않았을 경우 본 이메일을 무시해 주세요.</div>\n" +
                         "    </div>\n" +
-                        "  </body>\n" +
-                        "  <footer>\n" +
-                        "    <div style=\"color: #525252;font-size: 24px;font-style: normal;font-weight: 500;margin-top: 3.46vh;\">인증번호를 요청하지 않았을 경우 본 이메일을 무시해 주세요.</div>\n" +
-                        "  </footer style=\"position: fixed;bottom: 0;width: 100%;background-color: #fff4cd;height: 15vh;padding-top: 5.37vh;padding-left: 6.94vw;\">\n" +
-                        "</html>\n";
+                        "  </div>\n" +
+                        "  <div style=\"background-color: #FFD540;height: 15vh;padding: 10px 1rem 0px 1rem;width: 100vw;box-sizing: border-box;position: absolute;bottom: 0;max-width: 100%;\">\n" +
+                        "    <div style=\"color: #525252;font-size: 1rem;font-style: normal;font-weight: 500;margin-top: 2.46vh;\">인증번호를 요청하지 않았을 경우 본 이메일을 무시해 주세요.</div>\n" +
+                        "  </div>\n";
 
         MimeMessage message = emailSender.createMimeMessage();
 

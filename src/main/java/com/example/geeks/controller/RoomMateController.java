@@ -44,7 +44,7 @@ public class RoomMateController {
     }
 
     //나에게 보낸사람
-    @GetMapping("/recived")
+    @GetMapping("/received")
     public List<RoomMateDTO> recivedRoomMateList(@CookieValue("token") String token){
         Long id = util.getUserId(token, secretKey);
         List<RoomMateDTO> roomMates = roomMateService.findRecivedRoomMateList(id);
