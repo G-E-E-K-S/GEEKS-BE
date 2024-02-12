@@ -6,11 +6,10 @@ import com.example.geeks.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @Component
@@ -19,6 +18,7 @@ public class MessagingScheduler {
 
     private SimpMessagingTemplate messagingTemplate;
     private final ChatService chatService;
+
 
     @Autowired
     public void setMessagingTemplate(SimpMessagingTemplate messagingTemplate) {

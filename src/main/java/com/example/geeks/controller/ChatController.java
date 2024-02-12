@@ -55,4 +55,10 @@ public class ChatController {
         return chatService.findRoom(roomId, nickname, userId);
     }
 
+    @GetMapping("/removechat")
+    public String removeChat(@CookieValue("token") String token){
+        Long userId = util.getUserId(token, secretKey);
+        chatService.deleteHistoryAndChatRoom(userId);
+        return "Success";
+    }
 }
