@@ -250,7 +250,7 @@ public class MemberController {
     }
 
     @PostMapping("/reason")
-    public String reasonWithdrawal(@RequestBody ReasonDTO reasonDTO){
+    public String reasonWithdrawal(@RequestBody List<ReasonDTO> reasonDTO){
         memberService.saveReason(reasonDTO);
         return "success";
     }

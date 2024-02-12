@@ -241,9 +241,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void saveReason(ReasonDTO reasonDTO){
-        Withdrawal withdrawal = new Withdrawal(reasonDTO.getReason(), reasonDTO.getDetailReason());
-        withdrawalRepository.save(withdrawal);
+    public void saveReason(List<ReasonDTO> reasonDTO){
+        for (ReasonDTO dto : reasonDTO) {
+            withdrawalRepository.save(new Withdrawal(dto.getReason(), dto.getDetailReason()));
+        }
     }
 
     public List<SearchMemberDTO> searchMember(Long userId, String keyword) {

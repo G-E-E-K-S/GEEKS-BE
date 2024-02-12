@@ -19,10 +19,10 @@ public class Withdrawal {
 
     private String reason;
 
-    private String detailReson;
+    private String detailReason;
 
-    public Withdrawal(String reason, String detailReson) {
+    public Withdrawal(String reason, String detailReason) {
         this.reason = reason;
-        this.detailReson = detailReson;
+        this.detailReason = detailReason;
     }
 }
