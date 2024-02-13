@@ -26,4 +26,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query("delete from ChatRoom cr " +
             "where cr.user.id = :id or cr.opponentUser = :id")
     void deleteByUserOrOpponentuser(@Param("id") Long id);
+
+    void deleteByRoomId(@Param("id") String id);
 }
