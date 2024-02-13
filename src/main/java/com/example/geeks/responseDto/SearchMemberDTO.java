@@ -11,4 +11,6 @@ public class SearchMemberDTO {
     private String nickname;
 
     private String major;
+
+    private String photoName;
 }

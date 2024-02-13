@@ -22,6 +22,8 @@ public class DetailCompareDTO {
 
     private boolean roommateState; // 서로 룸메이트인지 여부
 
+    private boolean acceptRoommate; // 현재 매칭된 룸메이트가 있는지 여부
+
     private int studentID;
 
     private int point;

@@ -307,7 +307,6 @@ public class PostService {
         member.getHearts().remove(heart);
         postRepository.decreaseHeart(postId);
         heartRepository.delete(heart);
-
     }
     
     @Transactional

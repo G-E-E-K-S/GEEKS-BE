@@ -21,6 +21,11 @@ public interface AcceptRoomMateRepository extends JpaRepository<AcceptRoomMate, 
     Optional<AcceptRoomMate> findAcceptRoomMate(@Param("myId") Long myId,
                                                 @Param("opponentId") Long opponentId);
 
+    @Query("select ac from AcceptRoomMate ac " +
+            "where ac.accept.id = :myId " +
+            "or ac.sender.id = :myId")
+    Optional<AcceptRoomMate> findAcceptRoomMateState(@Param("myId") Long myId);
+
     @Modifying
     @Query("delete from AcceptRoomMate ac " +
             "where ac.sender.id = :userId or ac.accept.id = :userId")
