@@ -9,6 +9,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.REMOVE;
+
 @Getter
 @Setter
 @Entity
@@ -35,6 +38,6 @@ public class ChatRoom{
     //@JoinColumn(name = "opponent_user_id")
     private Member opponentUser;
 
-    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY, cascade = {PERSIST, REMOVE})
     private List<ChatHistory> histories = new ArrayList<>();
 }

@@ -56,9 +56,9 @@ public class ChatController {
     }
 
     @GetMapping("/removechat")
-    public String removeChat(@CookieValue("token") String token){
-        Long userId = util.getUserId(token, secretKey);
-        chatService.deleteHistoryAndChatRoom(userId);
+    public String removeChat(@RequestParam String roomId,
+                             @CookieValue("token") String token){
+        chatService.deleteChatRoom(roomId);
         return "Success";
     }
 }

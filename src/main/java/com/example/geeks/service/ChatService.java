@@ -142,4 +142,8 @@ public class ChatService {
         chatRoomRepository.deleteByUserOrOpponentuser(id);
     }
 
+    @Transactional
+    public void deleteChatRoom(String id){
+        chatRoomRepository.deleteByRoomId(id);
+    }
 }
