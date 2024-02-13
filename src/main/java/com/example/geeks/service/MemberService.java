@@ -258,6 +258,7 @@ public class MemberService {
                 new SearchMemberDTO(
                         member.getId(),
                         member.getNickname(),
-                        member.getMajor())).toList();
+                        member.getMajor(),
+                        member.getPhotoName())).toList();
     }
 }

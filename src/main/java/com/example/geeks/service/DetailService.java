@@ -120,6 +120,7 @@ public class DetailService {
 
         boolean roommateApply = false;
         boolean roommateState = false;
+        boolean acceptRoommate = false;
 
         if(roomMateRepository.findRoomMateState(myId, opponentId).isPresent()) {
             roommateApply = true;
@@ -129,12 +130,17 @@ public class DetailService {
             roommateState = true;
         }
 
+        if(!acceptRoomMateRepository.findAcceptRoomMateState(myId).isPresent()) {
+            acceptRoommate = true;
+        }
+
         return DetailCompareDTO.builder()
                 .point(point)
                 .details(detailDTOS)
                 .major(opponent.getMajor())
                 .roommateApply(roommateApply)
                 .roommateState(roommateState)
+                .acceptRoommate(acceptRoommate)
                 .nickname(opponent.getNickname())
                 .photoName(opponent.getPhotoName())
                 .studentID(opponent.getStudentID())
