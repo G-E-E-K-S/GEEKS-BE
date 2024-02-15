@@ -10,6 +10,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MyProfileDTO {
 
+    private Long roommateId;
+
     private String myNickname;
 
     private String nickname;
