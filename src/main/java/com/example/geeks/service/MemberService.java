@@ -205,6 +205,7 @@ public class MemberService {
             }
 
             dto = MyProfileDTO.builder()
+                    .roommateId(roommate.getId())
                     .myMajor(member.getMajor())
                     .myNickname(member.getNickname())
                     .myPhotoName(member.getPhotoName())
