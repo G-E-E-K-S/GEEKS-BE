@@ -52,27 +52,8 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 // 특정 API에 대해 모든 사용자에게 접근 허용
                 .antMatchers("*").permitAll()
-
-//                .antMatchers("/user/register").permitAll()
-//                .antMatchers("/board/return").permitAll()
-//                .antMatchers("/user/login").permitAll()
-
-
-
-//                .antMatchers("/search/recommand").permitAll()
-//                .antMatchers("/search/updateData").permitAll()
-//                .antMatchers("/chat/room").permitAll()
-//                .antMatchers("/user/profile").permitAll()
-//                .antMatchers("/coordinator/profile").permitAll()
-//                .antMatchers("/board/create").permitAll()
-//                .antMatchers("/main/test").permitAll()
-//                .antMatchers("/main/user").permitAll()
-//                .anyRequest().authenticated() // 나머지 API에 대해서는 인증을 요구
-
                 .and()
                 .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class);
-
-
         http
                 .cors().configurationSource(corsConfigurationSource())
                 .and()

@@ -67,7 +67,6 @@ public class MemberController {
 
         cookie.setPath("/");
         cookie.setSecure(false);
-        cookie.setMaxAge(86400); // 1일
         cookie.setHttpOnly(false);
 
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
@@ -93,7 +92,6 @@ public class MemberController {
 
        cookie.setPath("/");
        cookie.setSecure(false);
-       cookie.setMaxAge(86400); // 1일
        cookie.setHttpOnly(false);
 
        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
@@ -109,7 +107,6 @@ public class MemberController {
 
        cookie.setPath("/");
        cookie.setSecure(false);
-       cookie.setMaxAge(86400); // 1일
        cookie.setHttpOnly(true);
 
        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
@@ -125,7 +122,6 @@ public class MemberController {
 
         cookie.setPath("/");
         cookie.setSecure(false);
-        cookie.setMaxAge(86400); // 1일
         cookie.setHttpOnly(true);
 
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
