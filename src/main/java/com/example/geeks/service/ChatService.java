@@ -138,8 +138,11 @@ public class ChatService {
 
     @Transactional
     public void deleteHistoryAndChatRoom(Long id){
-        chatHistoryRepository.deleteBySender(id);
-        chatRoomRepository.deleteByUserOrOpponentuser(id);
+        List<ChatRoom> chatRooms = chatRoomRepository.findByUserOrOpponentUser(id);
+        for (ChatRoom chatRoom : chatRooms) {
+            chatHistoryRepository.deleteChatHistoriesByChatRoom_Id(chatRoom.getId());
+            chatRoomRepository.delete(chatRoom);
+        }
     }
 
     @Transactional

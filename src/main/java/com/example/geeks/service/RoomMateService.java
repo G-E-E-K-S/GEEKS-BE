@@ -175,8 +175,7 @@ public class RoomMateService {
     @Transactional
     public void deleteList(Long id){
         roomMateRepository.deleteRoomMateMyidOrSenderid(id);
-        Member me = memberRepository.findById(id).get();
-        saveRoomMateRepository.deleteByMeOrYou(me);
+        saveRoomMateRepository.deleteByMeOrYou(id);
         acceptRoomMateRepository.deleteAcceptRoomMateForWithdraw(id);
     }
 

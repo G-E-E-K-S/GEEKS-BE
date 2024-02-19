@@ -70,8 +70,8 @@ public class MemberService {
         return fileName;
     }
 
-    public boolean availableEmail(String email) {
-        return memberRepository.findByEmail(email).isEmpty();
+    public Optional<Member> availableEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     public boolean availableNickname(String nickname) {
@@ -148,12 +148,12 @@ public class MemberService {
     }
 
     public String login(LoginDTO loginDTO){
-        List<Member> members = memberRepository.findByEmail(loginDTO.getEmail());
+        Optional<Member> member = memberRepository.findByEmail(loginDTO.getEmail());
         // 1. Id가 틀린 경우
-        if(members.isEmpty()) return "Email Not Found";
+        if(!member.isPresent()) return "Email Not Found";
 
         // 2. Pw가 틀린 경우
-        Member user = members.get(0);
+        Member user = member.get();
 
         // 사용자가 입력한 비밀번호 (rawPassword)와 암호화된 비밀번호 (hashedPassword)를 비교
         if(!encoder.matches(loginDTO.getPassword(), user.getPassword())) return "Password Not Equal";
