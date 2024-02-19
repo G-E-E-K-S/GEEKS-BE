@@ -20,4 +20,9 @@ public interface ChatHistoryRepository extends JpaRepository<ChatHistory, Long> 
     @Query("delete from ChatHistory ch " +
             "where ch.sender.id = :id ")
     void deleteBySender(@Param("id") Long id);
+
+    @Modifying
+    @Query("delete from ChatHistory ch " +
+            "where ch.chatRoom.id = :roomId ")
+    void deleteChatHistoriesByChatRoom_Id(@Param("roomId") Long roomId);
 }

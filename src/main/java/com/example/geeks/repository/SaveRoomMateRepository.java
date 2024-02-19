@@ -28,7 +28,7 @@ public interface SaveRoomMateRepository extends JpaRepository<SaveRoomMate, Long
 
     @Modifying
     @Query("delete from SaveRoomMate sm " +
-            "where sm.me = :member or sm.you = :member")
-    void deleteByMeOrYou(@Param("member") Member member);
+            "where sm.me.id = :userId or sm.you.id = :userId")
+    void deleteByMeOrYou(@Param("userId") Long userId);
 
 }

@@ -1,6 +1,8 @@
 package com.example.geeks.controller;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.geeks.Security.Util;
+import com.example.geeks.domain.Member;
 import com.example.geeks.service.MailAuthService;
 import com.example.geeks.service.MailService;
 import com.example.geeks.service.MemberService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/mail")
@@ -33,9 +36,9 @@ public class MailController {
     @GetMapping("/send")
     public String mailConfirm(@RequestParam String email, HttpSession session) throws Exception{
         // 비어있으면 true 있다면 false
-        boolean pass = memberService.availableEmail(email);
+        Optional<Member> member = memberService.availableEmail(email);
 
-        if(!pass) return "duplicate";
+        if(member.isPresent()) return "duplicate";
 
         session.setAttribute("email", email);
 
@@ -64,21 +67,14 @@ public class MailController {
     }
 
     @GetMapping("/temporary")
-    public String mailTemporary(@RequestParam String email,
-                                @CookieValue String token,
-                                HttpSession session) throws Exception{
-        boolean pass = memberService.availableEmail(email);
-        if(pass) return "duplicate";
-
-        session.setAttribute("email", email);
+    public String mailTemporary(@RequestParam String email) throws Exception{
+        Optional<Member> member = memberService.availableEmail(email);
+        if(!member.isPresent()) return "duplicate";
 
         String password = mailService.sendPasswordMessage(email);
 
-        Long userId = util.getUserId(token, tokenSecretKey);
         String encodePassword = encoder.encode(password);
-        session.setAttribute("password", encodePassword);
-        memberService.editPassword(encodePassword, userId);
-
+        memberService.editPassword(encodePassword, member.get().getId());
         return "success";
     }
 }

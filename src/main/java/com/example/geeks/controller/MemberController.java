@@ -256,12 +256,17 @@ public class MemberController {
     }
 
     @GetMapping("/withdrawal")
-    public String withdrawal(@CookieValue String token){
+    public String withdrawal(@CookieValue String token,
+                             HttpServletResponse response){
         Long userId = util.getUserId(token, tokenSecretKey);
         roomMateService.deleteList(userId);
         chatService.deleteHistoryAndChatRoom(userId);
         postService.deletePostAndCommentAndHeartsAndPostScraps(userId);
         memberService.deleteMember(userId);
+
+        Cookie myCookie = new Cookie("token", null);  // 쿠키 값을 null로 설정
+        myCookie.setMaxAge(0);  // 남은 만료시간을 0으로 설정
+        response.addCookie(myCookie);
         return "success";
     }
 }
