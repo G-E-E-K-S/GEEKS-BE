@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -51,7 +52,8 @@ public class PointService {
         Member member = memberRepository.findByIdFetchDetail(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
-        Detail myDetail = member.getDetail();
+        Detail myDetail = detailRepository.findDetailByMemberId(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id" ));
 
         if(myDetail == null) {
             return false;
@@ -67,7 +69,13 @@ public class PointService {
 
             if(point.getLastModifiedDate().isAfter(myDetail.getLastModifiedDate()) ||
                     point.getLastModifiedDate().isAfter(point.getFriend().getLastModifiedDate())) {
-                point.setPoint(pointCalculator(myDetail, point.getFriend().getDetail()));
+                int newPoint = pointCalculator(myDetail, point.getFriend().getDetail());
+                Optional<Point> opponentPoint = pointRepository.findByMemberAndFriend(point.getFriend().getId(), userId);
+
+                point.setPoint(newPoint);
+                if(opponentPoint.isPresent()) {
+                    opponentPoint.get().setPoint(newPoint);
+                }
             }
         }
 
