@@ -102,7 +102,7 @@ public class MemberController {
 
    @GetMapping("/admin")
    public String admin() {
-       String token = memberService.createToken(1L, "member1");
+       String token = memberService.createToken(1L, "geeks");
        Cookie cookie = new Cookie("token", token);
 
        cookie.setPath("/");

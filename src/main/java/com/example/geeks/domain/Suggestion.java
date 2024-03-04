@@ -48,6 +48,10 @@ public class Suggestion extends BaseTimeEntity{
         this.photos.add(photo);
     }
 
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
     public void setMember(Member member) {
         this.member = member;
 

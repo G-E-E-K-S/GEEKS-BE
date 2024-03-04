@@ -50,24 +50,24 @@ public class PostService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String  uploadToS3(MultipartFile file, String nickname, int count) throws IOException {
-
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        String current_date = now.format(dateTimeFormatter);
-
-        String fileName = nickname + current_date + count++;
-
-        ObjectMetadata metadata = new ObjectMetadata();
-
-        metadata.setContentLength(file.getSize());
-        metadata.setContentType(file.getContentType());
-
-        amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
-        System.out.println("사진 URL" + amazonS3.getUrl(bucket, fileName));
-
-        return fileName;
-    }
+//    public String  uploadToS3(MultipartFile file, String nickname, int count) throws IOException {
+//
+//        LocalDateTime now = LocalDateTime.now();
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+//        String current_date = now.format(dateTimeFormatter);
+//
+//        String fileName = nickname + current_date + count++;
+//
+//        ObjectMetadata metadata = new ObjectMetadata();
+//
+//        metadata.setContentLength(file.getSize());
+//        metadata.setContentType(file.getContentType());
+//
+//        amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
+//        System.out.println("사진 URL" + amazonS3.getUrl(bucket, fileName));
+//
+//        return fileName;
+//    }
 
     public List<String>  uploadToS32(List<MultipartFile> files, String nickname) {
         List<String> fileNames = new ArrayList<>();

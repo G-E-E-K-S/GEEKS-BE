@@ -34,32 +34,32 @@ public class MemberInit {
     public void memberInit() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 
-//        Member member1 = Member.builder()
-//                .nickname("geeks")
-//                .email("geeks@sangmyung.kr")
-//                .password(encoder.encode("1234"))
-//                .major("소프트웨어학과")
-//                .studentID(19)
-//                .gender(Gender.MALE)
-//                .image_url("")
-//                .introduction("")
-//                .type(DormitoryType.NEW)
-//                .open(false)
-//                .build();
-//
-//        memberRepository.save(member1);
-//
-//        Post post1 = Post.builder()
-//                .commentCount(0)
-//                .anonymity(false)
-//                .title("GEEKS가 오픈했어요!")
-//                .content("GEEKS와 함께 더 편리한 기숙사 생활 만들어요.")
-//                .like_count(0)
-//                .type(DormitoryType.NEW)
-//                .build();
-//
-//        post1.setMember(member1);
-//        postRepository.save(post1);
+        Member member1 = Member.builder()
+                .nickname("geeks")
+                .email("geeks@sangmyung.kr")
+                .password(encoder.encode("1234"))
+                .major("소프트웨어학과")
+                .studentID(19)
+                .gender(Gender.MALE)
+                .image_url("")
+                .introduction("")
+                .type(DormitoryType.NEW)
+                .open(false)
+                .build();
+
+        memberRepository.save(member1);
+
+        Post post1 = Post.builder()
+                .commentCount(0)
+                .anonymity(false)
+                .title("GEEKS가 오픈했어요!")
+                .content("GEEKS와 함께 더 편리한 기숙사 생활 만들어요.")
+                .like_count(0)
+                .type(DormitoryType.NEW)
+                .build();
+
+        post1.setMember(member1);
+        postRepository.save(post1);
         /*
 
         Member member2 = Member.builder()
