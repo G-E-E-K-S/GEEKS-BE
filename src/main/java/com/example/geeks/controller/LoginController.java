@@ -29,11 +29,15 @@ public class LoginController {
 
         cookie.setPath("/");
         cookie.setSecure(false);
-        cookie.setMaxAge(86400); //1일
+        cookie.setMaxAge(60 * 60 * 24 * 30); // 30 일
         cookie.setHttpOnly(true);
 
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         response.addCookie(cookie);
+
+        if(loginDTO.getEmail().equals("admin@sangmyung.kr")) {
+            return "admin";
+        }
 
         return "success";
     }

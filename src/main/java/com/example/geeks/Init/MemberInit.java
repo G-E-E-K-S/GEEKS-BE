@@ -34,6 +34,21 @@ public class MemberInit {
     public void memberInit() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 
+        Member admin = Member.builder()
+                .nickname("admin")
+                .email("admin@sangmyung.kr")
+                .password(encoder.encode("geeksadmin0221"))
+                .major("행정실")
+                .studentID(1)
+                .gender(Gender.MALE)
+                .image_url("")
+                .introduction("")
+                .type(DormitoryType.NEW)
+                .open(false)
+                .build();
+
+        memberRepository.save(admin);
+
         Member member1 = Member.builder()
                 .nickname("geeks")
                 .email("geeks@sangmyung.kr")
@@ -60,6 +75,8 @@ public class MemberInit {
 
         post1.setMember(member1);
         postRepository.save(post1);
+
+
         /*
 
         Member member2 = Member.builder()
