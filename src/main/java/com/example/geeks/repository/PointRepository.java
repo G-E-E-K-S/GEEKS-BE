@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PointRepository extends JpaRepository<Point, Long> {
 
@@ -37,8 +38,11 @@ public interface PointRepository extends JpaRepository<Point, Long> {
             "order by p.point desc ")
     List<Point> findFetchMember(@Param("userId") Long userId);
 
-    Point findByMemberAndFriend(@Param("member") Member member,
-                                @Param("friend") Member friend);
+    @Query("select p from Point p " +
+            "where p.member.id = :memberId and " +
+            "p.friend.id = :friendId")
+    Optional<Point> findByMemberAndFriend(@Param("memberId") Long memberId,
+                                         @Param("friendId") Long friendId);
 
     @Query("select p from Point p " +
             "left join fetch p.friend f " +

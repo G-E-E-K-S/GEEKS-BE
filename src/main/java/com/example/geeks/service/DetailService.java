@@ -63,7 +63,7 @@ public class DetailService {
     }
 
     public boolean detailExist(Long userId) {
-        Optional<Detail> detail = detailRepository.findById(userId);
+        Optional<Detail> detail = detailRepository.findDetailByMemberId(userId);
 
         if(detail.isPresent()) {
             return true;
@@ -130,7 +130,7 @@ public class DetailService {
             roommateState = true;
         }
 
-        if(!acceptRoomMateRepository.findAcceptRoomMateState(myId).isPresent()) {
+        if(acceptRoomMateRepository.findAcceptRoomMateState(myId).isPresent()) {
             acceptRoommate = true;
         }
 
@@ -149,7 +149,7 @@ public class DetailService {
     }
 
     public DetailDTO getUserDetailById(Long userId){
-        Detail userDetail = detailRepository.findById(userId)
+        Detail userDetail = detailRepository.findDetailByMemberId(userId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
 
         DetailDTO userDetailDTO =
