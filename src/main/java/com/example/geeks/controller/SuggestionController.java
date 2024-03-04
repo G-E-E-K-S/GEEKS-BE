@@ -3,6 +3,7 @@ package com.example.geeks.controller;
 import com.example.geeks.Security.Util;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.requestDto.SuggestionCreateDTO;
+import com.example.geeks.responseDto.SuggestionCursorDTO;
 import com.example.geeks.responseDto.SuggestionDetailDTO;
 import com.example.geeks.service.SuggestionService;
 import lombok.RequiredArgsConstructor;
@@ -52,9 +53,14 @@ public class SuggestionController {
         return "success";
     }
 
+    @GetMapping("/main/{cursor}")
+    public SuggestionCursorDTO cursorPage(@PathVariable Long cursor) {
+        return suggestionService.cursorBasePaging(cursor);
+    }
+
     @GetMapping("/show/{suggestionId}")
-    public SuggestionDetailDTO show(@CookieValue(value = "token") String token,
-                                    @PathVariable Long suggestionId) {
+    public SuggestionDetailDTO showSuggestion(@PathVariable Long suggestionId,
+                                              @CookieValue(value = "token") String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         return suggestionService.findDetailSuggestion(userId, suggestionId);
     }

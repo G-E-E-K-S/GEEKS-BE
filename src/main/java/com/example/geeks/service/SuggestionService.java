@@ -11,9 +11,14 @@ import com.example.geeks.repository.SuggestionPhotoRepository;
 import com.example.geeks.repository.SuggestionRepository;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.requestDto.SuggestionCreateDTO;
+import com.example.geeks.responseDto.SuggestionAllDTO;
+import com.example.geeks.responseDto.SuggestionCursorDTO;
 import com.example.geeks.responseDto.SuggestionDetailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -151,6 +156,8 @@ public class SuggestionService {
         Suggestion suggestion = suggestionRepository.findById(suggestionId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + suggestionId));
 
+        System.out.println("suggestion: " + userId + " " + suggestionId);
+
         List<String> photoNames = suggestionPhotoRepository.findPhotoNamesBySuggestionId(suggestionId);
 
         Optional<Agree> agree = agreeRepository.findAgreeByMemberIdAndSuggestionId(userId, suggestionId);
@@ -163,5 +170,35 @@ public class SuggestionService {
                 .photoNames(photoNames)
                 .content(suggestion.getContent())
                 .build();
+    }
+
+    public SuggestionCursorDTO cursorBasePaging(Long cursor) {
+        PageRequest pageRequest =
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Suggestion> pages;
+
+        if(cursor == 0L) {
+            pages = suggestionRepository.findSuggestionCursorBasePagingFirst(pageRequest);
+        } else {
+            pages = suggestionRepository.findSuggestionCursorBasePaging(cursor, pageRequest);
+        }
+
+        List<SuggestionAllDTO> suggestionAllDTOS = pages.map(suggestion ->
+                SuggestionAllDTO.builder()
+                        .title(suggestion.getTitle())
+                        .content(suggestion.getContent())
+                        .suggestionId(suggestion.getId())
+                        .agreeCount(suggestion.getAgree_count())
+                        .photoName(suggestion.getPhotoName())
+                        .createDate(suggestion.getCreatedDate())
+                        .suggestionState(suggestion.getSuggestionState())
+                        .build()).stream().toList();
+
+        if(suggestionAllDTOS.isEmpty()) {
+            return new SuggestionCursorDTO(0L, pages.hasNext(), suggestionAllDTOS);
+        }
+
+        return new SuggestionCursorDTO(suggestionAllDTOS.get(suggestionAllDTOS.size() - 1).getSuggestionId(), pages.hasNext(), suggestionAllDTOS);
     }
 }
