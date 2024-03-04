@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
-@ToString(exclude = {"password", "posts", "point", "comments", "detail", "hearts", "scraps"})
+@ToString(exclude = {"password", "posts", "point", "comments", "detail", "hearts", "scraps", "suggestions", "agrees"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity{
 
