@@ -64,6 +64,12 @@ public class Member extends BaseTimeEntity{
     @OneToMany(mappedBy = "member")
     private List<PostScrap> scraps = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Suggestion> suggestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Agree> agrees = new ArrayList<>();
+
     public void changeIntroduction(String introduction) {
         this.introduction = introduction;
     }
@@ -91,6 +97,11 @@ public class Member extends BaseTimeEntity{
     public void addScrap(PostScrap postScrap) {
         this.scraps.add(postScrap);
     }
+
+    public void addSuggestion(Suggestion suggestion) {
+        this.suggestions.add(suggestion);
+    }
+    public void addAgree(Agree agree) {this.agrees.add(agree);}
 
     public void setOpen(boolean open) {
         this.open = open;
