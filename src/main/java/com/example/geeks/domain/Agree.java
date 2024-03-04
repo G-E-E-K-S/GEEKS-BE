@@ -12,7 +12,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @ToString(exclude = {"suggestion"})
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Agree {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,9 @@ public class Agree {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "suggestion_id")
     private Suggestion suggestion;
+
+    public Agree() {
+    }
 
     public void setMember(Member member) {
         this.member = member;

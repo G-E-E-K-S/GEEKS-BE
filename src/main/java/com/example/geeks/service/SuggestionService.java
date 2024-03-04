@@ -5,11 +5,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.geeks.Enum.SuggestionState;
 import com.example.geeks.domain.*;
+import com.example.geeks.repository.AgreeRepository;
 import com.example.geeks.repository.MemberRepository;
 import com.example.geeks.repository.SuggestionPhotoRepository;
 import com.example.geeks.repository.SuggestionRepository;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.requestDto.SuggestionCreateDTO;
+import com.example.geeks.responseDto.SuggestionDetailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,6 +35,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SuggestionService {
 
     private final MemberRepository memberRepository;
+
+    private final AgreeRepository agreeRepository;
 
     private final SuggestionRepository suggestionRepository;
 
@@ -104,5 +109,59 @@ public class SuggestionService {
                 suggestionPhotoRepository.save(photo);
             }
         }
+    }
+
+    @Transactional
+    public void increaseAgree(Long userId, Long suggestionId) throws Exception {
+        if(agreeRepository.findAgreeByMemberIdAndSuggestionId(userId, suggestionId).isPresent()) {
+            throw new Exception();
+        }
+
+        Member member = memberRepository.findByIdFetchDetail(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Suggestion suggestion = suggestionRepository.findById(suggestionId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + suggestionId));
+
+        Agree agree = new Agree();
+        agree.setMember(member);
+        agree.setSuggestion(suggestion);
+
+        agreeRepository.save(agree);
+        suggestionRepository.increaseAgree(suggestionId);
+    }
+
+    @Transactional
+    public void decreaseAgree(Long userId, Long suggestionId) {
+        Agree agree = agreeRepository.findAgreeByMemberIdAndSuggestionId(userId, suggestionId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + suggestionId));
+
+        Member member = memberRepository.findByIdFetchDetail(userId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + userId));
+
+        Suggestion suggestion = suggestionRepository.findById(suggestionId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + suggestionId));
+
+        member.getAgrees().remove(agree);
+        suggestionRepository.decreaseAgree(suggestionId);
+        agreeRepository.delete(agree);
+    }
+
+    public SuggestionDetailDTO findDetailSuggestion(Long userId, Long suggestionId) {
+        Suggestion suggestion = suggestionRepository.findById(suggestionId)
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + suggestionId));
+
+        List<String> photoNames = suggestionPhotoRepository.findPhotoNamesBySuggestionId(suggestionId);
+
+        Optional<Agree> agree = agreeRepository.findAgreeByMemberIdAndSuggestionId(userId, suggestionId);
+
+        return SuggestionDetailDTO.builder()
+                .title(suggestion.getTitle())
+                .agreeCount(suggestion.getAgree_count())
+                .agreeState(agree.isPresent())
+                .createdDate(suggestion.getCreatedDate())
+                .photoNames(photoNames)
+                .content(suggestion.getContent())
+                .build();
     }
 }
