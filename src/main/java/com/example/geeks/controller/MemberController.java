@@ -68,46 +68,21 @@ public class MemberController {
         cookie.setPath("/");
         cookie.setSecure(false);
         cookie.setHttpOnly(false);
+        cookie.setMaxAge(60 * 60 * 24 * 30); // 30 일
 
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         response.addCookie(cookie);
     }
-   @PostMapping("/register2")
-   public String register(@RequestBody RegisterDTO dto) {
-       Member member = Member.builder()
-               .nickname(dto.getNickname())
-               .email(dto.getEmail())
-               .password(encoder.encode(dto.getPassword()))
-               .major(dto.getMajor())
-               .gender(dto.getGender())
-               .type(dto.getType())
-               .image_url("basic")
-               .introduction("")
-               .build();
-
-       memberService.join(member);
-
-       String token = memberService.createToken(member.getId(), member.getNickname());
-       Cookie cookie = new Cookie("token", token);
-
-       cookie.setPath("/");
-       cookie.setSecure(false);
-       cookie.setHttpOnly(false);
-
-       HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-       response.addCookie(cookie);
-
-       return "";
-   }
 
    @GetMapping("/admin")
    public String admin() {
-       String token = memberService.createToken(1L, "geeks");
+       String token = memberService.createToken(1L, "admin");
        Cookie cookie = new Cookie("token", token);
 
        cookie.setPath("/");
        cookie.setSecure(false);
        cookie.setHttpOnly(true);
+       cookie.setMaxAge(60 * 60 * 24 * 30); // 30 일
 
        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
        response.addCookie(cookie);

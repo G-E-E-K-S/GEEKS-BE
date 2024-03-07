@@ -1,8 +1,10 @@
 package com.example.geeks.controller;
 
+import com.example.geeks.Enum.SuggestionState;
 import com.example.geeks.Security.Util;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.requestDto.SuggestionCreateDTO;
+import com.example.geeks.requestDto.SuggestionStateUpdateDTO;
 import com.example.geeks.responseDto.SuggestionCursorDTO;
 import com.example.geeks.responseDto.SuggestionDetailDTO;
 import com.example.geeks.service.SuggestionService;
@@ -58,10 +60,29 @@ public class SuggestionController {
         return suggestionService.cursorBasePaging(cursor);
     }
 
+    @GetMapping("/filter/{state}/{cursor}")
+    public SuggestionCursorDTO cursorFilterPage(@PathVariable(value = "state")SuggestionState state,
+                                                @PathVariable(value = "cursor") Long cursor) {
+        return suggestionService.cursorBasePagingByFilter(cursor, state);
+    }
+
     @GetMapping("/show/{suggestionId}")
     public SuggestionDetailDTO showSuggestion(@PathVariable Long suggestionId,
                                               @CookieValue(value = "token") String token) {
         Long userId = util.getUserId(token, tokenSecretKey);
         return suggestionService.findDetailSuggestion(userId, suggestionId);
+    }
+
+    @PatchMapping("/state/update")
+    public String updateState(@RequestBody SuggestionStateUpdateDTO dto,
+                              @CookieValue(value = "token") String token) {
+        String nickname = util.getNickname(token, tokenSecretKey);
+
+        if(!nickname.equals("admin")) {
+            return "Not Admin";
+        }
+
+        suggestionService.suggestionStateUpdate(dto);
+        return "success";
     }
 }

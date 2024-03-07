@@ -11,6 +11,7 @@ import com.example.geeks.repository.SuggestionPhotoRepository;
 import com.example.geeks.repository.SuggestionRepository;
 import com.example.geeks.requestDto.PostCreateRequestDTO;
 import com.example.geeks.requestDto.SuggestionCreateDTO;
+import com.example.geeks.requestDto.SuggestionStateUpdateDTO;
 import com.example.geeks.responseDto.SuggestionAllDTO;
 import com.example.geeks.responseDto.SuggestionCursorDTO;
 import com.example.geeks.responseDto.SuggestionDetailDTO;
@@ -169,6 +170,7 @@ public class SuggestionService {
                 .createdDate(suggestion.getCreatedDate())
                 .photoNames(photoNames)
                 .content(suggestion.getContent())
+                .suggestionState(suggestion.getSuggestionState())
                 .build();
     }
 
@@ -200,5 +202,43 @@ public class SuggestionService {
         }
 
         return new SuggestionCursorDTO(suggestionAllDTOS.get(suggestionAllDTOS.size() - 1).getSuggestionId(), pages.hasNext(), suggestionAllDTOS);
+    }
+
+    public SuggestionCursorDTO cursorBasePagingByFilter(Long cursor, SuggestionState state) {
+        PageRequest pageRequest =
+                PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Suggestion> pages;
+
+        if(cursor == 0L) {
+            pages = suggestionRepository.findSuggestionCursorFilterFirst(pageRequest, state);
+        } else {
+            pages = suggestionRepository.findSuggestionCursorFilter(cursor, state, pageRequest);
+        }
+
+        List<SuggestionAllDTO> suggestionAllDTOS = pages.map(suggestion ->
+                SuggestionAllDTO.builder()
+                        .title(suggestion.getTitle())
+                        .content(suggestion.getContent())
+                        .suggestionId(suggestion.getId())
+                        .agreeCount(suggestion.getAgree_count())
+                        .photoName(suggestion.getPhotoName())
+                        .createDate(suggestion.getCreatedDate())
+                        .suggestionState(suggestion.getSuggestionState())
+                        .build()).stream().toList();
+
+        if(suggestionAllDTOS.isEmpty()) {
+            return new SuggestionCursorDTO(0L, pages.hasNext(), suggestionAllDTOS);
+        }
+
+        return new SuggestionCursorDTO(suggestionAllDTOS.get(suggestionAllDTOS.size() - 1).getSuggestionId(), pages.hasNext(), suggestionAllDTOS);
+    }
+
+    @Transactional
+    public void suggestionStateUpdate(SuggestionStateUpdateDTO dto) {
+        Suggestion suggestion = suggestionRepository.findById(dto.getSuggestionId())
+                .orElseThrow(() -> new NotFoundException("Could not found id : " + dto.getSuggestionId()));
+
+        suggestion.setSuggestionState(dto.getSuggestionState());
     }
 }
