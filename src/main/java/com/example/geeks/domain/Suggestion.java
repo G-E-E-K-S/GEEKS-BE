@@ -60,6 +60,10 @@ public class Suggestion extends BaseTimeEntity{
         }
     }
 
+    public void setSuggestionState(SuggestionState suggestionState) {
+        this.suggestionState = suggestionState;
+    }
+
     @Builder
     public Suggestion(String title, String content, String photoName, int agree_count, SuggestionState suggestionState) {
         this.title = title;

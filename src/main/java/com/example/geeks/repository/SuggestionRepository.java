@@ -1,5 +1,6 @@
 package com.example.geeks.repository;
 
+import com.example.geeks.Enum.SuggestionState;
 import com.example.geeks.domain.Suggestion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +28,16 @@ public interface SuggestionRepository extends JpaRepository<Suggestion, Long> {
     @Query(value = "select s from Suggestion s ",
             countQuery = "select count(s) from Suggestion s")
     Page<Suggestion> findSuggestionCursorBasePagingFirst(Pageable pageable);
+
+    @Query(value = "select s from Suggestion s " +
+            "where s.id < :cursor and s.suggestionState = :state",
+            countQuery = "select count(s) from Suggestion s")
+    Page<Suggestion> findSuggestionCursorFilter(@Param("cursor") Long cursor,
+                                                    @Param("state") SuggestionState state,
+                                                    Pageable pageable);
+
+    @Query(value = "select s from Suggestion s where s.suggestionState = :state",
+            countQuery = "select count(s) from Suggestion s")
+    Page<Suggestion> findSuggestionCursorFilterFirst(Pageable pageable,
+                                                     @Param("state") SuggestionState state);
 }
