@@ -1,14 +1,9 @@
 package com.example.geeks.Init;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.geeks.Enum.*;
-import com.example.geeks.domain.AcceptRoomMate;
-import com.example.geeks.domain.Detail;
-import com.example.geeks.domain.Member;
-import com.example.geeks.domain.Post;
-import com.example.geeks.repository.AcceptRoomMateRepository;
-import com.example.geeks.repository.DetailRepository;
-import com.example.geeks.repository.MemberRepository;
-import com.example.geeks.repository.PostRepository;
+import com.example.geeks.domain.*;
+import com.example.geeks.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -22,6 +17,9 @@ import java.util.TimeZone;
 @RequiredArgsConstructor
 public class MemberInit {
     private final AcceptRoomMateRepository acceptRoomMateRepository;
+
+    private final SuggestionRepository suggestionRepository;
+
     private final MemberRepository memberRepository;
 
     private final DetailRepository detailRepository;
@@ -34,48 +32,58 @@ public class MemberInit {
     public void memberInit() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 
-        Member admin = Member.builder()
-                .nickname("admin")
-                .email("admin@sangmyung.kr")
-                .password(encoder.encode("geeksadmin0221"))
-                .major("행정실")
-                .studentID(1)
-                .gender(Gender.MALE)
-                .image_url("")
-                .introduction("")
-                .type(DormitoryType.NEW)
-                .open(false)
-                .build();
-
-        memberRepository.save(admin);
-
-        Member member1 = Member.builder()
-                .nickname("geeks")
-                .email("geeks@sangmyung.kr")
-                .password(encoder.encode("1234"))
-                .major("소프트웨어학과")
-                .studentID(19)
-                .gender(Gender.MALE)
-                .image_url("")
-                .introduction("")
-                .type(DormitoryType.NEW)
-                .open(false)
-                .build();
-
-        memberRepository.save(member1);
-
-        Post post1 = Post.builder()
-                .commentCount(0)
-                .anonymity(false)
-                .title("GEEKS가 오픈했어요!")
-                .content("GEEKS와 함께 더 편리한 기숙사 생활 만들어요.")
-                .like_count(0)
-                .type(DormitoryType.NEW)
-                .build();
-
-        post1.setMember(member1);
-        postRepository.save(post1);
-
+//        Member admin = Member.builder()
+//                .nickname("admin")
+//                .email("admin@sangmyung.kr")
+//                .password(encoder.encode("geeksadmin0221"))
+//                .major("행정실")
+//                .studentID(1)
+//                .gender(Gender.MALE)
+//                .image_url("")
+//                .introduction("")
+//                .type(DormitoryType.NEW)
+//                .open(false)
+//                .build();
+//
+//        memberRepository.save(admin);
+//
+//        Member member1 = Member.builder()
+//                .nickname("geeks")
+//                .email("geeks@sangmyung.kr")
+//                .password(encoder.encode("1234"))
+//                .major("소프트웨어학과")
+//                .studentID(19)
+//                .gender(Gender.MALE)
+//                .image_url("")
+//                .introduction("")
+//                .type(DormitoryType.NEW)
+//                .open(false)
+//                .build();
+//
+//        memberRepository.save(member1);
+//
+//        Post post1 = Post.builder()
+//                .commentCount(0)
+//                .anonymity(false)
+//                .title("GEEKS가 오픈했어요!")
+//                .content("GEEKS와 함께 더 편리한 기숙사 생활 만들어요.")
+//                .like_count(0)
+//                .type(DormitoryType.NEW)
+//                .build();
+//
+//        post1.setMember(member1);
+//        postRepository.save(post1);
+//
+//        for(int i = 1; i <= 15; i++) {
+//            Suggestion suggestion = Suggestion.builder()
+//                    .title("필터 테스트 " + i)
+//                    .content("필터 테스트 " + i)
+//                    .agree_count(0)
+//                    .suggestionState(SuggestionState.ONGOING)
+//                    .build();
+//            suggestion.setMember(member1);
+//            suggestionRepository.save(suggestion);
+//        }
 
         /*
 
