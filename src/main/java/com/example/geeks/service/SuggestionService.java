@@ -154,7 +154,7 @@ public class SuggestionService {
     }
 
     public SuggestionDetailDTO findDetailSuggestion(Long userId, Long suggestionId) {
-        Suggestion suggestion = suggestionRepository.findById(suggestionId)
+        Suggestion suggestion = suggestionRepository.findSuggestionFetchMember(suggestionId)
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + suggestionId));
 
         System.out.println("suggestion: " + userId + " " + suggestionId);
@@ -164,7 +164,10 @@ public class SuggestionService {
         Optional<Agree> agree = agreeRepository.findAgreeByMemberIdAndSuggestionId(userId, suggestionId);
 
         return SuggestionDetailDTO.builder()
+                .suggestionId(suggestion.getId())
                 .title(suggestion.getTitle())
+                .type(suggestion.getMember().getType())
+                .gender(suggestion.getMember().getGender())
                 .agreeCount(suggestion.getAgree_count())
                 .agreeState(agree.isPresent())
                 .createdDate(suggestion.getCreatedDate())
@@ -190,6 +193,8 @@ public class SuggestionService {
                 SuggestionAllDTO.builder()
                         .title(suggestion.getTitle())
                         .content(suggestion.getContent())
+                        .type(suggestion.getMember().getType())
+                        .gender(suggestion.getMember().getGender())
                         .suggestionId(suggestion.getId())
                         .agreeCount(suggestion.getAgree_count())
                         .photoName(suggestion.getPhotoName())
@@ -201,7 +206,7 @@ public class SuggestionService {
             return new SuggestionCursorDTO(0L, pages.hasNext(), suggestionAllDTOS);
         }
 
-        return new SuggestionCursorDTO(suggestionAllDTOS.get(suggestionAllDTOS.size() - 1).getSuggestionId(), pages.hasNext(), suggestionAllDTOS);
+        return new SuggestionCursorDTO(suggestionAllDTOS.get(suggestionAllDTOS.size() - 1).getPostId(), pages.hasNext(), suggestionAllDTOS);
     }
 
     public SuggestionCursorDTO cursorBasePagingByFilter(Long cursor, SuggestionState state) {
@@ -219,6 +224,8 @@ public class SuggestionService {
         List<SuggestionAllDTO> suggestionAllDTOS = pages.map(suggestion ->
                 SuggestionAllDTO.builder()
                         .title(suggestion.getTitle())
+                        .type(suggestion.getMember().getType())
+                        .gender(suggestion.getMember().getGender())
                         .content(suggestion.getContent())
                         .suggestionId(suggestion.getId())
                         .agreeCount(suggestion.getAgree_count())
@@ -231,7 +238,7 @@ public class SuggestionService {
             return new SuggestionCursorDTO(0L, pages.hasNext(), suggestionAllDTOS);
         }
 
-        return new SuggestionCursorDTO(suggestionAllDTOS.get(suggestionAllDTOS.size() - 1).getSuggestionId(), pages.hasNext(), suggestionAllDTOS);
+        return new SuggestionCursorDTO(suggestionAllDTOS.get(suggestionAllDTOS.size() - 1).getPostId(), pages.hasNext(), suggestionAllDTOS);
     }
 
     @Transactional
@@ -240,5 +247,14 @@ public class SuggestionService {
                 .orElseThrow(() -> new NotFoundException("Could not found id : " + dto.getSuggestionId()));
 
         suggestion.setSuggestionState(dto.getSuggestionState());
+    }
+
+    @Transactional
+    public void testChange(SuggestionState state) {
+        List<Suggestion> suggestionList = suggestionRepository.findAll();
+
+        for (Suggestion suggestion : suggestionList) {
+            suggestion.setSuggestionState(state);
+        }
     }
 }

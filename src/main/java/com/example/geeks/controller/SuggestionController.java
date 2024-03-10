@@ -85,4 +85,10 @@ public class SuggestionController {
         suggestionService.suggestionStateUpdate(dto);
         return "success";
     }
+
+    @PatchMapping("/change/{state}")
+    public String testChange(@PathVariable(value = "state") SuggestionState state) {
+        suggestionService.testChange(state);
+        return "success";
+    }
 }
