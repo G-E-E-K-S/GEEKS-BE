@@ -7,7 +7,6 @@ import com.example.geeks.domain.Member;
 import com.example.geeks.requestDto.PasswordDTO;
 import com.example.geeks.requestDto.ProfileEditDTO;
 import com.example.geeks.requestDto.ReasonDTO;
-import com.example.geeks.requestDto.RegisterDTO;
 import com.example.geeks.responseDto.InformationDTO;
 import com.example.geeks.responseDto.MyPageDTO;
 import com.example.geeks.responseDto.MyProfileDTO;
@@ -33,7 +32,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
     private final ChatService chatService;
     private final DetailService detailService;
     private final PostService postService;
