@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import java.util.stream.Collectors;
+
+
 @Service
 @RequiredArgsConstructor
 public class MeetingService {
@@ -33,7 +36,20 @@ public class MeetingService {
                 .map(meeting ->
                         new MeetingResponseDTO(
                                 meeting.getName(),
+                                meeting.getRoomId(),
+                                meeting.getHistories()
+                                        .stream()
+                                        .map(meetingHistory ->
+                                                new ChatHistoryResponse(
+                                                        meetingHistory.getSender().getNickname(),
+                                                        meetingHistory.getReadCount(),
+                                                        meetingHistory.getMessage(),
+                                                        meetingHistory.getCreatedAt()))
+                                        .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+
                                 meeting.getRoomId())).toList();
+
 
         return meetingResponseDTOS;
     }
