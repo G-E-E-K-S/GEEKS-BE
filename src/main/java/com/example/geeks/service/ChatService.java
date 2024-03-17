@@ -1,11 +1,7 @@
 package com.example.geeks.service;
 
-import com.example.geeks.domain.ChatHistory;
-import com.example.geeks.domain.ChatRoom;
-import com.example.geeks.domain.Member;
-import com.example.geeks.repository.ChatHistoryRepository;
-import com.example.geeks.repository.ChatRoomRepository;
-import com.example.geeks.repository.MemberRepository;
+import com.example.geeks.domain.*;
+import com.example.geeks.repository.*;
 import com.example.geeks.requestDto.ChatMessage;
 import com.example.geeks.requestDto.ChatRoomDTO;
 import com.example.geeks.responseDto.ChatHistoryResponse;
@@ -27,7 +23,8 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
     private final ChatHistoryRepository chatHistoryRepository;
-
+    private final MeetingRepository meetingRepository;
+    private final MeetingHistoryRepository meetingHistoryRepository;
     @Transactional
     public String createChatRoom(String myNickName, String yourNickName) {
         Member user = getUserByNickname(myNickName); //User에서 찾아야 하는거고
@@ -50,13 +47,26 @@ public class ChatService {
     }
 
     public Long saveMessage(ChatMessage message) {
-        ChatRoom chatRoom = chatRoomRepository.findByRoomId(message.getRoomid());
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(message.getRoomid());   //이거 값 없으면 Meeting에서 가져오면 될듯
+        if(chatRoom == null){
+            Meeting meeting = meetingRepository.findByRoomId(message.getRoomid());
+            Member sender = getUserByNickname(message.getUser());
+            String _message = message.getContent();
+            return saveChatMessage(null, meeting, sender, _message, message.getCreateAt());
+
+        }
         Member sender = getUserByNickname(message.getUser());
         String _message = message.getContent();
-        return saveChatMessage(chatRoom, sender ,_message, message.getCreateAt());
+        return saveChatMessage(chatRoom,null, sender ,_message, message.getCreateAt());
     }
     @Transactional
-    public Long saveChatMessage(ChatRoom chatRoom, Member sender, String message, LocalDateTime createdAt) {
+    public Long saveChatMessage(ChatRoom chatRoom, Meeting meeting, Member sender, String message, LocalDateTime createdAt) {
+        if(chatRoom == null){
+            MeetingHistory meetingHistory = MeetingHistory.create(meeting, sender, message, createdAt);
+            meetingHistoryRepository.save(meetingHistory);
+            Long id = meetingHistory.getId();
+            return id;
+        }
         ChatHistory chatHistory = ChatHistory.create(chatRoom, sender, message, createdAt);
         chatHistoryRepository.save(chatHistory);
         // 준형
