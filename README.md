@@ -28,8 +28,7 @@ GEEKS(긱스)는 상명대학교 기숙사생들을 위한 플랫폼입니다. �
 ### Config
 
 ### Development
-#### Frontend
-
+#### backend
 
 ## 기능
 **1. 회원가입 페이지**
