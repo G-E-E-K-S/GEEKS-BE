@@ -26,10 +26,12 @@ GEEKS(긱스)는 상명대학교 기숙사생들을 위한 플랫폼입니다. �
 ### Environment
 <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=#fff"> <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=#181717">
 
-### Config
-
 ### Development
 #### backend
+- Spring boot 2.7.17
+- java 17
+- kafka
+- websocket
 
 ## 기능
 **1. 회원가입 페이지**
